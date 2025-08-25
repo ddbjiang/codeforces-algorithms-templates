@@ -92,51 +92,7 @@ int find(vi& root, int x) {
     if (root[x] == x)return x;
     return root[x] = find(root, root[x]);
 }
-struct Treea {
-    int n;vl tree;
-    Treea(int size) {
-        n = size;tree.assign(n + 1, 0);
-    }
-    void update(int i, ll t) {
-        while (i <= n) {
-            tree[i] += t;
-            i += i & (-i);
-        }
-    }
-    ll sum(int i) {
-        ll sum = 0;
-        while (i > 0) {
-            sum += tree[i];
-            i -= i & (-i);
-        }
-        return sum;
-    }
-};
-struct ST {//max,min,gcd,lcm,&,|,minidx,maxidx
-    int n;vvi st;vi log;
-    ST(const vi& v) {
-        n = v.size() - 1;
-        int maxlog = 20;
-        st.assign(n + 1, vi(maxlog + 1));
-        log.assign(n + 2, 0);
-        for (int i = 2; i <= n; i++) {
-            log[i] = log[i >> 1] + 1;
-        }
-        for (int i = 1; i <= n; i++) {
-            st[i][0] = v[i];
-        }
-        for (int j = 1; j <= maxlog; j++) {
-            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
-                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
-            }
-        }
-    }
-    int query(int l, int r) {
-        int j = log[r - l + 1];
-        return max(st[l][j], st[r - (1 << j) + 1][j]);
-    }
-};
-struct Trie {//1-idx
+struct Trie {
     struct Node {
         int next[26];int cnt;
         Node() {
@@ -170,7 +126,51 @@ struct Trie {//1-idx
         return nodes[i].cnt;
     }
 };
-struct SegTree {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
+struct Treea {//1-idx
+    int n;vl tree;
+    Treea(int size) {
+        n = size;tree.assign(n + 1, 0);
+    }
+    void update(int i, ll t) {
+        while (i <= n) {
+            tree[i] += t;
+            i += i & (-i);
+        }
+    }
+    ll sum(int i) {
+        ll sum = 0;
+        while (i > 0) {
+            sum += tree[i];
+            i -= i & (-i);
+        }
+        return sum;
+    }
+};
+struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
+    int n;vvi st;vi log;
+    ST(const vi& v) {
+        n = v.size() - 1;
+        int maxlog = 20;
+        st.assign(n + 1, vi(maxlog + 1));
+        log.assign(n + 2, 0);
+        for (int i = 2; i <= n; i++) {
+            log[i] = log[i >> 1] + 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            st[i][0] = v[i];
+        }
+        for (int j = 1; j <= maxlog; j++) {
+            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
+                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
+            }
+        }
+    }
+    int query(int l, int r) {
+        int j = log[r - l + 1];
+        return max(st[l][j], st[r - (1 << j) + 1][j]);
+    }
+};
+struct SegTree {//1-idx
     int n;
     vl tree, lazy;
     SegTree(int size) {
