@@ -170,10 +170,57 @@ struct Trie {
         return nodes[i].cnt;
     }
 };
+struct SegTree {
+    int n;
+    vl tree, lazy;
+    SegTree(int size) {
+        n = size;
+        tree.assign(4 * n, 0);
+        lazy.assign(4 * n, 0);
+    }
+    void push(int v, int l, int r) {
+        if (lazy[v] != 0) {
+            tree[v] += lazy[v];
+            if (l != r) {
+                lazy[v*2] += lazy[v];
+                lazy[v*2+1] += lazy[v];
+            }
+            lazy[v] = 0;
+        }
+    }
+    void update(int v, int l, int r, int ul, int ur, ll val) {
+        push(v, l, r);
+        if (ul > r || ur < l) return;
+        if (ul <= l && r <= ur) {
+            lazy[v] += val;
+            push(v, l, r);
+            return;
+        }
+        int mid = (l + r) / 2;
+        update(v*2, l, mid, ul, ur, val);
+        update(v*2+1, mid+1, r, ul, ur, val);
+        tree[v] = max(tree[v*2], tree[v*2+1]);
+    }
+    ll query(int v, int l, int r, int ql, int qr) {
+        push(v, l, r);
+        if (ql > r || qr < l) return LLONG_MIN;
+        if (ql <= l && r <= qr) return tree[v];
+        int mid = (l + r) / 2;
+        return max(query(v*2, l, mid, ql, qr),
+                   query(v*2+1, mid+1, r, ql, qr));
+    }
+    void update(int l, int r, ll val) {
+        update(1, 1, n, l, r, val);
+    }
+    ll query(int l, int r) {
+        return query(1, 1, n, l, r);
+    }
+};
+
 void solve() {
     //db("-----------");
     
-
+    
     
 }
 
