@@ -136,7 +136,7 @@ struct ST {//max,min,gcd,lcm,&,|,minidx,maxidx
         return max(st[l][j], st[r - (1 << j) + 1][j]);
     }
 };
-struct Trie {
+struct Trie {//1-idx
     struct Node {
         int next[26];int cnt;
         Node() {
@@ -170,7 +170,7 @@ struct Trie {
         return nodes[i].cnt;
     }
 };
-struct SegTree {
+struct SegTree {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
     int n;
     vl tree, lazy;
     SegTree(int size) {
@@ -217,10 +217,11 @@ struct SegTree {
     }
 };
 
+
 void solve() {
     //db("-----------");
     
-    
+
     
 }
 
