@@ -23,6 +23,7 @@ using namespace std;
 #define ll long long
 #define ull unsigned long long
 #define pb push_back
+#define mb emplace_back
 #define yes cout<<"YES"<<endl
 #define no cout<<"NO"<<endl
 const ll mod = 1000000007;
@@ -47,94 +48,161 @@ void db(const vector<T>& v) { cout << "debug(1): "; for (const auto& i : v)cout 
 template <typename T>
 void db(const vector<vector<T>>& v) { cout << "debug(2): " << endl; for (const auto& i : v) { db(i); } }
 ll ksm(ll x, ll n) {
-    ll ans = 1;
-    while (n > 0) {
-        if (n & 1) {
-            ans = ans * x % mod;
-        }
-        x = x * x % mod;
-        n >>= 1;
-    }
-    return ans;
+    ll ans = 1;
+    while (n > 0) {
+        if (n & 1) {
+            ans = ans * x % mod;
+        }
+        x = x * x % mod;
+        n >>= 1;
+    }
+    return ans;
 }
 ll ny(ll x) {
-    return ksm(x, mod - 2);
-}
-ll C(ll n, ll k) {
-    if (k < 0 || k > n) return 0;
-    if (k == 0 || k == n) return 1;
-    k = min(k, n - k);
-    ll a = 1, b = 1;
-    for (ll i = 1; i <= k; ++i) {
-        a = a * (n - i + 1) % mod;
-        b = b * i % mod;
-    }
-    return a * ny(b) % mod;
-}
-int find(vi& root, int x) {
-    if (root[x] == x)return x;
-    return root[x] = find(root, root[x]);
+    return ksm(x, mod - 2);
 }
 vi minp, primes;
 void initp(int n) {
-    minp.assign(n + 1, 0);
-    primes.clear();
-    for (int i = 2; i <= n; i++) {
-        if (minp[i] == 0) {
-            minp[i] = i;
-            primes.push_back(i);
-        }
-        for (const int& p : primes) {
-            if (i * p > n)break;
-            minp[i * p] = p;
-            if (p == minp[i])break;
-        }
-    }
+    minp.assign(n + 1, 0);
+    primes.clear();
+    for (int i = 2; i <= n; i++) {
+        if (minp[i] == 0) {
+            minp[i] = i;
+            primes.push_back(i);
+        }
+        for (const int& p : primes) {
+            if (i * p > n)break;
+            minp[i * p] = p;
+            if (p == minp[i])break;
+        }
+    }
 }
 vi nyb;
 void initny(int n){
-    nyb.assign(n, 0);
-    nyb[1] = 1;
-    for (int i = 2; i < n; ++i) {
-        nyb[i] = (mod - (ll)(mod / i) * nyb[mod % i] % mod) % mod;
-    }
+    nyb.assign(n, 0);
+    nyb[1] = 1;
+    for (int i = 2; i < n; ++i) {
+        nyb[i] = (mod - (ll)(mod / i) * nyb[mod % i] % mod) % mod;
+    }
+}
+vl jcb, jcnyb;
+void initjc(int n) {
+    jcb.assign(n + 1, 1);
+    jcnyb.assign(n + 1, 1);
+    for (int i = 1; i <= n; ++i) {
+        jcb[i] = jcb[i - 1] * i % mod;
+    }
+    jcnyb[n] = ny(jcb[n]);
+    for (int i = n - 1; i >= 0; --i) {
+        jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
+    }
+}
+inline ll C(ll n, ll k) {
+    if (k < 0 || k > n) return 0;
+    return jcb[n] * jcnyb[k] % mod * jcnyb[n - k] % mod;
+}
+inline ll A(ll n, ll k) {
+    if (k < 0 || k > n) return 0;
+    return jcb[n] * jcnyb[n - k] % mod;
+}
+int find(vi& root, int x) {
+    if (root[x] == x)return x;
+    return root[x] = find(root, root[x]);
 }
 struct Treea {
-    int n;vl tree;
-    Treea(int size) {
-        n = size;tree.assign(n + 1, 0);
-    }
-    void update(int i, ll t) {
-        while (i <= n) {
-            tree[i] += t;
-            i += i & (-i);
-        }
-    }
-    ll sum(int i) {
-        ll sum = 0;
-        while (i > 0) {
-            sum += tree[i];
-            i -= i & (-i);
-        }
-        return sum;
-    }
+    int n;vl tree;
+    Treea(int size) {
+        n = size;tree.assign(n + 1, 0);
+    }
+    void update(int i, ll t) {
+        while (i <= n) {
+            tree[i] += t;
+            i += i & (-i);
+        }
+    }
+    ll sum(int i) {
+        ll sum = 0;
+        while (i > 0) {
+            sum += tree[i];
+            i -= i & (-i);
+        }
+        return sum;
+    }
+};
+struct ST {//max,min,gcd,lcm,&,|,minidx,maxidx
+    int n;vvi st;vi log;
+    ST(const vi& v) {
+        n = v.size() - 1;
+        int maxlog = 20;
+        st.assign(n + 1, vi(maxlog + 1));
+        log.assign(n + 2, 0);
+        for (int i = 2; i <= n; i++) {
+            log[i] = log[i >> 1] + 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            st[i][0] = v[i];
+        }
+        for (int j = 1; j <= maxlog; j++) {
+            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
+                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
+            }
+        }
+    }
+    int query(int l, int r) {
+        int j = log[r - l + 1];
+        return max(st[l][j], st[r - (1 << j) + 1][j]);
+    }
+};
+struct Trie {
+    struct Node {
+        int next[26];int cnt;
+        Node() {
+            memset(next, 0, sizeof(next));
+            cnt = 0;
+        }
+    };
+    vector<Node> nodes;
+    Trie() {
+        nodes.mb();
+    }
+    void insert(const string& word) {
+        int i = 0;
+        for (char c : word) {
+            if (nodes[i].next[c] == 0) {
+                nodes[i].next[c] = nodes.size();
+                nodes.mb();
+            }
+            i = nodes[i].next[c];
+            nodes[i].cnt++;
+        }
+    }
+    int find(const string& s) {
+        int i = 0;
+        for (char c : s) {
+            if (nodes[i].next[c] == 0) {
+                return 0;
+            }
+            i = nodes[i].next[c];
+        }
+        return nodes[i].cnt;
+    }
 };
 void solve() {
-    //db("-----------");
-   
-   
-   
+    //db("-----------");
+   
+   
 }
 /*
 */
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);cout.tie(nullptr);
-    //initp(MAXN);
-    //initny(MAXN);
-    go(solve);
-    //solve();
-    return 0;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);cout.tie(nullptr);
+    //initjc(MAXN);
+    //initp(MAXN);
+    //initny(MAXN);
+    go(solve);
+    //solve();
+    return 0;
 }
 
 基础
@@ -508,44 +576,37 @@ for (auto &[u, v, w] : edges)
     if (find(u) != find(v))
         total += w, union_set(u, v);
 字典树
-const int MAXN = 300005;
-const int ALPHABET = 26;
 struct Trie {
-    int ch[MAXN][ALPHABET];
-    bool isEnd[MAXN];
-    int tot;
+    struct Node {
+        int next[26];int cnt;
+        Node() {
+            memset(next, 0, sizeof(next));
+            cnt = 0;
+        }
+    };
+    vector<Node> nodes;
     Trie() {
-        memset(ch, 0, sizeof(ch));
-        memset(isEnd, false, sizeof(isEnd));
-        tot = 1;
+        nodes.mb();
     }
-    void insert(const string& s) {
-        int u = 1;
-        for (char c : s) {
-            int idx = c - 'a';
-            if (ch[u][idx] == 0) {
-                ch[u][idx] = ++tot;
+    void insert(const string& word) {
+        int i = 0;
+        for (char c : word) {
+            if (nodes[i].next[c] == 0) {
+                nodes[i].next[c] = nodes.size();
+                nodes.mb();
             }
-            u = ch[u][idx];
+            i = nodes[i].next[c];
+            nodes[i].cnt++;
         }
-        isEnd[u] = true;
     }
-    bool search(const string& s) {
-        int u = 1;
+    int find(const string& s) {
+        int i = 0;
         for (char c : s) {
-            int idx = c - 'a';
-            if (ch[u][idx] == 0) return false;
-            u = ch[u][idx];
+            if (nodes[i].next[c] == 0) {
+                return 0;
+            }
+            i = nodes[i].next[c];
         }
-        return isEnd[u];
-    }
-    bool startsWith(const string& prefix) {
-        int u = 1;
-        for (char c : prefix) {
-            int idx = c - 'a';
-            if (ch[u][idx] == 0) return false;
-            u = ch[u][idx];
-        }
-        return true;
+        return nodes[i].cnt;
     }
 };
