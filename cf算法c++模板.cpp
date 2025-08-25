@@ -6,6 +6,7 @@ using namespace std;
 #define ll long long
 #define ull unsigned long long
 #define pb push_back
+#define mb emplace_back
 #define yes cout<<"YES"<<endl
 #define no cout<<"NO"<<endl
 const ll mod = 1000000007;
@@ -111,12 +112,68 @@ struct Treea {
         return sum;
     }
 };
-
-
+struct ST {//max,min,gcd,lcm,&,|,minidx,maxidx
+    int n;vvi st;vi log;
+    ST(const vi& v) {
+        n = v.size() - 1;
+        int maxlog = 20;
+        st.assign(n + 1, vi(maxlog + 1));
+        log.assign(n + 2, 0);
+        for (int i = 2; i <= n; i++) {
+            log[i] = log[i >> 1] + 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            st[i][0] = v[i];
+        }
+        for (int j = 1; j <= maxlog; j++) {
+            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
+                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
+            }
+        }
+    }
+    int query(int l, int r) {
+        int j = log[r - l + 1];
+        return max(st[l][j], st[r - (1 << j) + 1][j]);
+    }
+};
+struct Trie {
+    struct Node {
+        int next[26];int cnt;
+        Node() {
+            memset(next, 0, sizeof(next));
+            cnt = 0;
+        }
+    };
+    vector<Node> nodes;
+    Trie() {
+        nodes.mb();
+    }
+    void insert(const string& word) {
+        int i = 0;
+        for (char c : word) {
+            if (nodes[i].next[c] == 0) {
+                nodes[i].next[c] = nodes.size();
+                nodes.mb();
+            }
+            i = nodes[i].next[c];
+            nodes[i].cnt++;
+        }
+    }
+    int find(const string& s) {
+        int i = 0;
+        for (char c : s) {
+            if (nodes[i].next[c] == 0) {
+                return 0;
+            }
+            i = nodes[i].next[c];
+        }
+        return nodes[i].cnt;
+    }
+};
 void solve() {
     //db("-----------");
     
-    
+
     
 }
 
