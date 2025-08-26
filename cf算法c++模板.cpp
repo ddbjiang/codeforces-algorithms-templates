@@ -175,7 +175,7 @@ struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
         return max(st[l][j], st[r - (1 << j) + 1][j]);
     }
 };
-struct SegTree {//1-idx
+struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
     int n;
     vl tree, lazy;
     SegTree(int size) {
@@ -211,8 +211,7 @@ struct SegTree {//1-idx
         if (ql > r || qr < l) return LLONG_MIN;
         if (ql <= l && r <= qr) return tree[v];
         int mid = (l + r) / 2;
-        return max(query(v*2, l, mid, ql, qr),
-                   query(v*2+1, mid+1, r, ql, qr));
+        return max(query(v*2, l, mid, ql, qr), query(v*2+1, mid+1, r, ql, qr));
     }
     void update(int l, int r, ll val) {
         update(1, 1, n, l, r, val);
