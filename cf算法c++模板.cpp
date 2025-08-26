@@ -107,6 +107,7 @@ struct Trie {
     void insert(const string& word) {
         int i = 0;
         for (char c : word) {
+            c -= 'a';
             if (nodes[i].next[c] == 0) {
                 nodes[i].next[c] = nodes.size();
                 nodes.mb();
@@ -115,15 +116,18 @@ struct Trie {
             nodes[i].cnt++;
         }
     }
-    int find(const string& s) {
+    ll find(const string& s) {
         int i = 0;
+        int sum = 0;
         for (char c : s) {
+            c -= 'a';
             if (nodes[i].next[c] == 0) {
                 return 0;
             }
             i = nodes[i].next[c];
+            sum += nodes[i].cnt;
         }
-        return nodes[i].cnt;
+        return sum;
     }
 };
 struct Treea {//1-idx
