@@ -30,6 +30,7 @@ template<typename T>
 void db(const vector<T>& v) { cout << "debug(1): "; for (const auto& i : v)cout << i << " "; cout << endl; }
 template <typename T>
 void db(const vector<vector<T>>& v) { cout << "debug(2): " << endl; for (const auto& i : v) { db(i); } }
+
 ll ksm(ll x, ll n) {
     ll ans = 1;
     while (n > 0) {
@@ -41,10 +42,10 @@ ll ksm(ll x, ll n) {
     }
     return ans;
 }
-ll ny(ll x) {
+ll ny(ll x) {//依赖ksm
     return ksm(x, mod - 2);
 }
-vi minp, primes;
+vi minp, primes;//最小质因数和小于等于n的全部质数，最小质因数等于自己为质数
 void initp(int n) {
     minp.assign(n + 1, 0);
     primes.clear();
@@ -60,39 +61,39 @@ void initp(int n) {
         }
     }
 }
-vi nyb;
-void initny(int n){
+vl nyb;
+void initny(ll n){//逆元线性求法
     nyb.assign(n, 0);
     nyb[1] = 1;
-    for (int i = 2; i < n; ++i) {
-        nyb[i] = (mod - (ll)(mod / i) * nyb[mod % i] % mod) % mod;
+    for (ll i = 2; i < n; ++i) {
+        nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
     }
 }
 vl jcb, jcnyb;
-void initjc(int n) {
+void initjc(ll n) {//依赖ny,ksm
     jcb.assign(n + 1, 1);
     jcnyb.assign(n + 1, 1);
-    for (int i = 1; i <= n; ++i) {
+    for (ll i = 1; i <= n; ++i) {
         jcb[i] = jcb[i - 1] * i % mod;
     }
     jcnyb[n] = ny(jcb[n]);
-    for (int i = n - 1; i >= 0; --i) {
+    for (ll i = n - 1; i >= 0; --i) {
         jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
     }
 }
-inline ll C(ll n, ll k) {
+inline ll C(ll n, ll k) {//依赖initjc
     if (k < 0 || k > n) return 0;
     return jcb[n] * jcnyb[k] % mod * jcnyb[n - k] % mod;
 }
-inline ll A(ll n, ll k) {
+inline ll A(ll n, ll k) {//依赖initjc
     if (k < 0 || k > n) return 0;
     return jcb[n] * jcnyb[n - k] % mod;
 }
-int find(vi& root, int x) {
+int find(vi& root, int x) {//并查集简洁写法
     if (root[x] == x)return x;
     return root[x] = find(root, root[x]);
 }
-struct Trie {
+struct Trie {//常数大,注意优化
     struct Node {
         int next[26];int cnt;
         Node() {
@@ -223,24 +224,24 @@ struct SegTree {//1-idx
 
 
 void solve() {
-    //db("-----------");
-    
+    db("---------------");
 
-    
+
+
 }
-
 
 /*
 
 
 
 */
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);cout.tie(nullptr);
+    //initny(MAXN);
     //initjc(MAXN);
     //initp(MAXN);
-    //initny(MAXN);
     go(solve);
     //solve();
     return 0;
