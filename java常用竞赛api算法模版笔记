@@ -1,5 +1,5 @@
 重要模版 st表 树状数组 并查集 差分 二维差分 组合数 错排 快速幂 集合枚举 gcd 素数筛
-次要模板 ST表 树状数组 背包 区间dp 单调队列 最短路d和堆优化 Floyd 最小生成树k(并查集) prim 字典树 邻接表
+次要模板 ST表 树状数组 背包 区间dp 单调队列 单调栈 最短路d和堆优化 Floyd 最小生成树k(并查集) prim 字典树 邻接表
 
 math BigIntegar arrarys数组方法 collection集合方法
 集合通用方法 arraylist set map stack queue dueqe string stringbuilder
@@ -85,7 +85,7 @@ dfs回溯分组合 子集 切割 排列 棋盘
 排序不等式
 Arrays.asList(result)数组转list
 return Arrays.copyOf(ans, k);
-统计出现次数，树状数组加离散化
+树状数组统计出现次数或排序二分后离散化
 大写变小写、小写变大写 : 字符 ^= 32;大写变小写、小写变小写 : 字符 |= 32;小写变大写、大写变大写 : 字符 &= -33;
 HashMap<String, List<Integer>> map = new HashMap<>();多重映射相当于c++ unordered_map<K, vector<V>>
 map.putIfAbsent(key, new ArrayList<>());map.get(key).add(value);
@@ -133,10 +133,7 @@ class Pair {
 排序
 sort（）或sort((a,b)->a-b)升序
 sort（Collections.reverseOrder()）或sort((a,b)->b-a)降序
-Collections.sort(a, new Comparator<Integer>() {
- @Override public int compare(Integer o1, Integer o2) {
-return o2 - o1;} });匿名内部类写法
-Arrays.sort(people,(a,b)->{
+Arrays.sort(v,(a,b)->{
             if(a[0]==b[0])return a[1]-b[1];
             return b[0]-a[0];
 })二维比较Lambda表达式写法
