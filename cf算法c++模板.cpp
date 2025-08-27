@@ -30,6 +30,14 @@ template<typename T>
 void db(const vector<T>& v) { cout << "debug(1): "; for (const auto& i : v)cout << i << " "; cout << endl; }
 template <typename T>
 void db(const vector<vector<T>>& v) { cout << "debug(2): " << endl; for (const auto& i : v) { db(i); } }
+//sort(a.begin(), a.end(), greater<>());
+//sort(all(a), [](vi &a, vi &b) {return a[0] < b[0];});
+//priority_queue<int, vi, greater<int>> pq;
+//struct cmp {bool operator()(int a, int b) {return a > b;}};
+//priority_queue<int, vi, cmp> pq;
+//int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
+//<<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
+
 
 ll ksm(ll x, ll n) {
     ll ans = 1;
@@ -93,7 +101,7 @@ int find(vi& root, int x) {//并查集简洁写法
     if (root[x] == x)return x;
     return root[x] = find(root, root[x]);
 }
-struct Trie {//常数大,注意优化
+struct Trie {//常数较大
     struct Node {
         int next[26];int cnt;
         Node() {
@@ -224,16 +232,16 @@ struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
 
 void solve() {
     //db("---------------");
-
+    
 
 
 }
 
+
 /*
 
-
-
 */
+
 
 int main() {
     ios::sync_with_stdio(false);
