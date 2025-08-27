@@ -29,19 +29,21 @@ template<typename T>
 void db(const vector<T>& v) { cout << "debug(1): "; for (const auto& i : v)cout << i << " "; cout << endl; }
 template <typename T>
 void db(const vector<vector<T>>& v) { cout << "debug(2): " << endl; for (const auto& i : v) { db(i); } }
+
+
 void solve() {
-    //db("-----------");
+    //db("---------------");
     
 
-    
+
 }
 
 
 /*
 
-
-
 */
+
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);cout.tie(nullptr);
