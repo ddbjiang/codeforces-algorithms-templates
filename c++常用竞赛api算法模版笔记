@@ -39,25 +39,27 @@ using namespace std;
 #define no cout<<"NO"<<endl
 const ll mod = 1000000007;
 //const ll mod = 998244353;
-const int MAXN = 10000007;
 using vi = vector<int>;
 using vl = vector<ll>;
 using vd = vector<double>;
-using vvi = vector<vector<int> >;
-using vvl = vector<vector<ll> >;
+using vvi = vector<vector<int>>;
+using vvl = vector<vector<ll>>;
 using vvvi = vector<vector<vector<int>>>;
 using vvvl = vector<vector<vector<ll>>>;
-using vpii = vector<pair<int, int> >;
-using vpll = vector<pair<ll, ll> >;
+using vpii = vector<pair<int, int>>;
+using vpll = vector<pair<ll, ll>>;
 using pii = pair<int, int>;
 using pll = pair<ll, ll>;
 #define go(x) int t; cin >> t; while(t--) x();
 template<typename T>
-void db(const T& x) { cout << "debug: " << x << endl; }
+void db(T& x) {cout << x;}
 template<typename T>
-void db(const vector<T>& v) { cout << "debug(1): "; for (const auto& i : v)cout << i << " "; cout << endl; }
-template <typename T>
-void db(const vector<vector<T>>& v) { cout << "debug(2): " << endl; for (const auto& i : v) { db(i); } }
+void db(vector<T>& v){cout << "[";for (auto &x : v) cout << (&x==&v[0]?"":",") << x;cout << "]";}
+template<typename T>
+void db(vector<vector<T>>& v) {cout << endl;for (auto& i : v) {db(i);cout << endl;}}
+template<typename T>
+void debug(char* name, T& x) {cout << "debug: " << name << " = ";db(x);cout << endl;}
+#define db(x) debug(#x, x)
 //sort(a.begin(), a.end(), greater<>());
 //sort(all(a), [](vi &a, vi &b) {return a[0] < b[0];});
 //priority_queue<int, vi, greater<int>> pq;
@@ -79,7 +81,7 @@ ll ksm(ll x, ll n) {
 ll ny(ll x) {//依赖ksm
     return ksm(x, mod - 2);
 }
-vi minp, primes;//最小质因数和小于等于n的全部质数，最小质因数等于自己为质数
+vi minp, primes;//最小质因数等于自身为质数，小于等于n的全部质数
 void initp(int n) {
     minp.assign(n + 1, 0);
     primes.clear();
@@ -96,7 +98,7 @@ void initp(int n) {
     }
 }
 vl nyb;
-void initny(ll n){//逆元线性求法
+void initny(ll n){//线性求逆元
     nyb.assign(n, 0);
     nyb[1] = 1;
     for (ll i = 2; i < n; ++i) {
@@ -255,7 +257,8 @@ struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
     }
 };
 void solve() {
-    //db("---------------");
+    //cout << "---------------" << endl;
+   
    
 }
 /*
@@ -305,16 +308,16 @@ sort(v.begin(), v.end(), cmp);自定义比较函数
 
 优先队列自定义排序
 struct cmp {
-    bool operator()(int a, int b) {
-        return a > b;
-        }
-    };
-    priority_queue<int, vi, cmp> pq;
+    bool operator()(int a, int b) {
+        return a > b;
+        }
+    };
+    priority_queue<int, vi, cmp> pq;
 
-    auto cmp = [](int a, int b) { return a > b; };
-    priority_queue<int, vi, decltype(cmp)> pq(cmp);
+    auto cmp = [](int a, int b) { return a > b; };
+    priority_queue<int, vi, decltype(cmp)> pq(cmp);
 
-    priority_queue<int, vi, greater<int>> pq;
+    priority_queue<int, vi, greater<int>> pq;
 
 最小堆priority_queue<int, vi, greater<int>> pq;
 
