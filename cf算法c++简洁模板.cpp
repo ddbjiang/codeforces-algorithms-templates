@@ -14,27 +14,29 @@ const ll mod = 1000000007;
 using vi = vector<int>;
 using vl = vector<ll>;
 using vd = vector<double>;
-using vvi = vector<vector<int> >;
-using vvl = vector<vector<ll> >;
+using vvi = vector<vector<int>>;
+using vvl = vector<vector<ll>>;
 using vvvi = vector<vector<vector<int>>>;
 using vvvl = vector<vector<vector<ll>>>;
-using vpii = vector<pair<int, int> >;
-using vpll = vector<pair<ll, ll> >;
+using vpii = vector<pair<int, int>>;
+using vpll = vector<pair<ll, ll>>;
 using pii = pair<int, int>;
 using pll = pair<ll, ll>;
 #define go(x) int t; cin >> t; while(t--) x();
 template<typename T>
-void db(const T& x) { cout << "debug: " << x << endl; }
+void db(T& x) {cout << x;}
 template<typename T>
-void db(const vector<T>& v) { cout << "debug(1): "; for (const auto& i : v)cout << i << " "; cout << endl; }
-template <typename T>
-void db(const vector<vector<T>>& v) { cout << "debug(2): " << endl; for (const auto& i : v) { db(i); } }
-
+void db(vector<T>& v){cout << "[";for (auto &x : v) cout << (&x==&v[0]?"":",") << x;cout << "]";}
+template<typename T>
+void db(vector<vector<T>>& v) {cout << endl;for (auto& i : v) {db(i);cout << endl;}}
+template<typename T>
+void debug(char* name, T& x) {cout << "debug: " << name << " = ";db(x);cout << endl;}
+#define db(x) debug(#x, x)
 
 void solve() {
-    //db("---------------");
+    //cout << "---------------" << endl;
     
-
+    
 
 }
 
