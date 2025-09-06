@@ -281,6 +281,8 @@ f[k + 1][i][j] = Math.min(f[k][i][j], f[k][i][k] + f[k][k][j]);可以优化成�
 0.5*|(( x₁y₂ + x₂y₃ + ... + xₙ₋₁yₙ + xₙy₁ ) - ( y₁x₂ + y₂x₃ + ... + yₙ₋₁xₙ + yₙx₁ ))|多边形面积公式
 枚举右维护左 枚举中间前后缀分解
 排序不等式贪心最大最小
+单调栈求下一个更大更小 单调队列求区间最大最小
+01bfs双端队列实现 01花费（传送门）
 
 自定义排序
 sort(a.begin(), a.end()); // 升序
@@ -504,25 +506,18 @@ cp[0] = 1; cp[1] = 0;
 for (int i = 2; i <= n; i++)
     cp[i] = (i - 1) * (cp[i - 1] + cp[i - 2]);
 并查集按秩合并
-vi root(n + 1), rank(n + 1);
-int find(vi& root, int x) {
-    if (root[x] == x) return x;
-    return root[x] = find(root, root[x]);
+int find(vi &root, int x){
+    if(root[x]!=x) root[x] = find(root, root[x]);
+    return root[x];
 }
-void union_set(int x, int y) {
-    int xx = find(root, x);
-    int yy = find(root, y);
-    if (xx == yy) {
-        return;
-    }
-    if (rank[xx] < rank[yy]) {
-        swap(xx, yy);
-    }
-    root[yy] = xx;
-    if (rank[xx] == rank[yy]) {
-        rank[xx]++;
-    }
+void unite(vi &root, vi &rank, int x,int y){
+    x=find(root,x); y=find(root,y);
+    if(x==y) return;
+    if(rank[x]<rank[y]) swap(x,y);
+    root[y]=x;
+    if(rank[x]==rank[y]) rank[x]++;
 }
+
 区间dp
 for (int len = 2; len <= n; len++) {
     for (int i = 1; i + len - 1 <= n; i++) {
