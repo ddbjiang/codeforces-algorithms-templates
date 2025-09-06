@@ -322,20 +322,14 @@ equal(arr1.begin(), arr1.end(), arr2.begin());判等
 binary_search(arr.begin(), arr.end(), 5);二分
 for (int& i : nums)可修改加强for循环
 reverse(nums.begin(), nums.end())反转
-max_element(nums.begin(), nums.end())最大
-min_element(nums.begin(), nums.end())最小
-accumulate(开始迭代器, 结束迭代器, 初始值)：计算容器元素的总和
 count(元素)：返回容器中指定元素的出现次数。
 clear()：清空容器中的所有元素。
 size()：返回容器中的元素个数。
 empty()：判断容器是否为空，返回布尔值。
-begin()：返回指向第一个元素的迭代器。
-end()：返回指向最后一个元素之后位置的迭代器。
-rbegin()：返回指向最后一个元素的反向迭代器。
-rend()：返回指向第一个元素之前的反向迭代器。
+begin()：返回指向第一个元素的迭代器。end()：返回指向最后一个元素之后位置的迭代器。
+rbegin()：返回指向最后一个元素的反向迭代器。rend()：返回指向第一个元素之前的反向迭代器。
 find(元素)：查找指定元素，返回迭代器指向该元素的位置。
 swap(另一个vector)：交换两个 vector 的内容。可以用来清空
-迭代器遍历
 unique(迭代器，迭代器)相邻重复元素移到末尾，返回去重后结尾迭代器
 merge(1begin，1end，2begin，2end，back_inserter3)两个有序序列有序合并到第三个序列的插入迭代器
 inplace_merge(begin，begin+middle，end)范围原地合并成有序序列
@@ -345,11 +339,7 @@ prev_permutation上一个全排列
 
 STL
 vector动态数组
-vector<int> vec;                          // 空 vector
-vector<int> vec(n);                        // 创建大小为 n 的 vector，元素默认值为 0（整型）
-vector<int> vec(n, val);                   // 创建大小为 n 的 vector，所有元素初始化为 val
-vector<int> vec = {1, 2, 3};               // 用列表初始化
-vector<int> vec2(vec1);                    // 用另一个 vector 初始化
+vector<int> vec;vector<int> vec(n);vector<int> vec(n, val);vector<int> vec = {1, 2, 3};vector<int> vec2(vec1);
 vector<vector<int>> ans(n, vector<int>(m, 0)); // 创建二维动态数组 n x m
 push_back(value);                          // 在末尾添加元素
 insert(pos, value);                        // 在指定位置插入元素
@@ -454,8 +444,7 @@ s.find_first_of("abc")查找第一个出现在 "abc" 中的字符
 s.find_last_of("abc")查找最后一个出现在 "abc" 中的字符
 s.find_first_not_of("abc")查找第一个不在 "abc" 中的字符
 s.find_last_not_of("abc")查找最后一个不在 "abc" 中的字符
-stoi(s) string转int
-to_string(int) int转string
+stoi(s) string转int to_string(int) int转string
 
 bitset
 bitset<32> b;bitset<8> b(15);bitset<8> b("10101010");
