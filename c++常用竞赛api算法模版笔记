@@ -468,7 +468,6 @@ b.to_string()   // 转为字符串
 for (int i = 0; i < (1 << l); i++)
     for (int j = 0; j < l; j++)
         if (i >> j & 1)
-
 二维差分（不需要显式初始化）
 void insert(int x1, int y1, int x2, int y2, int c) {
     a[x1][y1] += c;
@@ -506,7 +505,6 @@ void unite(vi &root, vi &rank, int x,int y){
     root[y]=x;
     if(rank[x]==rank[y]) rank[x]++;
 }
-
 区间dp
 for (int len = 2; len <= n; len++) {
     for (int i = 1; i + len - 1 <= n; i++) {
@@ -539,7 +537,6 @@ for (int i = 1; i <= n; i++)
     for (int j = m; j >= 0; j--)
         for (int k = 1; k <= s[i]; k++)
             if (j >= w[i][k])dp[j] = max(dp[j], dp[j - w[i][k]] + v[i][k]);
-
 最短路 Dijkstra
 vector<vpii> g(n + 1);
 vi dist(n + 1, INT_MAX);
@@ -556,11 +553,7 @@ while (!pq.empty()) {
         int w = edge.second;
         if (dist[v] > dist[u] + w) {
             dist[v] = dist[u] + w;
-            pq.push({ dist[v], v });
-        }
-    }
-}
-
+            pq.push({ dist[v], v });}}}
 最小生成树 Kruskal
 vvi edges;
 vi root;
@@ -575,9 +568,7 @@ for (vi& e : edges) {
     int x= find(u), y = find(v);
     if (x != y) {
         total += w;
-        root[x] = y;
-    }
-}
+        root[x] = y;}}
 求约数个数 唯一分解定理
 int yscount(int x) {
     int sum = 1;
@@ -585,14 +576,12 @@ int yscount(int x) {
         int p = minp[x];
         int t= 0;
         while (minp[x] == p) {
-            t++;
-            x /= p;
+            t++;x /= p;
         }
         sum *= (t + 1);
     }
     return sum;
 }
-
 线段树
 struct SegTree {
     int n;
