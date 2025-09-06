@@ -313,16 +313,15 @@ struct cmp {
 cmath
 abs fabs sqrt cbrt pow(x,y) exp自然对数的指数函数 log log2 log10 ceil向上取整 floor向下取整 round四舍五入 trunc截断小数 fmod浮点取余 hypot勾股 nearbyint返回最接近的整数 sin cos tan
 
-数组集合方法
+集合通用方法
 stable_sort稳定排序
-fill(arr.begin(), arr.end(), 0);
-equal(arr1.begin(), arr1.end(), arr2.begin());
-binary_search(arr.begin(), arr.end(), 5);
-for (int i : nums)
-for (int& i : nums)可以修改的加强for循环吗
-reverse(nums.begin(), nums.end())
-max_element(nums.begin(), nums.end())
-min_element(nums.begin(), nums.end())
+fill(arr.begin(), arr.end(), 0);填充
+equal(arr1.begin(), arr1.end(), arr2.begin());判等
+binary_search(arr.begin(), arr.end(), 5);二分
+for (int& i : nums)可修改加强for循环
+reverse(nums.begin(), nums.end())反转
+max_element(nums.begin(), nums.end())最大
+min_element(nums.begin(), nums.end())最小
 accumulate(开始迭代器, 结束迭代器, 初始值)：计算容器元素的总和
 count(元素)：返回容器中指定元素的出现次数。
 clear()：清空容器中的所有元素。
@@ -336,8 +335,6 @@ find(元素)：查找指定元素，返回迭代器指向该元素的位置。
 swap(另一个vector)：交换两个 vector 的内容。可以用来清空
 迭代器遍历
 unique(迭代器，迭代器)相邻重复元素移到末尾，返回去重后结尾迭代器
-lower_bound返回首个不小于x的迭代器，否则返回end
-upper_bound返回首个大于x的迭代器，否则返回end
 merge(1begin，1end，2begin，2end，back_inserter3)两个有序序列有序合并到第三个序列的插入迭代器
 inplace_merge(begin，begin+middle，end)范围原地合并成有序序列
 next_permutatin(begin，end)全排列更改为下一个排列
@@ -373,7 +370,6 @@ pop_front();             // 删除第一个元素
 remove(value);           // 删除所有等于 value 的元素
 remove_if(pred);         // 删除满足条件的元素（可用 lambda）
 reverse();               // 翻转列表
-unique();                // 删除连续重复元素
 
 set集合（红黑树映射）multiset重复集合 unordered_set哈希集合
 s.insert(value);           // 将元素插入集合（multiset 可重复，set 不重复）
@@ -445,7 +441,6 @@ substr()：根据位置和长度提取子串。
 replace()：替换字符串中的某个部分为另一段字符串。
 insert()：某个位置插入字符串
 erase()：删除字符串的一部分
-unique()：去重
 reverse()反转
  toupper(c); // 转换为大写 tolower(c); // 转换为小写
 compare()：比较两个字符串。相等=0
