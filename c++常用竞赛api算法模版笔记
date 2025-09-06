@@ -292,9 +292,7 @@ sort(v.begin(), v.end(), [](auto &a, auto &b) {
     return a.second < b.second; // 按照 second 升序
 });lambda表达式写法
 
-bool cmp(pair<int, int> a, pair<int, int> b) {
-    return a.first < b.first;
-}
+bool cmp(pair<int, int> a, pair<int, int> b) {return a.first < b.first;}
 sort(v.begin(), v.end(), cmp);自定义比较函数
 
 优先队列自定义排序
@@ -360,7 +358,6 @@ assign(count, value);    // 用 count 个 value 替换当前列表
 pop_back();              // 删除最后一个元素
 pop_front();             // 删除第一个元素
 remove(value);           // 删除所有等于 value 的元素
-remove_if(pred);         // 删除满足条件的元素（可用 lambda）
 reverse();               // 翻转列表
 
 set集合（红黑树映射）multiset重复集合 unordered_set哈希集合
@@ -510,10 +507,7 @@ for (int len = 2; len <= n; len++) {
     for (int i = 1; i + len - 1 <= n; i++) {
         int j = i + len - 1;
         for (int k = i; k < j; k++) {
-            dp[i][j] = min(dp[i][j], dp[i][k] + dp[k + 1][j] + cost(i, k, j));
-        }
-    }
-}
+            dp[i][j] = min(dp[i][j], dp[i][k] + dp[k + 1][j] + cost(i, k, j));}}}
 01背包
 for (int i = 1; i <= n; i++)
     for (int j = m; j >= w[i]; j--)
@@ -590,14 +584,7 @@ struct SegTree {
         n = size;
         tree.assign(4 * n, 0);
         lazy.assign(4 * n, 0);
-        // 初始化建议：
-        // sum: 0
-        // max: -INF
-        // min: INF
-        // gcd: 0
-        // lcm: 1?
-        // 乘积: 1
-        // |, &, ^: 0
+        // 初始化建议：sum: 0 max: -INF min: INF gcd: 0 lcm: 1? 乘积: 1   |, &, ^: 0
     }
     void push(int v, int l, int r) {
         if (lazy[v] == 0) return;  // 懒标记为0，不操作
