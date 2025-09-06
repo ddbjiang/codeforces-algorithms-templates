@@ -1,13 +1,11 @@
 头文件iostream iomanip cmath string cctype algorithm
 #include bits/stdc++.h 万能头
-
 不定输入
 int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}
 输出
 <<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
 printf%d整数 %.2f浮点数 %s字符串 .1lf四舍五入一位小数 %e科学记数法 %c字符 %b布尔
 宽度%8d，左边加空格，负号就是右边加空格 printf("%8.2f",x)8个字符，精度为2个字符
-
 模板
 #include <bits/stdc++.h>
 using namespace std;
@@ -255,7 +253,6 @@ int main() {
     //solve();
     return 0;
 }
-
 基础
 int*a=new int(n) delete[] a动态数组
 memset（位置，指定元素，sizeof（数组））初始化数组为指定元素
@@ -283,18 +280,14 @@ f[k + 1][i][j] = Math.min(f[k][i][j], f[k][i][k] + f[k][k][j]);可以优化成�
 排序不等式贪心最大最小
 单调栈求下一个更大更小 单调队列求区间最大最小
 01bfs双端队列实现 01花费（传送门）
-
 自定义排序
 sort(a.begin(), a.end()); // 升序
 sort(a.begin(), a.end(), greater<>()); // 降序
-
 sort(v.begin(), v.end(), [](auto &a, auto &b) {
     return a.second < b.second; // 按照 second 升序
 });lambda表达式写法
-
 bool cmp(pair<int, int> a, pair<int, int> b) {return a.first < b.first;}
 sort(v.begin(), v.end(), cmp);自定义比较函数
-
 优先队列自定义排序
 struct cmp {
     bool operator()(int a, int b) {
@@ -302,17 +295,12 @@ struct cmp {
         }
     };
     priority_queue<int, vi, cmp> pq;
-
     auto cmp = [](int a, int b) { return a > b; };
     priority_queue<int, vi, decltype(cmp)> pq(cmp);
-
     priority_queue<int, vi, greater<int>> pq;
-
 最小堆priority_queue<int, vi, greater<int>> pq;
-
 cmath
 abs fabs sqrt cbrt pow(x,y) exp自然对数的指数函数 log log2 log10 ceil向上取整 floor向下取整 round四舍五入 trunc截断小数 fmod浮点取余 hypot勾股 nearbyint返回最接近的整数 sin cos tan
-
 集合通用方法
 stable_sort稳定排序
 fill(arr.begin(), arr.end(), 0);填充
@@ -334,7 +322,6 @@ inplace_merge(begin，begin+middle，end)范围原地合并成有序序列
 next_permutatin(begin，end)全排列更改为下一个排列
 最后一个返回false并变回第一个，否则返回true
 prev_permutation上一个全排列
-
 STL
 vector动态数组
 vector<int> vec;vector<int> vec(n);vector<int> vec(n, val);vector<int> vec = {1, 2, 3};vector<int> vec2(vec1);
@@ -350,7 +337,6 @@ vec.at(index);                             // 返回指定索引元素，越界�
 front();                                   // 返回第一个元素
 back();                                    // 返回最后一个元素
 assign(n, value);                          // 将容器的所有元素赋值为 value，大小为 n
-
 list双向链表
 push_back(value);        // 在列表末尾添加元素
 push_front(value);       // 在列表开头添加元素
@@ -388,7 +374,6 @@ stack栈
 push(element)：将元素压入栈顶。
 pop()：移除栈顶元素，但不返回其值。
 top()：返回栈顶元素的引用，但不移除它。
-
 queue队列
 push(element)：将元素添加到队列的尾部。
 pop()：移除队列的第一个元素，但不返回其值
@@ -403,7 +388,6 @@ pop_back()删除尾部
 front()：返回对双端队列第一个元素的引用。
 back()：返回队列最后一个元素的引用，但不移除它。
 []随机访问
-
 priority_queue优先队列
 priority_queue<int> maxHeap;最大堆
 priority_queue<int,ci, greater<int>> minHeap;最小堆
@@ -445,21 +429,21 @@ stoi(s) string转int to_string(int) int转string
 
 bitset
 bitset<32> b;bitset<8> b(15);bitset<8> b("10101010");
-b[i]            // 访问第 i 位（从右往左，0-indexed）
-b.set()         // 所有位设为 1
-b.set(i)        // 第 i 位设为 1
-b.set(i, 0)     // 第 i 位设为 0
-b.reset()       // 所有位设为 0
-b.reset(i)      // 第 i 位设为 0
-b.flip()        // 所有位翻转
-b.flip(i)       // 第 i 位翻转
-b.count()       // 返回 1 的个数（非常快）
-b.size()        // 返回位数 N
-b.any()         // 是否至少有一个 1
-b.none()        // 是否全为 0
-b.all()         // 是否全为 1
-b.to_ullong()   // 转为 unsigned long long
-b.to_string()   // 转为字符串
+b[i]            // 访问第 i 位（从右往左，0-indexed）
+b.set()         // 所有位设为 1
+b.set(i)        // 第 i 位设为 1
+b.set(i, 0)     // 第 i 位设为 0
+b.reset()       // 所有位设为 0
+b.reset(i)      // 第 i 位设为 0
+b.flip()        // 所有位翻转
+b.flip(i)       // 第 i 位翻转
+b.count()       // 返回 1 的个数（非常快）
+b.size()        // 返回位数 N
+b.any()         // 是否至少有一个 1
+b.none()        // 是否全为 0
+b.all()         // 是否全为 1
+b.to_ullong()   // 转为 unsigned long long
+b.to_string()   // 转为字符串
 
 集合枚举
 for (int i = 0; i < (1 << l); i++)
