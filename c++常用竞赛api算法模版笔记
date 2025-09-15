@@ -344,7 +344,8 @@ assign(count, value);    // 用 count 个 value 替换当前列表
 pop_back();              // 删除最后一个元素
 pop_front();             // 删除第一个元素
 remove(value);           // 删除所有等于 value 的元素
-reverse();               // 翻转列表
+reverse(a.);               // 翻转列表
+auto it = find(all(a), mx);a.erase(it);//删除指定元素
 
 set集合（红黑树映射）multiset重复集合 unordered_set哈希集合
 s.insert(value);           // 将元素插入集合（multiset 可重复，set 不重复）
