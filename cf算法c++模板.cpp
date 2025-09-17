@@ -3,6 +3,7 @@ using namespace std;
 #define endl "\n"
 #define all(a) a.begin(), a.end()
 #define rall(a) a.rbegin(), a.rend()
+#define int long long
 #define ll long long
 #define ull unsigned long long
 #define pb push_back
@@ -12,25 +13,20 @@ using namespace std;
 const ll mod = 1000000007;
 //const ll mod = 998244353;
 using vi = vector<int>;
-using vl = vector<ll>;
 using vd = vector<double>;
 using vvi = vector<vector<int>>;
-using vvl = vector<vector<ll>>;
 using vvvi = vector<vector<vector<int>>>;
-using vvvl = vector<vector<vector<ll>>>;
 using vpii = vector<pair<int, int>>;
-using vpll = vector<pair<ll, ll>>;
 using pii = pair<int, int>;
-using pll = pair<ll, ll>;
 #define go(x) int t; cin >> t; while(t--) x();
 template<typename T>
-void db(T& x) {cout << x;}
+void db(T& x) { cout << x; }
 template<typename T>
-void db(vector<T>& v){cout << "[";for (auto &x : v) cout << (&x==&v[0]?"":",") << x;cout << "]";}
+void db(vector<T>& v) { cout << "[";for (auto& x : v) cout << (&x == &v[0] ? "" : ",") << x;cout << "]"; }
 template<typename T>
-void db(vector<vector<T>>& v) {cout << endl;for (auto& i : v) {db(i);cout << endl;}}
+void db(vector<vector<T>>& v) { cout << endl;for (auto& i : v) { db(i);cout << endl; } }
 template<typename T>
-void debug(char* name, T& x) {cout << "debug: " << name << " = ";db(x);cout << endl;}
+void debug(char* name, T& x) { cout << "debug: " << name << " = ";db(x);cout << endl; }
 #define db(x) debug(#x, x)
 //sort(a.begin(), a.end(), greater<>());
 //sort(all(a), [](vi &a, vi &b) {return a[0] < b[0];});
@@ -71,7 +67,7 @@ void initp(int n) {
         }
     }
 }
-vl nyb;
+vi nyb;
 void initny(ll n){//线性求逆元
     nyb.assign(n, 0);
     nyb[1] = 1;
@@ -79,7 +75,7 @@ void initny(ll n){//线性求逆元
         nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
     }
 }
-vl jcb, jcnyb;
+vi jcb, jcnyb;
 void initjc(ll n) {//依赖ny,ksm
     jcb.assign(n + 1, 1);
     jcnyb.assign(n + 1, 1);
@@ -142,7 +138,7 @@ struct Trie {//常数较大
     }
 };
 struct Treea {//1-idx
-    int n;vl tree;
+    int n;vi tree;
     Treea(int size) {
         n = size;tree.assign(n + 1, 0);
     }
@@ -187,7 +183,7 @@ struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
 };
 struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
     int n;
-    vl tree, lazy;
+    vi tree, lazy;
     SegTree(int size) {
         n = size;
         tree.assign(4 * n, 0);
@@ -235,7 +231,7 @@ struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
 void solve() {
     //cout << "---------------" << endl;
     
-    
+
 
 }
 
@@ -245,7 +241,7 @@ void solve() {
 */
 
 
-int main() {
+signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);cout.tie(nullptr);
     //initny(MAXN);
