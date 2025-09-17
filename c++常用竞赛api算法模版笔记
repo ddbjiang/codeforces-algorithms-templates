@@ -6,6 +6,7 @@ int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstre
 <<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
 printf%d整数 %.2f浮点数 %s字符串 .1lf四舍五入一位小数 %e科学记数法 %c字符 %b布尔
 宽度%8d，左边加空格，负号就是右边加空格 printf("%8.2f",x)8个字符，精度为2个字符
+结构化绑定for (auto&[x, y] : mp) { cout << x << " " << y << endl;}
 模板
 #include <bits/stdc++.h>
 using namespace std;
