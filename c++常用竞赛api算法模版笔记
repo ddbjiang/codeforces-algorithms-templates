@@ -1,5 +1,5 @@
 头文件iostream iomanip cmath string cctype algorithm
-#include bits/stdc++.h 万能头
+#include <bits/stdc++.h> 万能头
 不定输入
 int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}
 输出
