@@ -268,8 +268,7 @@ __builtin_popcount(i); // 计算二进制1的个数
 拓扑排序dfs倒序，bfs正序
 最短路d朴素算法 初始化两点距离g和单点最短路数组dist，找当前点连接的最短距离的点，标记访问过，更新dist数组
 堆优化版，带距离邻接表g加优先队列
-最短路Floyd算法，二维数组存边的距离，无边赋最大值。三维数组递推
-f[k + 1][i][j] = Math.min(f[k][i][j], f[k][i][k] + f[k][k][j]);可以优化成二维
+最短路Floyd算法，二维数组存边的距离，无边赋最大值。三维递推f[k + 1][i][j] = Math.min(f[k][i][j], f[k][i][k] + f[k][k][j]);可以优化成二维
 最小生成树k算法，按权值升序，如果两点祖先不同合并答案加权值
 最小生成树prim算法，带距离邻接表g加优先队列
 0.5*|(( x₁y₂ + x₂y₃ + ... + xₙ₋₁yₙ + xₙy₁ ) - ( y₁x₂ + y₂x₃ + ... + yₙ₋₁xₙ + yₙx₁ ))|多边形面积公式
@@ -282,9 +281,9 @@ sort(a.begin(), a.end()); // 升序
 sort(a.begin(), a.end(), greater<>()); // 降序
 sort(v.begin(), v.end(), [](auto &a, auto &b) {
     return a.second < b.second; // 按照 second 升序
-});lambda表达式写法
+});//lambda表达式写法
 bool cmp(pair<int, int> a, pair<int, int> b) {return a.first < b.first;}
-sort(v.begin(), v.end(), cmp);自定义比较函数
+sort(v.begin(), v.end(), cmp);//自定义比较函数
 优先队列自定义排序
 struct cmp {
     bool operator()(int a, int b) {
@@ -319,6 +318,12 @@ inplace_merge(begin，begin+middle，end)范围原地合并成有序序列
 next_permutatin(begin，end)全排列更改为下一个排列
 最后一个返回false并变回第一个，否则返回true
 prev_permutation上一个全排列
+auto it = find(all(a), mx);a.erase(it);//删除指定元素
+auto it = lower_bound(v.begin(), v.end(), x);// 返回第一个 >= x 的位置 
+auto it = upper_bound(v.begin(), v.end(), x);  // 返回第一个 > x 的位置 
+auto it1 = lower_bound(v.begin(), v.end(), x); auto it2 = upper_bound(v.begin(), v.end(), x); int count = it2 - it1;// 范围 [it1, it2) 是所有等于 x 的元素 
+rotate(v.begin(), v.begin() + 2, v.end()); // {1,2,3,4,5} -> {3,4,5,1,2}循环位移
+
 STL
 vector动态数组
 vector<int> vec;vector<int> vec(n);vector<int> vec(n, val);vector<int> vec = {1, 2, 3};vector<int> vec2(vec1);
@@ -337,15 +342,14 @@ assign(n, value);                          // 将容器的所有元素赋值为 
 list双向链表
 push_back(value);        // 在列表末尾添加元素
 push_front(value);       // 在列表开头添加元素
-assign(count, value);    // 用 count 个 value 替换当前列表
 pop_back();              // 删除最后一个元素
 pop_front();             // 删除第一个元素
 remove(value);           // 删除所有等于 value 的元素
 reverse(a.);               // 翻转列表
-auto it = find(all(a), mx);a.erase(it);//删除指定元素
 
 vector<int> arr(dq.begin(), dq.end());//deuqe转数组
-vector<pair<string, int>> vp(m.begin(), m.end());//map转pair数组vector<int> arr(s.begin(), s.end());//set转数组
+vector<pair<string, int>> vp(m.begin(), m.end());//map转pair数组
+vector<int> arr(s.begin(), s.end());//set转数组
 
 set集合（红黑树映射）multiset重复集合 unordered_set哈希集合
 s.insert(value);           // 将元素插入集合（multiset 可重复，set 不重复）
@@ -389,6 +393,7 @@ pop_back()删除尾部
 front()：返回对双端队列第一个元素的引用。
 back()：返回队列最后一个元素的引用，但不移除它。
 []随机访问
+
 priority_queue优先队列
 priority_queue<int> maxHeap;最大堆
 priority_queue<int,ci, greater<int>> minHeap;最小堆
