@@ -8,8 +8,6 @@ using namespace std;
 #define mb emplace_back
 #define yes cout<<"YES"<<endl
 #define no cout<<"NO"<<endl
-const ll mod = 1000000007;
-//const ll mod = 998244353;
 using ll = long long;
 using ull = unsigned long long;
 using vi = vector<int>;
@@ -18,6 +16,8 @@ using vvi = vector<vector<int>>;
 using vvvi = vector<vector<vector<int>>>;
 using vpii = vector<pair<int, int>>;
 using pii = pair<int, int>;
+const ll mod = 1000000007;
+//const ll mod = 998244353;
 template<typename T>
 void db(T& x) { cout << x; }
 template<typename T>
