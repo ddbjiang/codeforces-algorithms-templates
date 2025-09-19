@@ -18,7 +18,6 @@ using vvi = vector<vector<int>>;
 using vvvi = vector<vector<vector<int>>>;
 using vpii = vector<pair<int, int>>;
 using pii = pair<int, int>;
-#define go(x) int t; cin >> t; while(t--) x();
 template<typename T>
 void db(T& x) { cout << x; }
 template<typename T>
@@ -45,7 +44,11 @@ void solve() {
 signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);cout.tie(nullptr);
-    go(solve);
-    //solve();
+    int t = 1;
+    cin >> t;
+    for (int i = 1; i <= t; i++) {
+        //cout << "----Test " << i << "----" << endl;
+        solve();
+    }
     return 0;
 }
