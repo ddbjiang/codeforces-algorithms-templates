@@ -4,14 +4,14 @@ using namespace std;
 #define all(a) a.begin(), a.end()
 #define rall(a) a.rbegin(), a.rend()
 #define int long long
-#define ll long long
-#define ull unsigned long long
 #define pb push_back
 #define mb emplace_back
 #define yes cout<<"YES"<<endl
 #define no cout<<"NO"<<endl
 const ll mod = 1000000007;
 //const ll mod = 998244353;
+using ll = long long;
+using ull = unsigned long long;
 using vi = vector<int>;
 using vd = vector<double>;
 using vvi = vector<vector<int>>;
