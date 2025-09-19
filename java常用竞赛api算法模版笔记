@@ -1,664 +1,666 @@
-重要模版 st表 树状数组 并查集 差分 二维差分 组合数 错排 快速幂 集合枚举 gcd 素数筛
-次要模板 ST表 树状数组 背包 区间dp 单调队列 单调栈 最短路d和堆优化 Floyd 最小生成树k(并查集) prim 字典树 邻接表
-
-math BigIntegar arrarys数组方法 collection集合方法
-集合通用方法 arraylist set map stack queue dueqe string stringbuilder
-
-import java.util.*;java万能头
-import static java.lang.Math.*;静态导入math类
-public static void main(String[] args)主类
-
-输入 scanner类
-while (sc.hasNextInt())处理不定行输入
-Scanner in=new Scanner(System.in);
-nextByte() nextShort() nextInt() nextLong() nextFloat() nextDouble() next()空格分割 nextLine()当前行 hasNext()检查输入 in.close
-输出 System.out.println()
+头文件iostream iomanip cmath string cctype algorithm
+#include <bits/stdc++.h> 万能头
+不定输入
+int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}
+输出
+<<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
 printf%d整数 %.2f浮点数 %s字符串 .1lf四舍五入一位小数 %e科学记数法 %c字符 %b布尔
 宽度%8d，左边加空格，负号就是右边加空格 printf("%8.2f",x)8个字符，精度为2个字符
-
-快读st br isr 快写pw osw
-import java.io.*;
-import java.util.*;
-public class Main {
-    static PrintWriter pw = new PrintWriter(new OutputStreamWriter(System.out));
-    public static void main(String[] args) throws Exception {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        //int n=Integer.parseInt(bf.readLine().trim());
-        //String s=bf.readLine().trim();
-        Read in = new Read();
-        
-        pw.flush();
-    }
-    public static class Read {
-        StreamTokenizer st = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
-        public int nextInt() throws IOException {
-            st.nextToken();
-            return (int) st.nval;
-        }
-        public long nextLong() throws IOException {
-            st.nextToken();
-            return (long) st.nval;
-        }
-        public double nextDouble() throws IOException {
-            st.nextToken();
-            return st.nval;
-        }
-        public String nextword() throws Exception{ 
-    		st.nextToken();
-    		return st.sval;
-    	}
-    }
+结构化绑定for (auto&[x, y] : mp) { cout << x << " " << y << endl;}
+模板
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define all(a) a.begin(), a.end()
+#define rall(a) a.rbegin(), a.rend()
+#define int long long
+#define pb push_back
+#define mb emplace_back
+#define yes cout<<"YES"<<endl
+#define no cout<<"NO"<<endl
+const ll mod = 1000000007;
+//const ll mod = 998244353;
+using ll = long long;
+using ull = unsigned long long;
+using vi = vector<int>;
+using vd = vector<double>;
+using vvi = vector<vector<int>>;
+using vvvi = vector<vector<vector<int>>>;
+using vpii = vector<pair<int, int>>;
+using pii = pair<int, int>;
+template<typename T>
+void db(T& x) { cout << x; }
+template<typename T>
+void db(vector<T>& v) { cout << "[";for (auto& x : v) cout << (&x == &v[0] ? "" : ",") << x;cout << "]"; }
+template<typename T>
+void db(vector<vector<T>>& v) { cout << endl;for (auto& i : v) { db(i);cout << endl; } }
+template<typename T>
+void debug(char* name, T& x) { cout << "debug: " << name << " = ";db(x);cout << endl; }
+#define db(x) debug(#x, x)
+//sort(a.begin(), a.end(), greater<>());
+//sort(all(a), [](vi &a, vi &b) {return a[0] < b[0];});
+//priority_queue<int, vi, greater<int>> pq;
+//struct cmp {bool operator()(int a, int b) {return a > b;}};
+//priority_queue<int, vi, cmp> pq;
+//int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
+//<<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
+ll ksm(ll x, ll n) {
+    ll ans = 1;
+    while (n > 0) {
+        if (n & 1) {
+            ans = ans * x % mod;
+        }
+        x = x * x % mod;
+        n >>= 1;
+    }
+    return ans;
 }
-基础算法备忘
-最大int 2147483647 最小int -2147483648
+ll ny(ll x) {//依赖ksm
+    return ksm(x, mod - 2);
+}
+vi minp, primes;//最小质因数等于自身为质数，小于等于n的全部质数
+void initp(int n) {
+    minp.assign(n + 1, 0);
+    primes.clear();
+    for (int i = 2; i <= n; i++) {
+        if (minp[i] == 0) {
+            minp[i] = i;
+            primes.push_back(i);
+        }
+        for (const int& p : primes) {
+            if (i * p > n)break;
+            minp[i * p] = p;
+            if (p == minp[i])break;
+        }
+    }
+}
+vi nyb;
+void initny(ll n){//线性求逆元
+    nyb.assign(n, 0);
+    nyb[1] = 1;
+    for (ll i = 2; i < n; ++i) {
+        nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
+    }
+}
+vi jcb, jcnyb;
+void initjc(ll n) {//依赖ny,ksm
+    jcb.assign(n + 1, 1);
+    jcnyb.assign(n + 1, 1);
+    for (ll i = 1; i <= n; ++i) {
+        jcb[i] = jcb[i - 1] * i % mod;
+    }
+    jcnyb[n] = ny(jcb[n]);
+    for (ll i = n - 1; i >= 0; --i) {
+        jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
+    }
+}
+inline ll C(ll n, ll k) {//依赖initjc
+    if (k < 0 || k > n) return 0;
+    return jcb[n] * jcnyb[k] % mod * jcnyb[n - k] % mod;
+}
+inline ll A(ll n, ll k) {//依赖initjc
+    if (k < 0 || k > n) return 0;
+    return jcb[n] * jcnyb[n - k] % mod;
+}
+int find(vi& root, int x) {//并查集简洁写法
+    if (root[x] == x)return x;
+    return root[x] = find(root, root[x]);
+}
+struct Trie {//常数较大
+    struct Node {
+        int next[26];int cnt;
+        Node() {
+            memset(next, 0, sizeof(next));
+            cnt = 0;
+        }
+    };
+    vector<Node> nodes;
+    Trie() {
+        nodes.mb();
+    }
+    void insert(const string& word) {
+        int i = 0;
+        for (char c : word) {
+            c -= 'a';
+            if (nodes[i].next[c] == 0) {
+                nodes[i].next[c] = nodes.size();
+                nodes.mb();
+            }
+            i = nodes[i].next[c];
+            nodes[i].cnt++;
+        }
+    }
+    ll find(const string& s) {
+        int i = 0;
+        int sum = 0;
+        for (char c : s) {
+            c -= 'a';
+            if (nodes[i].next[c] == 0) {
+                return 0;
+            }
+            i = nodes[i].next[c];
+            sum += nodes[i].cnt;
+        }
+        return sum;
+    }
+};
+struct Treea {//1-idx
+    int n;vi tree;
+    Treea(int size) {
+        n = size;tree.assign(n + 1, 0);
+    }
+    void update(int i, ll t) {
+        while (i <= n) {
+            tree[i] += t;
+            i += i & (-i);
+        }
+    }
+    ll sum(int i) {
+        ll sum = 0;
+        while (i > 0) {
+            sum += tree[i];
+            i -= i & (-i);
+        }
+        return sum;
+    }
+};
+struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
+    int n;vvi st;vi log;
+    ST(const vi& v) {
+        n = v.size() - 1;
+        int maxlog = 20;
+        st.assign(n + 1, vi(maxlog + 1));
+        log.assign(n + 2, 0);
+        for (int i = 2; i <= n; i++) {
+            log[i] = log[i >> 1] + 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            st[i][0] = v[i];
+        }
+        for (int j = 1; j <= maxlog; j++) {
+            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
+                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
+            }
+        }
+    }
+    int query(int l, int r) {
+        int j = log[r - l + 1];
+        return max(st[l][j], st[r - (1 << j) + 1][j]);
+    }
+};
+struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
+    int n;
+    vi tree, lazy;
+    SegTree(int size) {
+        n = size;
+        tree.assign(4 * n, 0);
+        lazy.assign(4 * n, 0);
+    }
+    void push(int v, int l, int r) {
+        if (lazy[v] != 0) {
+            tree[v] += lazy[v];
+            if (l != r) {
+                lazy[v*2] += lazy[v];
+                lazy[v*2+1] += lazy[v];
+            }
+            lazy[v] = 0;
+        }
+    }
+    void update(int v, int l, int r, int ul, int ur, ll val) {
+        push(v, l, r);
+        if (ul > r || ur < l) return;
+        if (ul <= l && r <= ur) {
+            lazy[v] += val;
+            push(v, l, r);
+            return;
+        }
+        int mid = (l + r) / 2;
+        update(v*2, l, mid, ul, ur, val);
+        update(v*2+1, mid+1, r, ul, ur, val);
+        tree[v] = max(tree[v*2], tree[v*2+1]);
+    }
+    ll query(int v, int l, int r, int ql, int qr) {
+        push(v, l, r);
+        if (ql > r || qr < l) return LLONG_MIN;
+        if (ql <= l && r <= qr) return tree[v];
+        int mid = (l + r) / 2;
+        return max(query(v*2, l, mid, ql, qr), query(v*2+1, mid+1, r, ql, qr));
+    }
+    void update(int l, int r, ll val) {
+        update(1, 1, n, l, r, val);
+    }
+    ll query(int l, int r) {
+        return query(1, 1, n, l, r);
+    }
+};
+void solve() {
+    //cout << "---------------" << endl;
+   
+}
+/*
+*/
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);cout.tie(nullptr);
+    //initny(MAXN);
+    //initjc(MAXN);
+    //initp(MAXN);
+    int t = 1;
+    cin >> t;
+    for (int i = 1; i <= t; i++) {
+        //cout << "----Test " << i << "----" << endl;
+        solve();
+    }
+    return 0;
+}
+基础
+int*a=new int(n) delete[] a动态数组
+memset（位置，指定元素，sizeof（数组））初始化数组为指定元素
+获取数组大小size()内存sizeof()
+&按位与运算 |按位或运算 ^按位异或运算 ~取反运算 ^32大小写转化
+stol("FF", nullptr, 16)2到36进制转化10进制
+函数传引用&不会再拷贝一次
+1e7 int数据大概47mb
+树状数组下标离散化，map和二分查找
+__builtin_popcount(i); // 计算二进制1的个数
 除法向上取整（x+y-1）/y
-dfs收集答案 List<List<Integer>> ans = new ArrayList<>();
-LinkedList<Integer> path = new LinkedList<>();
-set存字符串去重
-java标签搭配continue和break跳出多层循环
-Integer.parseInt可以进制转化
-.toArray(Integer[]::new)集合转成数组
 滑窗越长越合法ans += left，越短越合法ans += right - left + 1，恰好型f(k) - f(k + 1)
 排序置换环 并查集解
 01bfs用双端队列，0开头入队，1末尾入队
 三色标记法 未遍历0 遍历中1 遍历完2
-拓扑排序dfs倒序。。，bfs正序
-Map.Entry<K, V>当pair用
+拓扑排序dfs倒序，bfs正序
 最短路d朴素算法 初始化两点距离g和单点最短路数组dist，找当前点连接的最短距离的点，标记访问过，更新dist数组
 堆优化版，带距离邻接表g加优先队列
-最短路Floyd算法，二维数组存边的距离，无边赋最大值。三维数组递推
-f[k + 1][i][j] = Math.min(f[k][i][j], f[k][i][k] + f[k][k][j]);可以优化成二维
+最短路Floyd算法，二维数组存边的距离，无边赋最大值。三维递推f[k + 1][i][j] = Math.min(f[k][i][j], f[k][i][k] + f[k][k][j]);可以优化成二维
 最小生成树k算法，按权值升序，如果两点祖先不同合并答案加权值
 最小生成树prim算法，带距离邻接表g加优先队列
-力扣预处理可以放在外面static{}
-分组循环while(i<n){int low=i;i++;while(i<n&&f()){i++}int high=i-1}
-(long)Math.sqrt(t)*(long)Math.sqrt(t)==t判断完全平方数
-逆元a^-1两次快速幂求，一个数（对mod取模完）的（mod-2）次方再对mod取模
-费马小定理a^-1%p替换成a^(p-2)%p(条件是p是质数，a和p互质) (2^10)^(p−2)=2^(10×(p−2))(modp)模意义下分两次快速幂和一次是一样的 模意义下的除法要转化成逆元 比如组合数n!×(k!)^−1×((n−k)!)^−1 (modp)
-大整数类有自带的逆元
-逆元分数加法直接相加取模即可
-String.split("\\+");转义
 0.5*|(( x₁y₂ + x₂y₃ + ... + xₙ₋₁yₙ + xₙy₁ ) - ( y₁x₂ + y₂x₃ + ... + yₙ₋₁xₙ + yₙx₁ ))|多边形面积公式
-大数据范围可以打表枚举质数和特定的数
-dfs回溯分组合 子集 切割 排列 棋盘
 枚举右维护左 枚举中间前后缀分解
-排序不等式
-Arrays.asList(result)数组转list
-return Arrays.copyOf(ans, k);
-树状数组统计出现次数或排序二分后离散化
-大写变小写、小写变大写 : 字符 ^= 32;大写变小写、小写变小写 : 字符 |= 32;小写变大写、大写变大写 : 字符 &= -33;
-HashMap<String, List<Integer>> map = new HashMap<>();多重映射相当于c++ unordered_map<K, vector<V>>
-map.putIfAbsent(key, new ArrayList<>());map.get(key).add(value);
-
-二进制和位运算
-&按位与运算 |按位或运算 ^按位异或运算 ~取反运算
-<<左移 >>右移 >>>无符号右移，空位补0
-^32大小写转化
-0b开头表示二进制 0开头表示八进制 0x开头表示十六进制 
-int转二进制Integer.toBinaryString(int i)八进制Integer.toOctalString(int i)十六进使用Integer.toHexString(int i)
-Integer.bitCount(s)集合大小
-32-Integer.numberOfLeadingZeros(s)二进制长度
-31-Integer.numberOfLeadingZeros(s)集合最大元素
-Integer.numberOfTrailingZeros(s)集合最小元素
-Integer.lowestOneBit最低位1对应的数
-Integer.highestOneBit最高位1对应的数(考虑0)
-字符串哈希掩码添加mask|=1<<(c-'a');
-删除mask&=~(1<<(c-'a'))
-删除mask^=1<<(c-'a');
-位运算去掉最后1 s&(s−1)
-属于(s >> i) & 1=1
-不属于(s >> i) & 1=0
-枚举集合
-for (int i = 0; i < (1 << l); i++) 
-    for (int j = 0; j < l; j++) 
-        if ((i & (1 << j)) != 0) {}
-
-javapair类（是下标也可以用数组存）
-class Pair {
-	    final int x,y;
-	    public Pair(int x, int y) {
-	        this.x = x;this.y = y;
-	    }
-	    public boolean equals(Object o) {
-	        if (this == o) return true;
-	        if (o == null || getClass() != o.getClass()) return false;
-	        Pair pair = (Pair) o;
-	        return x == pair.x && y == pair.y;
-	    }
-	    public int hashCode() {
-	        return Objects.hash(x, y);
-	    }
-	}
-
-排序
-sort（）或sort((a,b)->a-b)升序
-sort（Collections.reverseOrder()）或sort((a,b)->b-a)降序
-Arrays.sort(v,(a,b)->{
-            if(a[0]==b[0])return a[1]-b[1];
-            return b[0]-a[0];
-})二维比较Lambda表达式写法
-Arrays.sort(points, (a, b) -> Integer.compare(a[0], b[0]));比较器写法 防int溢出
-
-给map排序
-List<Map.Entry<String, Integer>>list=new ArrayList<>(map.entrySet());
-        Collections.sort(list,(a,b)->{
-            int t=Integer.compare(a.getValue(), b.getValue());
-            if(t==0) {
-                return a.getKey().compareTo(b.getKey());
-            }
-            return t;
-        });
-        list.forEach(a->ans.add(a.getKey()));
-
-math类
-abs max min pow sqrt random sin cos tan log random
-ceil向上 floor向下 round四舍五入 rint（a）返回最接近a的整数
-
-BigInteger类（BigDecimal高精度小数类）
-Biginteger(string)构造
-add subtract multiply divide
-mod（remainder可为负数）模 abs绝对值 negate返回负数
-gcd最大公约数 lcm最小公倍数 pow幂 compareTo比较
-shiftLeft左移n位 shiftRight右移n位 and与 or或 xor异或 not取反
-isProbablePrime（20以上（置信度））判素数
-toString(）toString(int radix)指定radix进制
-modInverse(BigInteger m)模逆元（当 m 是质数时有效）
-modPow(BigInteger exponent, BigInteger m)快速幂
-
-数组方法arrarys
-sort(array)：升序
-fill(array, value)：填充元素
-equals(array1, array2)：如长度相同，包含相同的顺序和元素，返回true。
-binarySearch(array, key)：在已排序的数组中查找值。找到该值返回其索引，否则返回-i-1下标表示应该插入的位置
-toString(array)：打印数组
-deepToString(Object[] a)：打印多维数组
-ans.add(Arrays.asList(i, j));构建链表添加
-
-集合方法collections
-sort(List list)：升序
-fill(List list, T obj)：填充元素
-binarySearch(List list, Object key)二分查找
-reverse(List list)：反转列表中元素的顺序 max min
-
+排序不等式贪心最大最小
+单调栈求下一个更大更小 单调队列求区间最大最小
+01bfs双端队列实现 01花费（传送门）
+自定义排序
+sort(a.begin(), a.end()); // 升序
+sort(a.begin(), a.end(), greater<>()); // 降序
+sort(v.begin(), v.end(), [](auto &a, auto &b) {
+    return a.second < b.second; // 按照 second 升序
+});//lambda表达式写法
+bool cmp(pair<int, int> a, pair<int, int> b) {return a.first < b.first;}
+sort(v.begin(), v.end(), cmp);//自定义比较函数
+优先队列自定义排序
+struct cmp {
+    bool operator()(int a, int b) {
+        return a > b;
+        }
+    };
+    priority_queue<int, vi, cmp> pq;
+    auto cmp = [](int a, int b) { return a > b; };
+    priority_queue<int, vi, decltype(cmp)> pq(cmp);
+    priority_queue<int, vi, greater<int>> pq;
+最小堆priority_queue<int, vi, greater<int>> pq;
+cmath
+abs fabs sqrt cbrt pow(x,y) exp自然对数的指数函数 log log2 log10 ceil向上取整 floor向下取整 round四舍五入 trunc截断小数 fmod浮点取余 hypot勾股 nearbyint返回最接近的整数 sin cos tan
 集合通用方法
-Iterator<String>it=List.iterator()迭代器
-while（it.hasNext()）String name=it.next()迭代器遍历
-add() 添加元素 remove() 移除第一个符合元素 clear() 清空集合 size() 返回集合元素数量 
-contains() 判断包含元素 isEmpty() 集合判空  equals(Object o) 判断集合相等
-addAll(集合) 添加另一个集合的所有元素 containsAll(集合) 判断集合是否包含指定集合中的所有元素
-removeAll(集合) 移除与指定集合共有的元素取差集 retainAll(集合) 保留与指定集合共有的元素取交集
-Arrays.setAll(lists, i->new ArrayList<>());
-vec.toArray(new int[vec.size()][]);返回特定类型数组 clone（）克隆
+stable_sort稳定排序
+fill(arr.begin(), arr.end(), 0);填充
+equal(arr1.begin(), arr1.end(), arr2.begin());判等
+binary_search(arr.begin(), arr.end(), 5);二分
+for (int& i : nums)可修改加强for循环
+reverse(nums.begin(), nums.end())反转
+count(元素)：返回容器中指定元素的出现次数。
+clear()：清空容器中的所有元素。
+size()：返回容器中的元素个数。
+empty()：判断容器是否为空，返回布尔值。
+begin()：返回指向第一个元素的迭代器。end()：返回指向最后一个元素之后位置的迭代器。
+rbegin()：返回指向最后一个元素的反向迭代器。rend()：返回指向第一个元素之前的反向迭代器。
+find(元素)：查找指定元素，返回迭代器指向该元素的位置。
+swap(另一个vector)：交换两个 vector 的内容。可以用来清空
+unique(迭代器，迭代器)相邻重复元素移到末尾，返回去重后结尾迭代器
+merge(1begin，1end，2begin，2end，back_inserter3)两个有序序列有序合并到第三个序列的插入迭代器
+inplace_merge(begin，begin+middle，end)范围原地合并成有序序列
+next_permutatin(begin，end)全排列更改为下一个排列
+最后一个返回false并变回第一个，否则返回true
+prev_permutation上一个全排列
+auto it = find(all(a), mx);a.erase(it);//删除指定元素
+auto it = lower_bound(v.begin(), v.end(), x);// 返回第一个 >= x 的位置 
+auto it = upper_bound(v.begin(), v.end(), x);  // 返回第一个 > x 的位置 
+auto it1 = lower_bound(v.begin(), v.end(), x); auto it2 = upper_bound(v.begin(), v.end(), x); int count = it2 - it1;// 范围 [it1, it2) 是所有等于 x 的元素 
+rotate(v.begin(), v.begin() + 2, v.end()); // {1,2,3,4,5} -> {3,4,5,1,2}循环位移
 
-List列表（ArrayList或LinkedList）
-add(元素)添加到末尾 add(int index, 元素)在指定位置插入元素。
-get(int index)返回索引的元素 set(int index, 元素)用元素替换指定位置的元素。
-remove(int index)移除并返回指定位置的元素 remove(元素)移除列表中首次出现的指定元素
-removeLast（）移除最后一个元素
-indexOf(Object o)：返回此列表中首次出现指定元素的位置，不包含该元素则返回 -1
-lastIndexOf(Object o)：返回此列表中最后一次出现指定元素的位置，不包含该元素则返回 -1
-        List<Integer>[]lists=new List[n];
-        for(int i=0;i<n;i++) {
-        	lists[i]=new ArrayList<>();
-        }声明list数组
+STL
+vector动态数组
+vector<int> vec;vector<int> vec(n);vector<int> vec(n, val);vector<int> vec = {1, 2, 3};vector<int> vec2(vec1);
+vector<vector<int>> ans(n, vector<int>(m, 0)); // 创建二维动态数组 n x m
+push_back(value);                          // 在末尾添加元素
+insert(pos, value);                        // 在指定位置插入元素
+insert(pos, count, value);                 // 在指定位置插入 count 个相同元素
+pop_back();                                // 删除最后一个元素
+erase(pos);                                // 删除指定位置元素
+clear();                                   // 清空整个 vector
+vec[index];                                // 返回指定索引的元素
+vec.at(index);                             // 返回指定索引元素，越界会抛异常
+front();                                   // 返回第一个元素
+back();                                    // 返回最后一个元素
+assign(n, value);                          // 将容器的所有元素赋值为 value，大小为 n
+list双向链表
+push_back(value);        // 在列表末尾添加元素
+push_front(value);       // 在列表开头添加元素
+pop_back();              // 删除最后一个元素
+pop_front();             // 删除第一个元素
+remove(value);           // 删除所有等于 value 的元素
+reverse(a.);               // 翻转列表
 
-Set集合(HashSet)还有LinkedHashSet TreeSet
-add(E e)：如果此集合中尚未包含指定元素，则将其添加
-remove(Object o)：从该集合中移除指定元素
-contains(Object o)：判断集合中是否包含指定元素
-TreeSet
-ceiling(E e) 返回大于等于 e 的最小元素 floor(E e) 返回小于等于 e 的最大元素 
-higher(E e) 返回严格大于 e 的最小元素 lower(E e) 返回严格小于 e 的最大元素 
-subSet(E fromElement, E toElement) 返回从 fromElement（包含）到 toElement（不包含）之间的子集 
-headSet(E toElement) 返回小于 toElement 的所有元素的子集 
-tailSet(E fromElement) 返回大于等于 fromElement 的所有元素的子集
-可以当队列用
+vector<int> arr(dq.begin(), dq.end());//deuqe转数组
+vector<pair<string, int>> vp(m.begin(), m.end());//map转pair数组
+vector<int> arr(s.begin(), s.end());//set转数组
 
-Map映射(HashMap)还有LinkedHashMap TreeMap
+set集合（红黑树映射）multiset重复集合 unordered_set哈希集合
+s.insert(value);           // 将元素插入集合（multiset 可重复，set 不重复）
+s.erase(value);            // 根据值删除元素（set 删除最多 1 个，multiset 删除所有相等元素）
+s.find(value);             // 查找指定值，返回迭代器，找不到返回 end()
+s.count(value);            // 返回集合中等于 value 的元素数量
+s.lower_bound(value);      // 返回第一个 >= value 的迭代器
+s.upper_bound(value);      // 返回第一个 > value 的迭代器
+s.equal_range(value);      // 返回 [lower_bound, upper_bound) 迭代器对（多用于 multiset）
+*s.begin();                // 获取集合中的最小元素
+*s.rbegin();               // 获取集合中的最大元素
 
-Map<String, String> m = new HashMap(){{ put("Jan", "01");}}可以初始化两个括号里填put
-put(K key, V value)：将指定值与此映射中的指定键关联。
-replace(K key, V value)存在key就更新，不存在忽略
-get(Object key)：返回指定键映射到的值，如果此映射不包含该键的映射关系则返回 null。
-getOrDefault(key, defaultValue)带默认值
-remove(Object key)：从此映射中移除指定键的映射关系
-keySet()：返回映射中所有键的集合视图。
-values()：返回映射中所有值的集合视图。
-entrySet()：返回映射中所有键值对的集合set视图。
+map映射（红黑树映射）multimap重复映射 unordered_map哈希映射
+mp.insert({key, value});      // 插入键值对
+mp[key];                      // 访问或修改 map 中的值（仅 map 支持）
+mp.at(key);                    // 访问 map 中的值，不存在会抛异常
+mp.find(key);                  // 返回指向指定键的迭代器，找不到返回 end()
+mp.count(key);                 // 返回 map 中指定键的数量（map 0 或 1，multimap 可 >1）
+mp.lower_bound(key);           // 返回第一个 >= key 的迭代器
+mp.upper_bound(key);           // 返回第一个 > key 的迭代器
+mp.equal_range(key);           // 返回 [lower_bound, upper_bound) 迭代器对（多用于 multimap）
+mp.erase(key);                 // 按键删除元素，返回删除数量
+mp.begin()->first;             // 获取最小 key
+mp.rbegin()->first;            // 获取最大 key
 
-map.foreach(k,v)->{}遍历
-for（Map.Entry<,>entry entries）遍历
-containKey判断是否包含健 containValue判断是否包含值
-map.merge(t, 1, Integer::sum);等价于map.put(t, map.getOrDefault(t, 0)+1);
-map.computeIfAbsent(t, k->new ArrayList<Integer>());如果不存在键时创建值，可以用ifelse实现
-TreeMap
-ceilingKey(K key) 返回大于等于 key 的最小键 floorKey(K key) 返回小于等于 key 的最大键 
-higherKey(K key) - 返回严格大于 key 的最小键 lowerKey(K key) 返回严格小于 key 的最大键 
-subMap(K fromKey, K toKey) - 返回从 fromKey（包含）到 toKey（不包含）之间的键值对映射 
-headMap(K toKey) - 返回小于 toKey 的所有键值对映射 
-tailMap(K fromKey) - 返回大于等于 fromKey 的所有键值对映射
-firstKey() lastKey()
+stack栈
+push(element)：将元素压入栈顶。
+pop()：移除栈顶元素，但不返回其值。
+top()：返回栈顶元素的引用，但不移除它。
+queue队列
+push(element)：将元素添加到队列的尾部。
+pop()：移除队列的第一个元素，但不返回其值
+front()：返回队列第一个元素的引用，但不移除它。
+back()：返回队列最后一个元素的引用，但不移除它。
 
-Stack栈（Deque或Stack）
-push(元素)：元素压入栈顶 pop()：移除并返回栈顶元素 peek()：返回栈顶元素
-search(元素)：返回对象在栈中的位置，以1为基数。如果找不则返回 -1。
+deque双端队列
+push_front()头部插入
+pop_front()删除头部
+push_back()尾部插入
+pop_back()删除尾部
+front()：返回对双端队列第一个元素的引用。
+back()：返回队列最后一个元素的引用，但不移除它。
+[]随机访问
 
-Queue队列(LinkedList或ArrayDeque或PriorityQueue)
-优先队列创建PriorityQueue<Integer> q = new PriorityQueue<>((o1, o2) -> o2 - o1);
-offer(元素)将元素插入队列的尾部 poll()获取并移除队列的头部元素 peek()获取队列的头部元素 
+priority_queue优先队列
+priority_queue<int> maxHeap;最大堆
+priority_queue<int,ci, greater<int>> minHeap;最小堆
+push(element)：将元素添加到优先队列中。
+top()：返回优先队列顶部元素的引用，但不移除它。
+pop()：移除优先队列顶部的元素。
 
-Deque双端队列（LinkedList或ArrayDeque）
-addFirst(元素)开头插入指定元素 addLast(元素)末尾插入指定元素 相当于 add(E e)
-getFirst() 返回此第一个元素 getLast() 返回最后一个元素。
-removeFirst()移除并返回第一个元素 removeLast()移除并返回最后一个元素
-peekFirst()返回第一个元素 peekLast()返回最后一个元素
-pollFirst() pollLast()（不抛异常）
+c风格字符串
+strlen()长度 strcmp()比较 strncmp()比较前n个
+strcpy_s（）复制字符串 strncpy_s（）指定最大字符数
+strcat_s（）字符串拼接 strncat_s（）指定最大字符数
+strchr（）查找字符首次出现 strrchr（）查找字符最后一次出现
+strstr（）查找字符串首次出现
+atoi（）字符串转int
 
-String类
-创建字符串：String s1=＂＂ 
-连接字符串：使用 + 或者 concat() 方法
-charAt(int index)获取字符 substring(int beginIndex) / substring(int beginIndex, int endIndex)子串
-indexOf(String str) / lastIndexOf(String str)查找子串首次或最后一次出现的位置
-startsWith(String prefix) / endsWith(String suffix)判断字符串是否以特定前缀开始/结束
-contains(CharSequence s)判断是否包含某子串
-replace(CharSequence target, CharSequence replacement)修改
-toUpperCase() / toLowerCase()转为大写/小写
-trim()删除两端空格 split(String regex)分割字符串
-join(CharSequence delimiter, CharSequence... elements)使用指定的分隔符连接多个字符串元素
-compareTo(String anotherString) 字典顺序比较equalsIgnoreCase(String anotherString)忽略大小写的比较
+string字符串
+初始化string s;string s("Hello, world!");
+memset（字符串，0，sizeof（字符串））初始化字符串
+s[] at()访问
+size() length()获取长度
+append() += 末尾追加字符串
+find()：查找子串或字符首次出现的位置。
+substr()：根据位置和长度提取子串。
+replace()：替换字符串中的某个部分为另一段字符串。
+insert()：某个位置插入字符串
+erase()：删除字符串的一部分
+reverse()反转
+ toupper(c); // 转换为大写 tolower(c); // 转换为小写
+compare()：比较两个字符串。相等=0
+compare(初始位置, 长度, str2);指定范围子串比较
+substr(初始位置，长度)截取子串
+s.find("abc")从头查找 "abc"，返回起始索引，找不到返回 string::npos
+s.rfind("abc")从后往前查找
+s.find_first_of("abc")查找第一个出现在 "abc" 中的字符
+s.find_last_of("abc")查找最后一个出现在 "abc" 中的字符
+s.find_first_not_of("abc")查找第一个不在 "abc" 中的字符
+s.find_last_not_of("abc")查找最后一个不在 "abc" 中的字符
+stoi(s) string转int to_string(int) int转string
 
-toCharArray()字符串转字符数组
-new String(charArray, startIndex, length)字符数组转字符串
-Integer.parseInt(String s)字符串转int
-Integer.valueOf(String s)字符串转int
-String.valueOf(int i)int转字符串
-Integer.toString()int转字符串
+bitset
+bitset<32> b;bitset<8> b(15);bitset<8> b("10101010");
+b[i]            // 访问第 i 位（从右往左，0-indexed）
+b.set()         // 所有位设为 1
+b.set(i)        // 第 i 位设为 1
+b.set(i, 0)     // 第 i 位设为 0
+b.reset()       // 所有位设为 0
+b.reset(i)      // 第 i 位设为 0
+b.flip()        // 所有位翻转
+b.flip(i)       // 第 i 位翻转
+b.count()       // 返回 1 的个数（非常快）
+b.size()        // 返回位数 N
+b.any()         // 是否至少有一个 1
+b.none()        // 是否全为 0
+b.all()         // 是否全为 1
+b.to_ullong()   // 转为 unsigned long long
+b.to_string()   // 转为字符串
 
-Stringbuilder类和StringBuffer类
-Stringbuilder sb = new Stringbuilder(); new Stringbuilder(int capacity) new Stringbuilder(String str)
-append(String str)添加字符 insert(int offset, String str)插入字符串到指定位置
-delete(int start, int end)删除指定范围内的子串 deleteCharAt(int index)删除某个位置的字符
-replace(int start, int end, String str)替换内容 reverse()反转字符串
-toString()获取可读字符串 char charAt(int index)获取字符 setCharAt(int index, char ch)设置字符
-String substring(int start) 或 String substring(int start, int end) 截取子串
-insert（位置，字符）指定位置插入
-sb.setLength(0);清空
-StringJonier
-new StringJonier(间隔符号); new StringJonier(间隔符号,开始符号,结束符号);
-add() toString()
-
-差分
-int[] a=new int[n+1];int[] cf=new int[n+2];
-for(int i=1;i<=n;i++) {
-        a[i]=in.nextInt();
-        cf[i]=a[i]-a[i-1];
-}//差分数组初始化
-while(q-->0) {
-        int x=in.nextInt();int y=in.nextInt();int z=in.nextInt();
-        cf[x]+=z;
-        cf[y+1]-=z;//可能需要判断y+1是否合理
-}
-for(int i=1;i<=n;i++) {
-        a[i]=a[i-1]+cf[i];
-        min=Math.min(min, a[i]);
-}//前缀和复原差分数组
+集合枚举
+for (int i = 0; i < (1 << l); i++)
+    for (int j = 0; j < l; j++)
+        if (i >> j & 1)
 二维差分（不需要显式初始化）
-void insert(int x1, int y1 , int x2 , int y2 , int c){
-    b[x1][y1] += c;
-    b[x2 + 1][y1] -= c;
-    b[x1][y2 + 1] -= c;
-    b[x2 + 1][y2 + 1] += c;
-}差分数组插入
-for(int i = 1 ; i <= n ; i ++){
-        for(int j = 1 ; j <= m ; j ++){
-            b[i][j] += b[i-1][j] + b[i][j - 1] - b[i - 1][j - 1];
-        }
-    }前缀和复原差分数组
-ST表（区间最大小值 gcd lcm && || 布尔 存在某值）
-int maxlog=(int) ((Math.log(n)/Math.log(2))+1);
-        st=new int[n+1][maxlog];
-        for(int i=1;i<=n;i++) 
-        	st[i][0]=in.nextInt();
-        for(int j=1;j<maxlog;j++) {
-        	for(int i=1;i<=n-(1<<j)+1;i++) {
-        		st[i][j]=Math.max(st[i][j-1], st[i+(1<<(j-1))][j-1]);
-        	}
-        }
-        while(m-->0) {
-        	int l=in.nextInt();
-        	int r=in.nextInt();
-        	pw.println(query(l, r));
-        }
-        pw.flush();
-    }
-    public static int query(int l,int r) {
-    	int j=(int) (Math.log(r-l+1)/Math.log(2));
-    	return Math.max(st[l][j], st[r-(1<<j)+1][j]);
-    }
-树状数组（前缀和 区间和 单点更新 区间更新）
-class Treea {
-    int n;
-    int[] tree;
-    Treea(int n) {
-        this.n = n;
-        tree = new int[n + 1];
-    }
-    void update(int i, int t) {
-        while (i <= n) {
-            tree[i] += t;
-            i += i & -i;
-        }
-    }
-    int sum(int i) {
-        int sum = 0;
-        while (i > 0) {
-            sum += tree[i];
-            i -= i & -i;
-        }
-        return sum;
-    }
+void insert(int x1, int y1, int x2, int y2, int c) {
+    a[x1][y1] += c;
+    a[x2 + 1][y1] -= c;
+    a[x1][y2 + 1] -= c;
+    a[x2 + 1][y2 + 1] += c;
 }
-素数筛（埃氏筛法）
-boolean a[]=new boolean[n+1];
-        for(int i=2;i<=n;i++) a[i]=true;
-        for(int i=2;i*i<=n;i++) {
-            if(a[i]) {
-                for(int j=i*i;j<=n;j+=i) {
-                    a[j]=false;}}}
-素数筛（欧拉筛法 线性筛）
-boolean a[]=new boolean[n+1];
-        List<Integer>ps=new ArrayList<>();
-        Arrays.fill(a, true);a[0]=a[1]=false;
-        for(int i=2;i<=n;i++) {
-        	if(a[i]) ps.add(i);
-        	for(int j:ps) {
-        		if(j*i>n)break;
-        		a[j*i]=false;
-        		if(j%i==0)break;}}
-组合数
-a[0]=1;
-        for(int i=1;i<=k;i++) 
-            for(int j=i;j>=1;j--) 
-                a[j]=(a[j-1]+a[j])%mod;
+for (int i = 1; i <= n; ++i)
+    for (int j = 1; j <= m; ++j)
+        a[i][j] += a[i - 1][j] + a[i][j - 1] - a[i - 1][j - 1];//前缀和复原差分数组
+埃氏筛法
+vector<bool> p(N + 1, true);
+for (int i = 2; i * i <= N; i++) {
+    if (p[i]) {
+        for (int j = i * i; j <= N; j += i) {
+            p[j] = false;
+        }}}
+组合数(杨辉三角)
+for (int i = 1; i <= n; i++)
+    for (int j = i; j >= 1; j--)
+        a[j] += a[j - 1];
 错排
-cp[0]=1;cp[1]=0;
-        for(int i=2;i<=n;i++) 
-        	cp[i]=(i-1)*(cp[i-1]+cp[i-2]);
-快速幂
-public static long quickPow(long a, long n) {
-    long ans = 1;
-    while (n > 0) {
-        if ((n & 1) == 1) {  // 如果该二进制位存在
-            ans = ans * a % MOD;
-        }
-        a = a * a % MOD;
-        n >>= 1;  // n除以2,判断下一个二进制位
-    }
-    return ans;
+cp[0] = 1; cp[1] = 0;
+for (int i = 2; i <= n; i++)
+    cp[i] = (i - 1) * (cp[i - 1] + cp[i - 2]);
+并查集按秩合并
+int find(vi &root, int x){
+    if(root[x]!=x) root[x] = find(root, root[x]);
+    return root[x];
 }
-逆元表
-inv[1] = 1;
-    for (int i = 2; i < MAXN; ++i) {
-        inv[i] = mod - mod / i * inv[mod % i] % mod;
-    }
-并查集
-int[] fa = new int[n+1]; int[] nums = new int[n+1];
-static int find(int x) {
-    if(fa[x] == x) return x;
-    return fa[x] = find(fa[x]);}
-static void union(int a, int b) {
-    int rootA = find(a);int rootB = find(b);
-    if(rootA == rootB) return;
-    if(nums[rootA] > nums[rootB]) fa[rootB] = rootA;
-    else if(nums[rootA] < nums[rootB]) fa[rootA] = rootB;
-    else {
-        fa[rootB] = rootA;
-        nums[rootA]++;}}
+void unite(vi &root, vi &rank, int x,int y){
+    x=find(root,x); y=find(root,y);
+    if(x==y) return;
+    if(rank[x]<rank[y]) swap(x,y);
+    root[y]=x;
+    if(rank[x]==rank[y]) rank[x]++;
+}
 区间dp
-int[][] dp = new int[n + 1][n + 1];
-int[] arr = new int[n + 1];
 for (int len = 2; len <= n; len++) {
-for (int i = 1; i <= n - len + 1; i++) {
-int j = i + len - 1;
-for (int k = i; k < j; k++) {
-dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k + 1][j] + cost(i, k, j));}}}
-单调队列
-拓扑排序
-
-01背包（可以转二进制拆分优化）
-for(int i=1;i<=n;i++) {
-for(int j=m;j>=w[i];j--){
-dp[j]=Math.max(dp[j], dp[j-w[i]]+v[i]);}}
+    for (int i = 1; i + len - 1 <= n; i++) {
+        int j = i + len - 1;
+        for (int k = i; k < j; k++) {
+            dp[i][j] = min(dp[i][j], dp[i][k] + dp[k + 1][j] + cost(i, k, j));}}}
+01背包
+for (int i = 1; i <= n; i++)
+    for (int j = m; j >= w[i]; j--)
+        dp[j] = max(dp[j], dp[j - w[i]] + v[i]);
 完全背包
-for(int i=1;i<=n;i++) {
-for (int j = w[i]; j <= m; j++) {
-dp[j] = Math.max(dp[j], dp[j - w[i]] + v[i]);}}
+for (int i = 1; i <= n; i++)
+    for (int j = w[i]; j <= m; j++)
+        dp[j] = max(dp[j], dp[j - w[i]] + v[i]);
 多重背包
-for(int i=1;i<=n;i++) {
-for(int j=m;j>=w[i];j--) {
-for(int k=1;k<=s[i]&&k*w[i]<=j;k++) {
-dp[j]=Math.max(dp[j], dp[j-k*w[i]]+k*v[i]);}}}
+for (int i = 1; i <= n; i++)
+    for (int j = m; j >= w[i]; j--)
+        for (int k = 1; k <= s[i] && k * w[i] <= j; k++)
+            dp[j] = max(dp[j], dp[j - k * w[i]] + k * v[i]);
 二维费用背包
-for(int i=1;i<=n;i++) {
-for(int j=v;j>=v1[i];j--) {
-for(int k=m;k>=m1[i];k--) {
-dp[j][k]=Math.max(dp[j][k], dp[j-v1[i]][k-m1[i]]+w1[i]);}}}
+for (int i = 1; i <= n; i++)
+    for (int j = v; j >= v1[i]; j--)
+        for (int k = m; k >= m1[i]; k--)
+            dp[j][k] = max(dp[j][k], dp[j - v1[i]][k - m1[i]] + w1[i]);
 分组背包
-for (int i = 1; i <= n; i++) {
-            for (int j = m; j >= 1; j--) { 
-                for (int k = 1; k <= s[i]; k++) {
-                    if (j >= w[i][k]) {
-                        dp[j] = Math.max(dp[j], dp[j - w[i][k]] + v[i][k]);}}}}
-边集建立邻接表
-List<Integer>[]lists=new List[n];
-        for(int i=0;i<n;i++) {
-        	lists[i]=new ArrayList<>();
+for (int i = 1; i <= n; i++)
+    for (int j = m; j >= 0; j--)
+        for (int k = 1; k <= s[i]; k++)
+            if (j >= w[i][k])dp[j] = max(dp[j], dp[j - w[i][k]] + v[i][k]);
+最短路 Dijkstra
+vector<vpii> g(n + 1);
+vi dist(n + 1, INT_MAX);
+priority_queue<pii, vpii, greater<>> pq;
+dist[start] = 0;
+pq.push({ 0, start });
+while (!pq.empty()) {
+    pii t = pq.top(); pq.pop();
+    int d = t.first;
+    int u = t.second;
+    if (d > dist[u]) continue;
+    for (pii& edge : g[u]) {
+        int v = edge.first;
+        int w = edge.second;
+        if (dist[v] > dist[u] + w) {
+            dist[v] = dist[u] + w;
+            pq.push({ dist[v], v });}}}
+最小生成树 Kruskal
+vvi edges;
+vi root;
+root.assign(n + 1, 0);
+for (int i = 0; i <= n; i++) root[i] = i;
+sort(all(edges), [](const vi& a, const vi& b) {
+    return a[2] < b[2];
+    });
+ll total = 0;
+for (vi& e : edges) {
+    int u = e[0], v = e[1], w = e[2];
+    int x= find(u), y = find(v);
+    if (x != y) {
+        total += w;
+        root[x] = y;}}
+求约数个数 唯一分解定理
+int yscount(int x) {
+    int sum = 1;
+    while (x > 1) {
+        int p = minp[x];
+        int t= 0;
+        while (minp[x] == p) {
+            t++;x /= p;
         }
-        for(int[]i:edges) {
-        	lists[i[0]].add(i[1]);
-        	lists[i[1]].add(i[0]);
-        }
-        int v[]=new int[n];
-最短路d算法（稠密图）
-class Solution {
-    public int networkDelayTime(int[][] times, int n, int k) {
-        int max=(int) (1e9+7);
-        int[][]g=new int[n][n];
-        int[]dist=new int[n];
-        boolean[]f=new boolean[n];
-        for(int[]i:g)Arrays.fill(i, max);
-        Arrays.fill(dist, max);
-        for(int[]i:times) {
-        	g[i[0]-1][i[1]-1]=i[2];
-        }
-        dist[k-1]=0;
-        for(int i=0;i<n;i++) {
-        	int x=-1;
-        	for(int j=0;j<n;j++) {
-        		if(!f[j]&&(x<0||dist[x]>dist[j])) {
-        			x=j;
-        		}
-        	}
-        	f[x]=true;
-        	for(int j=0;j<n;j++) {
-        		dist[j]=Math.min(dist[j], dist[x]+g[x][j]);
-        	}
-        }
-        int maxd=0;
-        for(int i:dist)maxd=Math.max(maxd, i);
-        return maxd==max?-1:maxd;
+        sum *= (t + 1);
     }
+    return sum;
 }
-（稀疏图）堆优化
-class Solution {
-    public int networkDelayTime(int[][] times, int n, int k) {
-        int max=(int) (1e9+7);
-        List<int[]>g[]=new List[n];
-        Arrays.setAll(g, i->new ArrayList<>());
-        int[]dist=new int[n];;
-        Arrays.fill(dist, max);
-        for(int[]i:times) {
-        	g[i[0]-1].add(new int[] {i[1]-1,i[2]});
-        }
-        dist[k-1]=0;
-        PriorityQueue<int[]>queue=new PriorityQueue<>((a,b)->a[1]-b[1]);
-        queue.add(new int[] {k-1,0});
-        while(!queue.isEmpty()) {
-        	int[]now=queue.poll();
-        	int i=now[0];
-        	int d=now[1];
-        	if(d>dist[i])continue;
-        	for(int[]next:g[i]) {
-        		int j=next[0],dd=next[1];
-        		if(dist[j]>dist[i]+dd) {
-        			dist[j]=dist[i]+dd;
-        			queue.add(new int[] {j,dist[j]});
-        		}
-        	}
-        }
-        int maxd=0;
-        for(int i:dist)maxd=Math.max(maxd, i);
-        return maxd==max?-1:maxd;
-    }
-}
-最短路Floyd算法
-int[][] d = new int[n][n];
-        for (int i = 0; i < n; i++) Arrays.fill(d[i], (int)1e9);
-        for (int i = 0; i < n; i++) d[i][i] = 0;
-        for (int[] edge : edges) {
-            d[edge[0]][edge[1]] = edge[2];
-            d[edge[1]][edge[0]] = edge[2];
-        }
-        for (int k = 0; k < n; k++) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    d[i][j] = Math.min(d[i][j], d[i][k] + d[k][j]);
-                }
-            }
-        }
-最小生成树k（套用并查集）稀疏图
-List<int[]>lists=new ArrayList<>();
-        for(int i=0;i<n;i++) {
-            for(int j=i+1;j<n;j++) {
-                int t=Math.abs(points[i][0]-points[j][0])+Math.abs(points[i][1]-points[j][1]);
-                lists.add(new int[] {t,i,j});
-            }
-        }
-        Collections.sort(lists,(a,b)->a[0]-b[0]);
-        int ans=0,cnt=1;
-        for(int[]i:lists) {
-            int len=i[0],x=i[1],y=i[2];
-            int xx=find(x);int yy=find(y);
-            if(xx!=yy) {
-                f[xx]=yy;
-                ans+=len;
-                cnt++;
-                if(cnt==n)break;
-            }
-        }
-最小生成树prim算法 稀疏图堆优化版
-List<int[]>[]g=new List[n];
-        Arrays.setAll(g, i->new ArrayList<>());
-        for(int i=0;i<n;i++) {
-            for(int j=0;j<n;j++) {
-                int t=Math.abs(points[i][0]-points[j][0])+Math.abs(points[i][1]-points[j][1]);
-                g[i].add(new int[] {j,t});
-                g[j].add(new int[] {i,t});
-            }
-        }
-        PriorityQueue<int[]>pq=new PriorityQueue<>((a,b)->a[1]-b[1]);
-        boolean[]v=new boolean[n];
-        pq.add(new int[] {0,0});
-        int ans=0;int cnt=0;
-        while(!pq.isEmpty()) {
-            int[]now=pq.poll();
-            int i=now[0];
-            int d=now[1];
-            if(v[i])continue;
-            v[i]=true;
-            ans+=d;
-            cnt++;
-            if(cnt==n)break;
-            for(int[]next:g[i]) {
-                int j=next[0];
-                int dd=next[1];
-                if(!v[j]) {
-                    pq.add(new int[] {j,dd});
-                }
-            }
-        }
-字典树
-class Trie {
-    	private class Node{
-    		Node[] son=new Node[26];
-    		boolean end;
-    	}
-    	private final Node root=new Node();
-        public void insert(String word) {
-            Node cur=root;
-            for(char c:word.toCharArray()) {
-            	c-='a';
-            	if(cur.son[c]==null) {
-            		cur.son[c]=new Node();
-            	}
-            	cur=cur.son[c];
-            }
-            cur.end=true;
-        }
-        public boolean search(String word) {
-        	return find(word)==2;
-        }
-        public boolean startsWith(String prefix) {
-            return find(prefix)!=0;
-        }
-        private int find(String word) {
-        	Node cur=root;
-        	for(char c:word.toCharArray()) {
-        		c-='a';
-        		if(cur.son[c]==null) {
-        			return 0;
-        		}
-        		cur=cur.son[c];
-        	}
-        	return cur.end?2:1;
-        }
-}
-
 线段树
-public class SegmentTree {
-    int[] tree;
+struct SegTree {
     int n;
-    public SegmentTree(int[] arr) {
-        n = arr.length;
-        tree = new int[4 * n];
-        build(arr, 1, 0, n - 1);
+    vl tree, lazy;
+    SegTree(int size) {
+        n = size;
+        tree.assign(4 * n, 0);
+        lazy.assign(4 * n, 0);
+        // 初始化建议：sum: 0 max: -INF min: INF gcd: 0 lcm: 1? 乘积: 1   |, &, ^: 0
     }
-    void build(int[] arr, int node, int start, int end) {
-        if (start == end) {
-            tree[node] = arr[start];
-        } else {
-            int mid = (start + end) / 2;
-            build(arr, node*2, start, mid);
-            build(arr, node*2+1, mid+1, end);
-            tree[node] = Math.min(tree[node*2], tree[node*2+1]); // 合并
+    void push(int v, int l, int r) {
+        if (lazy[v] == 0) return;  // 懒标记为0，不操作
+        // =============== 根据操作选择下面的 push ===============
+        // 1. 区间加：sum, max, min 用
+        tree[v] += lazy[v] * (r - l + 1);  // sum: 乘长度
+        // tree[v] += lazy[v];             // max/min: 不乘长度
+        // gcd, lcm, 乘积, &, |, ^ 不能用“区间加”懒标记！
+        // 如果是“区间 or”：tree[v] |= lazy[v];
+        // 如果是“区间 and”：tree[v] &= lazy[v];
+        // 如果是“区间 xor”：tree[v] ^= lazy[v];
+        // 如果是“区间乘”：tree[v] = (tree[v] * lazy[v]) % MOD;
+        if (l != r) {
+            lazy[v*2]   += lazy[v];   // sum, max, min
+            lazy[v*2+1] += lazy[v];   // sum, max, min
+            // lazy[v*2]   |= lazy[v]; // 区间 or
+            // lazy[v*2+1] |= lazy[v];
+            // lazy[v*2]   &= lazy[v]; // 区间 and
+            // lazy[v*2+1] &= lazy[v];
+            // lazy[v*2]   ^= lazy[v]; // 区间 xor
+            // lazy[v*2+1] ^= lazy[v];
+            // lazy[v*2]   *= lazy[v]; // 区间乘，需 mod
+            // lazy[v*2+1] *= lazy[v];
         }
+        lazy[v] = 0;
     }
-    int query(int node, int start, int end, int l, int r) {
-        if (r < start || end < l) return Integer.MAX_VALUE;
-        if (l <= start && end <= r) return tree[node];
-        int mid = (start + end) / 2;
-        int leftQ = query(node*2, start, mid, l, r);
-        int rightQ = query(node*2+1, mid+1, end, l, r);
-        return Math.min(leftQ, rightQ);
-    }
-    void update(int node, int start, int end, int idx, int val) {
-        if (start == end) {
-            tree[node] = val;
-        } else {
-            int mid = (start + end) / 2;
-            if (idx <= mid) update(node*2, start, mid, idx, val);
-            else update(node*2+1, mid+1, end, idx, val);
-            tree[node] = Math.min(tree[node*2], tree[node*2+1]);
+    void update(int v, int l, int r, int ul, int ur, ll val) {
+        push(v, l, r);
+        if (ul > r || ur < l) return;
+        if (ul <= l && r <= ur) {
+            // =============== 懒标记赋值 ===============
+            lazy[v] += val;   // sum, max, min: 区间加
+            // lazy[v] |= val; // 区间 or
+            // lazy[v] &= val; // 区间 and
+            // lazy[v] ^= val; // 区间 xor
+            // lazy[v] *= val; // 区间乘
+            push(v, l, r);
+            return;
         }
+        int mid = (l + r) / 2;
+        update(v*2,   l,     mid, ul, ur, val);
+        update(v*2+1, mid+1, r,   ul, ur, val);
+        // ====== 合并子节点 (tree[v] = merge(left, right)) =====
+        tree[v] = tree[v*2] + tree[v*2+1];           // sum
+        // tree[v] = max(tree[v*2], tree[v*2+1]);     // max
+        // tree[v] = min(tree[v*2], tree[v*2+1]);     // min
+        // tree[v] = gcd(tree[v*2], tree[v*2+1]);     // gcd (不能用区间加!)
+        // tree[v] = lcm(tree[v*2], tree[v*2+1]);     // lcm (不能用区间加!)
+        // tree[v] = (tree[v*2] * tree[v*2+1]) % MOD; // 乘积 (不能用区间加!)
+        // tree[v] = tree[v*2] | tree[v*2+1];         // |
+        // tree[v] = tree[v*2] & tree[v*2+1];         // &
+        // tree[v] = tree[v*2] ^ tree[v*2+1];         // ^
     }
-}
+    ll query(int v, int l, int r, int ql, int qr) {
+        push(v, l, r);
+        if (ql > r || qr < l) {
+            // =============== 返回单位元 ===============
+            return 0;                    // sum, |, ^
+            // return 0;                 // gcd (数学上可接受)
+            // return 1;                 // 乘积, lcm
+            // return LLONG_MIN;         // max
+            // return LLONG_MAX;         // min
+            // return (1LL << 60) - 1;   // & (全1，近似)
+        }
+        if (ql <= l && r <= qr) return tree[v];
+        int mid = (l + r) / 2;
+        ll left  = query(v*2,   l,     mid, ql, qr);
+        ll right = query(v*2+1, mid+1, r,   ql, qr);
+        // =============== 合并查询结果 ===============
+        return left + right;             // sum
+        // return max(left, right);      // max
+        // return min(left, right);      // min
+        // return gcd(left, right);      // gcd
+        // return lcm(left, right);      // lcm
+        // return (left * right) % MOD;  // 乘积
+        // return left | right;          // |
+        // return left & right;          // &
+        // return left ^ right;          // ^
+    }
+    void update(int l, int r, ll val) {
+        update(1, 1, n, l, r, val);
+    }
+    ll query(int l, int r) {
+        return query(1, 1, n, l, r);
+    }
+};
