@@ -228,8 +228,9 @@ struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
 
 
 void solve() {
-    //cout << "---------------" << endl;
-    
+
+
+
 
 
 }
