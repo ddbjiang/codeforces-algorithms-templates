@@ -5,7 +5,6 @@ using namespace std;
 #define rall(a) a.rbegin(), a.rend()
 #define int long long
 #define pb push_back
-#define mb emplace_back
 #define yes cout<<"YES"<<endl
 #define no cout<<"NO"<<endl
 using ll = long long;
@@ -108,7 +107,7 @@ struct Trie {//常数较大
     };
     vector<Node> nodes;
     Trie() {
-        nodes.mb();
+        nodes.emplace_back();
     }
     void insert(const string& word) {
         int i = 0;
@@ -116,7 +115,7 @@ struct Trie {//常数较大
             c -= 'a';
             if (nodes[i].next[c] == 0) {
                 nodes[i].next[c] = nodes.size();
-                nodes.mb();
+                nodes.emplace_back();
             }
             i = nodes[i].next[c];
             nodes[i].cnt++;
