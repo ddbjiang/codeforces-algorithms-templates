@@ -5,7 +5,6 @@ using namespace std;
 #define rall(a) a.rbegin(), a.rend()
 #define int long long
 #define pb push_back
-#define mb emplace_back
 #define yes cout<<"YES"<<endl
 #define no cout<<"NO"<<endl
 using ll = long long;
