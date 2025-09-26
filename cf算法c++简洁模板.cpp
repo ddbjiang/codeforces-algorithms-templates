@@ -15,6 +15,8 @@ using vvi = vector<vector<int>>;
 using vvvi = vector<vector<vector<int>>>;
 using vpii = vector<pair<int, int>>;
 using pii = pair<int, int>;
+using si = set<int>;
+using mii = map<int, int>;
 const ll mod = 1000000007;
 //const ll mod = 998244353;
 template<typename T>
@@ -29,8 +31,6 @@ void debug(char* name, T& x) { cout << "debug: " << name << " = ";db(x);cout << 
 
 void solve() {
     
-    
-
     
 
 }
