@@ -15,6 +15,8 @@ using vvi = vector<vector<int>>;
 using vvvi = vector<vector<vector<int>>>;
 using vpii = vector<pair<int, int>>;
 using pii = pair<int, int>;
+using si = set<int>;
+using mii = map<int, int>;
 const ll mod = 1000000007;
 //const ll mod = 998244353;
 template<typename T>
@@ -227,9 +229,7 @@ struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
 
 
 void solve() {
-
-
-
+    
 
 
 }
@@ -243,6 +243,7 @@ void solve() {
 signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);cout.tie(nullptr);
+    //int MAXN = 2e5 + 10;
     //initny(MAXN);
     //initjc(MAXN);
     //initp(MAXN);
