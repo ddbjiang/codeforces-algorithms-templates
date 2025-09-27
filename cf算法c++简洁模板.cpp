@@ -12,6 +12,7 @@ using ull = unsigned long long;
 using ld = long double;
 using vi = vector<int>;
 using vd = vector<double>;
+using vs = vector<string>;
 using vvi = vector<vector<int>>;
 using vvvi = vector<vector<vector<int>>>;
 using vpii = vector<pair<int, int>>;
