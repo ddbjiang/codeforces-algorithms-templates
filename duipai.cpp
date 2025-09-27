@@ -2,9 +2,9 @@
 using namespace std;
 
 int main() {
-    system("g++ -std=c++11 rand.cpp -o rand.exe");
-    system("g++ -std=c++11 t1.cpp -o t1.exe");
-    system("g++ -std=c++11 t2.cpp -o t2.exe");
+    system("g++ -std=c++23 rand.cpp -o rand.exe");
+    system("g++ -std=c++23 t1.cpp -o t1.exe");
+    system("g++ -std=c++23 t2.cpp -o t2.exe");
     int t=1;
     while (true) {
     	cout<<"test "<<t++<<":";
