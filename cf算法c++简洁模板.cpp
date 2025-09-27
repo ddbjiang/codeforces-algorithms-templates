@@ -9,6 +9,7 @@ using namespace std;
 #define no cout<<"NO"<<endl
 using ll = long long;
 using ull = unsigned long long;
+using ld = long double;
 using vi = vector<int>;
 using vd = vector<double>;
 using vvi = vector<vector<int>>;
@@ -16,6 +17,7 @@ using vvvi = vector<vector<vector<int>>>;
 using vpii = vector<pair<int, int>>;
 using pii = pair<int, int>;
 using si = set<int>;
+using msi = multiset<int>;
 using mii = map<int, int>;
 const ll mod = 1000000007;
 //const ll mod = 998244353;
@@ -30,8 +32,6 @@ void debug(char* name, T& x) { cout << "debug: " << name << " = ";db(x);cout << 
 #define db(x) debug(#x, x)
 
 void solve() {
-    
-    
 
 }
 
@@ -45,7 +45,7 @@ signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);cout.tie(nullptr);
     int t = 1;
-    cin >> t;
+    //cin >> t;
     for (int i = 1; i <= t; i++) {
         //cout << "----Test " << i << "----" << endl;
         solve();
