@@ -11,9 +11,11 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 using vi = vector<int>;
+using vl = vector<ll>;
 using vd = vector<double>;
 using vs = vector<string>;
 using vvi = vector<vector<int>>;
+using vvl = vector<vector<ll>>;
 using vvvi = vector<vector<vector<int>>>;
 using vpii = vector<pair<int, int>>;
 using pii = pair<int, int>;
@@ -70,7 +72,7 @@ void initp(int n) {
         }
     }
 }
-vi nyb;
+vl nyb;
 void initny(ll n){//线性求逆元
     nyb.assign(n, 0);
     nyb[1] = 1;
@@ -78,7 +80,7 @@ void initny(ll n){//线性求逆元
         nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
     }
 }
-vi jcb, jcnyb;
+vl jcb, jcnyb;
 void initjc(ll n) {//依赖ny,ksm
     jcb.assign(n + 1, 1);
     jcnyb.assign(n + 1, 1);
@@ -141,7 +143,7 @@ struct Trie {//常数较大
     }
 };
 struct Treea {//1-idx
-    int n;vi tree;
+    int n;vl tree;
     Treea(int size) {
         n = size;tree.assign(n + 1, 0);
     }
@@ -161,11 +163,11 @@ struct Treea {//1-idx
     }
 };
 struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
-    int n;vvi st;vi log;
-    ST(const vi& v) {
+    int n;vvl st;vl log;
+    ST(const vl& v) {
         n = v.size() - 1;
         int maxlog = 20;
-        st.assign(n + 1, vi(maxlog + 1));
+        st.assign(n + 1, vl(maxlog + 1));
         log.assign(n + 2, 0);
         for (int i = 2; i <= n; i++) {
             log[i] = log[i >> 1] + 1;
@@ -186,7 +188,7 @@ struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
 };
 struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
     int n;
-    vi tree, lazy;
+    vl tree, lazy;
     SegTree(int size) {
         n = size;
         tree.assign(4 * n, 0);
