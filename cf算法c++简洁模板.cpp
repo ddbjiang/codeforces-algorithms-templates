@@ -33,6 +33,8 @@ void debug(char* name, T& x) { cout << "debug: " << name << " = ";db(x);cout << 
 #define db(x) debug(#x, x)
 
 void solve() {
+    
+
 
 }
 
