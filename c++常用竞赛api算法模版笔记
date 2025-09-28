@@ -3,9 +3,9 @@
 不定输入
 int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}
 输出
+scanf("%d", &num)输入 printf输出 %d整数 %.2f浮点数 %s字符串 .1lf四舍五入一位小数 %e科学记数法 %c字符 %b布尔
+宽度%8d，数字右对齐 左边空格补位，%-8d反过来数字左对齐； printf("%8.2f",x)输出总共8个字符右对齐精度为2个字符的浮点数
 <<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
-printf%d整数 %.2f浮点数 %s字符串 .1lf四舍五入一位小数 %e科学记数法 %c字符 %b布尔
-宽度%8d，左边加空格，负号就是右边加空格 printf("%8.2f",x)8个字符，精度为2个字符
 结构化绑定for (auto&[x, y] : mp) { cout << x << " " << y << endl;}
 模板
 #include <bits/stdc++.h>
@@ -21,9 +21,11 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 using vi = vector<int>;
+using vl = vector<ll>;
 using vd = vector<double>;
 using vs = vector<string>;
 using vvi = vector<vector<int>>;
+using vvl = vector<vector<ll>>;
 using vvvi = vector<vector<vector<int>>>;
 using vpii = vector<pair<int, int>>;
 using pii = pair<int, int>;
@@ -78,7 +80,7 @@ void initp(int n) {
         }
     }
 }
-vi nyb;
+vl nyb;
 void initny(ll n){//线性求逆元
     nyb.assign(n, 0);
     nyb[1] = 1;
@@ -86,7 +88,7 @@ void initny(ll n){//线性求逆元
         nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
     }
 }
-vi jcb, jcnyb;
+vl jcb, jcnyb;
 void initjc(ll n) {//依赖ny,ksm
     jcb.assign(n + 1, 1);
     jcnyb.assign(n + 1, 1);
@@ -149,7 +151,7 @@ struct Trie {//常数较大
     }
 };
 struct Treea {//1-idx
-    int n;vi tree;
+    int n;vl tree;
     Treea(int size) {
         n = size;tree.assign(n + 1, 0);
     }
@@ -169,11 +171,11 @@ struct Treea {//1-idx
     }
 };
 struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
-    int n;vvi st;vi log;
-    ST(const vi& v) {
+    int n;vvl st;vl log;
+    ST(const vl& v) {
         n = v.size() - 1;
         int maxlog = 20;
-        st.assign(n + 1, vi(maxlog + 1));
+        st.assign(n + 1, vl(maxlog + 1));
         log.assign(n + 2, 0);
         for (int i = 2; i <= n; i++) {
             log[i] = log[i >> 1] + 1;
@@ -194,7 +196,7 @@ struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
 };
 struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
     int n;
-    vi tree, lazy;
+    vl tree, lazy;
     SegTree(int size) {
         n = size;
         tree.assign(4 * n, 0);
