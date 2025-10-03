@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
+using vi = vector<int>;
+using pii = pair<int, int>;
 
 int f(int l, int r) {
     static mt19937_64 gen(time(0));
@@ -22,3 +24,4 @@ signed main() {
 	}
     return 0;
 }
+
