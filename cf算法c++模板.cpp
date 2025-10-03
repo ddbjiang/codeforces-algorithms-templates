@@ -24,6 +24,8 @@ using msi = multiset<int>;
 using mii = map<int, int>;
 const ll mod = 1000000007;
 //const ll mod = 998244353;
+template <typename T>
+void out(T & a) {for (auto& x : a) {cout << x << " ";}cout << endl;}
 template<typename T>
 void db(T& x) { cout << x; }
 template<typename T>
