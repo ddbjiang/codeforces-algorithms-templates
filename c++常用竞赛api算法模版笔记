@@ -34,6 +34,8 @@ using msi = multiset<int>;
 using mii = map<int, int>;
 const ll mod = 1000000007;
 //const ll mod = 998244353;
+template <typename T>
+void out(T & a) {for (auto& x : a) {cout << x << " ";}cout << endl;}
 template<typename T>
 void db(T& x) { cout << x; }
 template<typename T>
@@ -300,7 +302,7 @@ stol("FF", nullptr, 16)2到36进制转化10进制
 函数传引用&不会再拷贝一次
 1e7 int数据大概47mb
 树状数组下标离散化，map和二分查找
-__builtin_popcount(i); // 计算二进制1的个数
+__builtin_popcount(i);__builtin_popcountll // 计算二进制1的个数
 除法向上取整（x+y-1）/y
 滑窗越长越合法ans += left，越短越合法ans += right - left + 1，恰好型f(k) - f(k + 1)
 排序置换环 并查集解
@@ -318,6 +320,8 @@ __builtin_popcount(i); // 计算二进制1的个数
 单调栈求下一个更大更小 单调队列求区间最大最小
 01bfs双端队列实现 01花费（传送门）
 前缀和开n+1数组，差分开n+2数组
+function<int(int)> find = [&](int x) { ... };递归函数lambda表达式
+tuple pair的升级版
 自定义排序
 sort(a.begin(), a.end()); // 升序
 sort(a.begin(), a.end(), greater<>()); // 降序
@@ -365,7 +369,8 @@ auto it = lower_bound(v.begin(), v.end(), x);// 返回第一个 >= x 的位置
 auto it = upper_bound(v.begin(), v.end(), x);  // 返回第一个 > x 的位置 
 auto it1 = lower_bound(v.begin(), v.end(), x); auto it2 = upper_bound(v.begin(), v.end(), x); int count = it2 - it1;// 范围 [it1, it2) 是所有等于 x 的元素 
 rotate(v.begin(), v.begin() + 2, v.end()); // {1,2,3,4,5} -> {3,4,5,1,2}循环位移
-
+iota(v.begin(), v.end(),0)从0递增分配
+nth_element将第n个元素排到第n个位置，左边小于它右边大于它
 STL
 vector动态数组
 vector<int> vec;vector<int> vec(n);vector<int> vec(n, val);vector<int> vec = {1, 2, 3};vector<int> vec2(vec1);
