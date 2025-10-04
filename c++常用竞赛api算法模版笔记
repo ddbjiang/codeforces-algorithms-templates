@@ -15,8 +15,8 @@ using namespace std;
 #define rall(a) a.rbegin(), a.rend()
 #define int long long
 #define pb push_back
-#define yes cout<<"YES"<<endl
-#define no cout<<"NO"<<endl
+#define yes cout<<"Yes"<<endl
+#define no cout<<"No"<<endl
 using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
