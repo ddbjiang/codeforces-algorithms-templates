@@ -53,213 +53,213 @@ void debug(char* name, T& x) { cout << "debug: " << name << " = ";db(x);cout << 
 //int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
 //<<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
 ll ksm(ll x, ll n) {
-    ll ans = 1;
-    while (n > 0) {
-        if (n & 1) {
-            ans = ans * x % mod;
-        }
-        x = x * x % mod;
-        n >>= 1;
-    }
-    return ans;
+    ll ans = 1;
+    while (n > 0) {
+        if (n & 1) {
+            ans = ans * x % mod;
+        }
+        x = x * x % mod;
+        n >>= 1;
+    }
+    return ans;
 }
 ll ny(ll x) {//依赖ksm
-    return ksm(x, mod - 2);
+    return ksm(x, mod - 2);
 }
 vi minp, primes;//最小质因数等于自身为质数，小于等于n的全部质数
 void initp(int n) {
-    minp.assign(n + 1, 0);
-    primes.clear();
-    for (int i = 2; i <= n; i++) {
-        if (minp[i] == 0) {
-            minp[i] = i;
-            primes.push_back(i);
-        }
-        for (const int& p : primes) {
-            if (i * p > n)break;
-            minp[i * p] = p;
-            if (p == minp[i])break;
-        }
-    }
+    minp.assign(n + 1, 0);
+    primes.clear();
+    for (int i = 2; i <= n; i++) {
+        if (minp[i] == 0) {
+            minp[i] = i;
+            primes.push_back(i);
+        }
+        for (const int& p : primes) {
+            if (i * p > n)break;
+            minp[i * p] = p;
+            if (p == minp[i])break;
+        }
+    }
 }
 vl nyb;
 void initny(ll n){//线性求逆元
-    nyb.assign(n, 0);
-    nyb[1] = 1;
-    for (ll i = 2; i < n; ++i) {
-        nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
-    }
+    nyb.assign(n, 0);
+    nyb[1] = 1;
+    for (ll i = 2; i < n; ++i) {
+        nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
+    }
 }
 vl jcb, jcnyb;
 void initjc(ll n) {//依赖ny,ksm
-    jcb.assign(n + 1, 1);
-    jcnyb.assign(n + 1, 1);
-    for (ll i = 1; i <= n; ++i) {
-        jcb[i] = jcb[i - 1] * i % mod;
-    }
-    jcnyb[n] = ny(jcb[n]);
-    for (ll i = n - 1; i >= 0; --i) {
-        jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
-    }
+    jcb.assign(n + 1, 1);
+    jcnyb.assign(n + 1, 1);
+    for (ll i = 1; i <= n; ++i) {
+        jcb[i] = jcb[i - 1] * i % mod;
+    }
+    jcnyb[n] = ny(jcb[n]);
+    for (ll i = n - 1; i >= 0; --i) {
+        jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
+    }
 }
 inline ll C(ll n, ll k) {//依赖initjc
-    if (k < 0 || k > n) return 0;
-    return jcb[n] * jcnyb[k] % mod * jcnyb[n - k] % mod;
+    if (k < 0 || k > n) return 0;
+    return jcb[n] * jcnyb[k] % mod * jcnyb[n - k] % mod;
 }
 inline ll A(ll n, ll k) {//依赖initjc
-    if (k < 0 || k > n) return 0;
-    return jcb[n] * jcnyb[n - k] % mod;
+    if (k < 0 || k > n) return 0;
+    return jcb[n] * jcnyb[n - k] % mod;
 }
 int find(vi& root, int x) {//并查集简洁写法
-    if (root[x] == x)return x;
-    return root[x] = find(root, root[x]);
+    if (root[x] == x)return x;
+    return root[x] = find(root, root[x]);
 }
 struct Trie {//常数较大
-    struct Node {
-        int next[26];int cnt;
-        Node() {
-            memset(next, 0, sizeof(next));
-            cnt = 0;
-        }
-    };
-    vector<Node> nodes;
-    Trie() {
-        nodes.emplace_back();
-    }
-    void insert(const string& word) {
-        int i = 0;
-        for (char c : word) {
-            c -= 'a';
-            if (nodes[i].next[c] == 0) {
-                nodes[i].next[c] = nodes.size();
-                nodes.emplace_back();
-            }
-            i = nodes[i].next[c];
-            nodes[i].cnt++;
-        }
-    }
-    ll find(const string& s) {
-        int i = 0;
-        int sum = 0;
-        for (char c : s) {
-            c -= 'a';
-            if (nodes[i].next[c] == 0) {
-                return 0;
-            }
-            i = nodes[i].next[c];
-            sum += nodes[i].cnt;
-        }
-        return sum;
-    }
+    struct Node {
+        int next[26];int cnt;
+        Node() {
+            memset(next, 0, sizeof(next));
+            cnt = 0;
+        }
+    };
+    vector<Node> nodes;
+    Trie() {
+        nodes.emplace_back();
+    }
+    void insert(const string& word) {
+        int i = 0;
+        for (char c : word) {
+            c -= 'a';
+            if (nodes[i].next[c] == 0) {
+                nodes[i].next[c] = nodes.size();
+                nodes.emplace_back();
+            }
+            i = nodes[i].next[c];
+            nodes[i].cnt++;
+        }
+    }
+    ll find(const string& s) {
+        int i = 0;
+        int sum = 0;
+        for (char c : s) {
+            c -= 'a';
+            if (nodes[i].next[c] == 0) {
+                return 0;
+            }
+            i = nodes[i].next[c];
+            sum += nodes[i].cnt;
+        }
+        return sum;
+    }
 };
 struct Treea {//1-idx
-    int n;vl tree;
-    Treea(int size) {
-        n = size;tree.assign(n + 1, 0);
-    }
-    void update(int i, ll t) {
-        while (i <= n) {
-            tree[i] += t;
-            i += i & (-i);
-        }
-    }
-    ll sum(int i) {
-        ll sum = 0;
-        while (i > 0) {
-            sum += tree[i];
-            i -= i & (-i);
-        }
-        return sum;
-    }
+    int n;vl tree;
+    Treea(int size) {
+        n = size;tree.assign(n + 1, 0);
+    }
+    void update(int i, ll t) {
+        while (i <= n) {
+            tree[i] += t;
+            i += i & (-i);
+        }
+    }
+    ll sum(int i) {
+        ll sum = 0;
+        while (i > 0) {
+            sum += tree[i];
+            i -= i & (-i);
+        }
+        return sum;
+    }
 };
 struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
-    int n;vvl st;vl log;
-    ST(const vl& v) {
-        n = v.size() - 1;
-        int maxlog = 20;
-        st.assign(n + 1, vl(maxlog + 1));
-        log.assign(n + 2, 0);
-        for (int i = 2; i <= n; i++) {
-            log[i] = log[i >> 1] + 1;
-        }
-        for (int i = 1; i <= n; i++) {
-            st[i][0] = v[i];
-        }
-        for (int j = 1; j <= maxlog; j++) {
-            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
-                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
-            }
-        }
-    }
-    int query(int l, int r) {
-        int j = log[r - l + 1];
-        return max(st[l][j], st[r - (1 << j) + 1][j]);
-    }
+    int n;vvl st;vl log;
+    ST(const vl& v) {
+        n = v.size() - 1;
+        int maxlog = 20;
+        st.assign(n + 1, vl(maxlog + 1));
+        log.assign(n + 2, 0);
+        for (int i = 2; i <= n; i++) {
+            log[i] = log[i >> 1] + 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            st[i][0] = v[i];
+        }
+        for (int j = 1; j <= maxlog; j++) {
+            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
+                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
+            }
+        }
+    }
+    int query(int l, int r) {
+        int j = log[r - l + 1];
+        return max(st[l][j], st[r - (1 << j) + 1][j]);
+    }
 };
 struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
-    int n;
-    vl tree, lazy;
-    SegTree(int size) {
-        n = size;
-        tree.assign(4 * n, 0);
-        lazy.assign(4 * n, 0);
-    }
-    void push(int v, int l, int r) {
-        if (lazy[v] != 0) {
-            tree[v] += lazy[v];
-            if (l != r) {
-                lazy[v*2] += lazy[v];
-                lazy[v*2+1] += lazy[v];
-            }
-            lazy[v] = 0;
-        }
-    }
-    void update(int v, int l, int r, int ul, int ur, ll val) {
-        push(v, l, r);
-        if (ul > r || ur < l) return;
-        if (ul <= l && r <= ur) {
-            lazy[v] += val;
-            push(v, l, r);
-            return;
-        }
-        int mid = (l + r) / 2;
-        update(v*2, l, mid, ul, ur, val);
-        update(v*2+1, mid+1, r, ul, ur, val);
-        tree[v] = max(tree[v*2], tree[v*2+1]);
-    }
-    ll query(int v, int l, int r, int ql, int qr) {
-        push(v, l, r);
-        if (ql > r || qr < l) return LLONG_MIN;
-        if (ql <= l && r <= qr) return tree[v];
-        int mid = (l + r) / 2;
-        return max(query(v*2, l, mid, ql, qr), query(v*2+1, mid+1, r, ql, qr));
-    }
-    void update(int l, int r, ll val) {
-        update(1, 1, n, l, r, val);
-    }
-    ll query(int l, int r) {
-        return query(1, 1, n, l, r);
-    }
+    int n;
+    vl tree, lazy;
+    SegTree(int size) {
+        n = size;
+        tree.assign(4 * n, 0);
+        lazy.assign(4 * n, 0);
+    }
+    void push(int v, int l, int r) {
+        if (lazy[v] != 0) {
+            tree[v] += lazy[v];
+            if (l != r) {
+                lazy[v*2] += lazy[v];
+                lazy[v*2+1] += lazy[v];
+            }
+            lazy[v] = 0;
+        }
+    }
+    void update(int v, int l, int r, int ul, int ur, ll val) {
+        push(v, l, r);
+        if (ul > r || ur < l) return;
+        if (ul <= l && r <= ur) {
+            lazy[v] += val;
+            push(v, l, r);
+            return;
+        }
+        int mid = (l + r) / 2;
+        update(v*2, l, mid, ul, ur, val);
+        update(v*2+1, mid+1, r, ul, ur, val);
+        tree[v] = max(tree[v*2], tree[v*2+1]);
+    }
+    ll query(int v, int l, int r, int ql, int qr) {
+        push(v, l, r);
+        if (ql > r || qr < l) return LLONG_MIN;
+        if (ql <= l && r <= qr) return tree[v];
+        int mid = (l + r) / 2;
+        return max(query(v*2, l, mid, ql, qr), query(v*2+1, mid+1, r, ql, qr));
+    }
+    void update(int l, int r, ll val) {
+        update(1, 1, n, l, r, val);
+    }
+    ll query(int l, int r) {
+        return query(1, 1, n, l, r);
+    }
 };
 void solve() {
-   
+   
 }
 /*
 */
 signed main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);cout.tie(nullptr);
-    //int MAXN = 2e5 + 10;
-    //initny(MAXN);
-    //initjc(MAXN);
-    //initp(MAXN);
-    int t = 1;
-    cin >> t;
-    for (int i = 1; i <= t; i++) {
-        //cout << "----Test " << i << "----" << endl;
-        solve();
-    }
-    return 0;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);cout.tie(nullptr);
+    //int MAXN = 2e5 + 10;
+    //initny(MAXN);
+    //initjc(MAXN);
+    //initp(MAXN);
+    int t = 1;
+    cin >> t;
+    for (int i = 1; i <= t; i++) {
+        //cout << "----Test " << i << "----" << endl;
+        solve();
+    }
+    return 0;
 }
 对拍
 #include <bits/stdc++.h>
@@ -371,6 +371,8 @@ auto it1 = lower_bound(v.begin(), v.end(), x); auto it2 = upper_bound(v.begin(),
 rotate(v.begin(), v.begin() + 2, v.end()); // {1,2,3,4,5} -> {3,4,5,1,2}循环位移
 iota(v.begin(), v.end(),0)从0递增分配
 nth_element将第n个元素排到第n个位置，左边小于它右边大于它
+random_shuffle打乱数组c++14以下
+shuffle(v.begin(), v.end(), rng) mt19937 rng(random_device{}()); c++11以上
 STL
 vector动态数组
 vector<int> vec;vector<int> vec(n);vector<int> vec(n, val);vector<int> vec = {1, 2, 3};vector<int> vec2(vec1);
@@ -463,13 +465,12 @@ memset（字符串，0，sizeof（字符串））初始化字符串
 s[] at()访问
 size() length()获取长度
 append() += 末尾追加字符串
-find()：查找子串或字符首次出现的位置。
 substr()：根据位置和长度提取子串。
-replace()：替换字符串中的某个部分为另一段字符串。
+replace(位置,长度,字符串)：替换字符串中的某个部分为另一段字符串。
 insert()：某个位置插入字符串
 erase()：删除字符串的一部分
 reverse()反转
- toupper(c); // 转换为大写 tolower(c); // 转换为小写
+toupper(c); // 转换为大写 tolower(c); // 转换为小写
 compare()：比较两个字符串。相等=0
 compare(初始位置, 长度, str2);指定范围子串比较
 substr(初始位置，长度)截取子串
@@ -521,9 +522,15 @@ for (int i = 2; i * i <= N; i++) {
             p[j] = false;
         }}}
 组合数(杨辉三角)
+a[0]=1;
 for (int i = 1; i <= n; i++)
     for (int j = i; j >= 1; j--)
         a[j] += a[j - 1];
+for (int i = 1; i <= 5000; i++) {//杨辉三角二维
+        c[i][0] = c[i][i] = 1;
+        for (int j = 1; j < i; j++) {
+            c[i][j] = c[i - 1][j - 1] + c[i - 1][j];
+            c[i][j] %= mod;}}
 错排
 cp[0] = 1; cp[1] = 0;
 for (int i = 2; i <= n; i++)
@@ -709,3 +716,38 @@ struct SegTree {
         return query(1, 1, n, l, r);
     }
 };
+字符串哈希（单模找第一个子串出现下标）1e9+7和131或1e9+9和13331或者模数ull自动取模
+const ll base = 131;
+ll shash(const string& s, ll b, ll mod) {
+    ll ans = 0;
+    for (char c : s) {
+        ans = (ans * b + c) % mod;
+    }
+    return ans;
+}
+int strStr(string s, string t) {
+        int n = s.size(), m = t.size();
+        if (m == 0) return 0;
+        if (n < m) return -1;
+        ll tt = 0;
+        for (char c : t) {
+            tt = (tt * base + c) % mod;
+        }
+        ll pow = 1;
+        for (int i = 0; i < m - 1; i++) {
+            pow = (pow * base) % mod;
+        }
+        ll hash = 0;
+        for (int i = 0; i < m - 1; i++) {
+            hash = (hash * base + s[i]) % mod;
+        }
+        int j = 0;
+        for (int i = m - 1; i < n; i++) {
+            hash = (hash * base + s[i]) % mod;
+            if (hash == tt) {
+                return j;
+            }
+            hash = (hash - (s[j++] * pow) % mod + mod) % mod;
+        }
+        return -1;
+    }
