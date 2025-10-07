@@ -233,7 +233,14 @@ struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
         return query(1, 1, n, l, r);
     }
 };
-
+const ll base = 131;
+ll shash(string& s, ll b, ll mod) {
+    ll ans = 0;
+    for (char c : s) {
+        ans = (ans * b + c) % mod;
+    }
+    return ans;
+}
 
 void solve() {
     
