@@ -321,7 +321,8 @@ __builtin_popcount(i);__builtin_popcountll // 计算二进制1的个数
 01bfs双端队列实现 01花费（传送门）
 前缀和开n+1数组，差分开n+2数组
 function<int(int)> find = [&](int x) { ... };递归函数lambda表达式
-tuple pair的升级版
+tuple是pair的升级版
+字符串哈希考虑奇偶
 自定义排序
 sort(a.begin(), a.end()); // 升序
 sort(a.begin(), a.end(), greater<>()); // 降序
@@ -717,6 +718,7 @@ struct SegTree {
     }
 };
 字符串哈希（单模找第一个子串出现下标）1e9+7和131或1e9+9和13331或者模数ull自动取模
+ //ull sum = qzh[r+1] - qzh[l] * pow[len];前缀和求子串哈希，*pow是将左前缀移动到右前缀对应位置，再相减
 const ll base = 131;
 ll shash(const string& s, ll b, ll mod) {
     ll ans = 0;
