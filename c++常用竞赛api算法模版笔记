@@ -241,6 +241,11 @@ struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
         return query(1, 1, n, l, r);
     }
 };
+int qry(int l, int r) {//交互
+    cout << "? " << l << ' ' << r << endl;
+    int x;cin >> x;
+    return x;
+}
 void solve() {
    
 }
@@ -287,10 +292,21 @@ int main() {
     return 0;
 }
 随机数
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
 int f(int l, int r) {
-    static mt19937_64 gen(time(0));
-    uniform_int_distribution<int> dis(l, r);
-    return dis(gen);
+    static mt19937_64 gen(time(0));
+    uniform_int_distribution<int> dis(l, r);
+    return dis(gen);
+}
+signed main() {
+    int t = f(1, 1);
+    cout << t << endl;
+    while (t--) {
+        int n = f(10, 10);cout << n << endl;
+    }
+    return 0;
 }
 
 公式，数论，技巧，备忘
@@ -336,7 +352,11 @@ tuple是pair的升级版
 曼哈顿(棱形)转切比雪夫转化(正方形)
 坐标变换u=x+y,v=x-y,|dx|+|dy|=max(|du|,|dv|)
 还原曼哈顿坐标x = (u + v) / 2,y = (u - v) / 2
-
+stable_sort(all(a));结构体排序要用这个，不然相对顺序会错
+海伦公式：S = sqrt(p*(p-a)*(p-b)*(p-c))p是半周长
+struct aa { int time; char t; string ret; bool operator<(const aa& other) const { return time < other.time; } };重载<
+#define _crt_secure_no_warnings 1抑制安全警告
+set必须用自带的二分函数才是Ologn
 自定义排序
 sort(a.begin(), a.end()); // 升序
 sort(a.begin(), a.end(), greater<>()); // 降序
@@ -394,7 +414,7 @@ vector动态数组
 vector<int> a;vector<int> a(n);vector<int> a(n, val);vector<int> a= {1, 2, 3};vector<int> a2(a);
 vector<vector<int>> a(n, vector<int>(m, 0)); // 创建二维动态数组 n x m
 push_back(val);                          // 在末尾添加元素
-insert(idx, val);                        // 在指定位置插入元素
+insert(迭代器, val);                        // 在指定位置插入元素
 insert(idx, count, val);             // 在指定位置插入 count 个相同元素
 pop_back();                                // 删除最后一个元素
 erase(it);                                // 删除指定位置元素
@@ -774,192 +794,192 @@ const ld eps = 1e-9;
 const ld PI = acosl(-1.0);
 // 判断浮点数符号，避免精度问题
 int sgn(ld x) {
-    if (fabs(x) < eps) return 0;
-    return x > 0 ? 1 : -1;
+    if (fabs(x) < eps) return 0;
+    return x > 0 ? 1 : -1;
 }
 // === 向量/点 结构体 ===
 struct Point {
-    ld x, y;
-    Point() = default;
-    Point(ld x, ld y) : x(x), y(y) {}
-    bool operator==(const Point& b) const { return sgn(x - b.x) == 0 && sgn(y - b.y) == 0; }
-    bool operator<(const Point& b) const { return sgn(x - b.x) == 0 ? sgn(y - b.y) < 0 : sgn(x - b.x) < 0; }
-    Point operator+(const Point& b) const { return { x + b.x, y + b.y }; }
-    Point operator-(const Point& b) const { return { x - b.x, y - b.y }; }
-    Point operator*(ld k) const { return { x * k, y * k }; }
-    Point operator/(ld k) const { return { x / k, y / k }; }
-    ld operator^(const Point& b) const { return x * b.y - y * b.x; } // 叉积
-    ld operator*(const Point& b) const { return x * b.x + y * b.y; } // 点积
+    ld x, y;
+    Point() = default;
+    Point(ld x, ld y) : x(x), y(y) {}
+    bool operator==(const Point& b) const { return sgn(x - b.x) == 0 && sgn(y - b.y) == 0; }
+    bool operator<(const Point& b) const { return sgn(x - b.x) == 0 ? sgn(y - b.y) < 0 : sgn(x - b.x) < 0; }
+    Point operator+(const Point& b) const { return { x + b.x, y + b.y }; }
+    Point operator-(const Point& b) const { return { x - b.x, y - b.y }; }
+    Point operator*(ld k) const { return { x * k, y * k }; }
+    Point operator/(ld k) const { return { x / k, y / k }; }
+    ld operator^(const Point& b) const { return x * b.y - y * b.x; } // 叉积
+    ld operator*(const Point& b) const { return x * b.x + y * b.y; } // 点积
 };
 ostream& operator<<(ostream& os, const Point& p) {
-    return os << "(" << p.x << ", " << p.y << ")";
+    return os << "(" << p.x << ", " << p.y << ")";
 }
 // 计算向量长度
 ld len(const Point& a) {
-    return sqrt(a.x * a.x + a.y * a.y);
+    return sqrt(a.x * a.x + a.y * a.y);
 }
 // 向量夹角 [0, π]
 ld angle(const Point& a, const Point& b) {
-    return acos((a * b) / (len(a) * len(b)));
+    return acos((a * b) / (len(a) * len(b)));
 }
 // 旋转点 p 绕原点逆时针旋转 rad 弧度
 Point rotate(const Point& p, ld rad) {
-    return { p.x * cos(rad) - p.y * sin(rad), p.x * sin(rad) + p.y * cos(rad) };
+    return { p.x * cos(rad) - p.y * sin(rad), p.x * sin(rad) + p.y * cos(rad) };
 }
 // 单位向量
 Point unit(const Point& a) {
-    ld L = len(a);
-    return L < eps ? Point(0, 0) : a / L;
+    ld L = len(a);
+    return L < eps ? Point(0, 0) : a / L;
 }
 // === 直线/线段 结构体 ===
 struct Line {
-    Point s, e; // 起点、终点
-    Line() = default;
-    Line(Point s, Point e) : s(s), e(e) {}
+    Point s, e; // 起点、终点
+    Line() = default;
+    Line(Point s, Point e) : s(s), e(e) {}
 };
 // 判断两直线是否平行
 bool parallel(const Line& l1, const Line& l2) {
-    return sgn((l1.e - l1.s) ^ (l2.e - l2.s)) == 0;
+    return sgn((l1.e - l1.s) ^ (l2.e - l2.s)) == 0;
 }
 // 判断两直线是否相交，若相交返回交点
 bool lineIntersect(const Line& l1, const Line& l2, Point& res) {
-    ld a1 = (l2.e - l2.s) ^ (l1.s - l2.s);
-    ld a2 = (l2.e - l2.s) ^ (l1.e - l2.s);
-    if (sgn(a1 - a2) == 0) return false; // 平行无交点
-    res = (l1.s * a2 - l1.e * a1) / (a2 - a1);
-    return true;
+    ld a1 = (l2.e - l2.s) ^ (l1.s - l2.s);
+    ld a2 = (l2.e - l2.s) ^ (l1.e - l2.s);
+    if (sgn(a1 - a2) == 0) return false; // 平行无交点
+    res = (l1.s * a2 - l1.e * a1) / (a2 - a1);
+    return true;
 }
 // 点到直线的距离（垂线距离）
 ld distPointToLine(const Point& p, const Line& l) {
-    return fabs((l.e - l.s) ^ (p - l.s)) / len(l.e - l.s);
+    return fabs((l.e - l.s) ^ (p - l.s)) / len(l.e - l.s);
 }
 // 点到线段的距离（考虑端点）
 ld distPointToSeg(const Point& p, const Line& l) {
-    Point a = l.s, b = l.e;
-    if (sgn((p - a) * (b - a)) < 0) return len(p - a);
-    if (sgn((p - b) * (a - b)) < 0) return len(p - b);
-    return fabs((b - a) ^ (p - a)) / len(b - a);
+    Point a = l.s, b = l.e;
+    if (sgn((p - a) * (b - a)) < 0) return len(p - a);
+    if (sgn((p - b) * (a - b)) < 0) return len(p - b);
+    return fabs((b - a) ^ (p - a)) / len(b - a);
 }
 // 判断点是否在线段上（含端点）
 bool onSegment(const Point& p, const Line& l) {
-    return sgn((l.e - l.s) ^ (p - l.s)) == 0 && sgn((p - l.s) * (p - l.e)) <= 0;
+    return sgn((l.e - l.s) ^ (p - l.s)) == 0 && sgn((p - l.s) * (p - l.e)) <= 0;
 }
 // 判断两线段是否相交（包括端点）
 bool segIntersect(const Line& l1, const Line& l2) {
-    int d1 = sgn((l1.e - l1.s) ^ (l2.s - l1.s));
-    int d2 = sgn((l1.e - l1.s) ^ (l2.e - l1.s));
-    int d3 = sgn((l2.e - l2.s) ^ (l1.s - l2.s));
-    int d4 = sgn((l2.e - l2.s) ^ (l1.e - l2.s));
-    if (d1 * d2 < 0 && d3 * d4 < 0) return true;
-    return (d1 == 0 && onSegment(l2.s, l1)) ||
-        (d2 == 0 && onSegment(l2.e, l1)) ||
-        (d3 == 0 && onSegment(l1.s, l2)) ||
-        (d4 == 0 && onSegment(l1.e, l2));
+    int d1 = sgn((l1.e - l1.s) ^ (l2.s - l1.s));
+    int d2 = sgn((l1.e - l1.s) ^ (l2.e - l1.s));
+    int d3 = sgn((l2.e - l2.s) ^ (l1.s - l2.s));
+    int d4 = sgn((l2.e - l2.s) ^ (l1.e - l2.s));
+    if (d1 * d2 < 0 && d3 * d4 < 0) return true;
+    return (d1 == 0 && onSegment(l2.s, l1)) ||
+        (d2 == 0 && onSegment(l2.e, l1)) ||
+        (d3 == 0 && onSegment(l1.s, l2)) ||
+        (d4 == 0 && onSegment(l1.e, l2));
 }
 // 两线段之间的最短距离
 ld segDist(const Line& l1, const Line& l2) {
-    if (segIntersect(l1, l2)) return 0;
-    ld ans = 1e18;
-    ans = min(ans, distPointToSeg(l1.s, l2));
-    ans = min(ans, distPointToSeg(l1.e, l2));
-    ans = min(ans, distPointToSeg(l2.s, l1));
-    ans = min(ans, distPointToSeg(l2.e, l1));
-    return ans;
+    if (segIntersect(l1, l2)) return 0;
+    ld ans = 1e18;
+    ans = min(ans, distPointToSeg(l1.s, l2));
+    ans = min(ans, distPointToSeg(l1.e, l2));
+    ans = min(ans, distPointToSeg(l2.s, l1));
+    ans = min(ans, distPointToSeg(l2.e, l1));
+    return ans;
 }
 // 多边形面积（按顺序给出顶点，可顺/逆时针）
 ld polygonArea(vector<Point>& p) {
-    ld area = 0;
-    int n = p.size();
-    for (int i = 0; i < n; ++i) {
-        area += (p[i] ^ p[(i + 1) % n]);
-    }
-    return fabs(area) / 2.0;
+    ld area = 0;
+    int n = p.size();
+    for (int i = 0; i < n; ++i) {
+        area += (p[i] ^ p[(i + 1) % n]);
+    }
+    return fabs(area) / 2.0;
 }
 // 判断点是否在多边形内部（射线法）
 // 返回: 0=外部, 1=内部, 2=边上
 int pointInPolygon(const Point& pt, const vector<Point>& poly) {
-    int cnt = 0;
-    int n = poly.size();
-    for (int i = 0; i < n; ++i) {
-        Point a = poly[i], b = poly[(i + 1) % n];
-        if (onSegment(pt, Line(a, b))) return 2;
-        if (sgn(a.y - b.y) != 0) {
-            if (sgn(pt.y - min(a.y, b.y)) >= 0 && sgn(pt.y - max(a.y, b.y)) < 0) {
-                ld x = (pt.y - a.y) * (b.x - a.x) / (b.y - a.y) + a.x;
-                if (sgn(pt.x - x) > 0) cnt++;
-                else if (sgn(pt.x - x) == 0) return 2;
-            }
-        }
-    }
-    return cnt & 1 ? 1 : 0;
+    int cnt = 0;
+    int n = poly.size();
+    for (int i = 0; i < n; ++i) {
+        Point a = poly[i], b = poly[(i + 1) % n];
+        if (onSegment(pt, Line(a, b))) return 2;
+        if (sgn(a.y - b.y) != 0) {
+            if (sgn(pt.y - min(a.y, b.y)) >= 0 && sgn(pt.y - max(a.y, b.y)) < 0) {
+                ld x = (pt.y - a.y) * (b.x - a.x) / (b.y - a.y) + a.x;
+                if (sgn(pt.x - x) > 0) cnt++;
+                else if (sgn(pt.x - x) == 0) return 2;
+            }
+        }
+    }
+    return cnt & 1 ? 1 : 0;
 }
 // 判断多边形是否为凸多边形
 bool isConvex(vector<Point>& poly) {
-    int n = poly.size();
-    if (n < 3) return false;
-    bool hasPos = false, hasNeg = false;
-    for (int i = 0; i < n; ++i) {
-        Point a = poly[i], b = poly[(i + 1) % n], c = poly[(i + 2) % n];
-        ld cr = (b - a) ^ (c - b);
-        if (sgn(cr) > 0) hasPos = true;
-        if (sgn(cr) < 0) hasNeg = true;
-    }
-    return !(hasPos && hasNeg);
+    int n = poly.size();
+    if (n < 3) return false;
+    bool hasPos = false, hasNeg = false;
+    for (int i = 0; i < n; ++i) {
+        Point a = poly[i], b = poly[(i + 1) % n], c = poly[(i + 2) % n];
+        ld cr = (b - a) ^ (c - b);
+        if (sgn(cr) > 0) hasPos = true;
+        if (sgn(cr) < 0) hasNeg = true;
+    }
+    return !(hasPos && hasNeg);
 }
 // 凸包（Graham Scan）逆时针输出凸包点集
 vector<Point> convexHull(vector<Point> pts) {
-    sort(pts.begin(), pts.end());
-    pts.erase(unique(pts.begin(), pts.end()), pts.end());
-    if (pts.size() <= 1) return pts;
-    vector<Point> ch;
-    int n = pts.size();
-    ch.resize(2 * n);
-    int k = 0;
-    // 下凸壳
-    for (int i = 0; i < n; ++i) {
-        while (k >= 2 && sgn((ch[k - 1] - ch[k - 2]) ^ (pts[i] - ch[k - 2])) <= 0) k--;
-        ch[k++] = pts[i];
-    }
-    // 上凸壳
-    for (int i = n - 2, t = k + 1; i >= 0; --i) {
-        while (k >= t && sgn((ch[k - 1] - ch[k - 2]) ^ (pts[i] - ch[k - 2])) <= 0) k--;
-        ch[k++] = pts[i];
-    }
-    ch.resize(k - 1);
-    return ch;
+    sort(pts.begin(), pts.end());
+    pts.erase(unique(pts.begin(), pts.end()), pts.end());
+    if (pts.size() <= 1) return pts;
+    vector<Point> ch;
+    int n = pts.size();
+    ch.resize(2 * n);
+    int k = 0;
+    // 下凸壳
+    for (int i = 0; i < n; ++i) {
+        while (k >= 2 && sgn((ch[k - 1] - ch[k - 2]) ^ (pts[i] - ch[k - 2])) <= 0) k--;
+        ch[k++] = pts[i];
+    }
+    // 上凸壳
+    for (int i = n - 2, t = k + 1; i >= 0; --i) {
+        while (k >= t && sgn((ch[k - 1] - ch[k - 2]) ^ (pts[i] - ch[k - 2])) <= 0) k--;
+        ch[k++] = pts[i];
+    }
+    ch.resize(k - 1);
+    return ch;
 }
 // 凸包直径（旋转卡壳，O(n)）
 ld convexDiameter(vector<Point>& ch) {
-    int n = ch.size();
-    if (n <= 1) return 0;
-    if (n == 2) return len(ch[1] - ch[0]);
-    ld ans = 0;
-    for (int u = 0, v = 1; u < n; u++) {
-        while (sgn((ch[(u + 1) % n] - ch[u]) ^ (ch[(v + 1) % n] - ch[v])) >= 0)
-            v = (v + 1) % n;
-        ans = max(ans, len(ch[u] - ch[v]));
-        ans = max(ans, len(ch[(u + 1) % n] - ch[v]));
-    }
-    return ans;
+    int n = ch.size();
+    if (n <= 1) return 0;
+    if (n == 2) return len(ch[1] - ch[0]);
+    ld ans = 0;
+    for (int u = 0, v = 1; u < n; u++) {
+        while (sgn((ch[(u + 1) % n] - ch[u]) ^ (ch[(v + 1) % n] - ch[v])) >= 0)
+            v = (v + 1) % n;
+        ans = max(ans, len(ch[u] - ch[v]));
+        ans = max(ans, len(ch[(u + 1) % n] - ch[v]));
+    }
+    return ans;
 }
 // 点 p 关于直线 l 的对称点
 Point reflectPoint(const Point& p, const Line& l) {
-    Point a = l.s, b = l.e;
-    Point v = b - a;
-    ld t = ((p - a) * v) / (v * v);
-    Point proj = a + v * t;
-    return proj * 2 - p;
+    Point a = l.s, b = l.e;
+    Point v = b - a;
+    ld t = ((p - a) * v) / (v * v);
+    Point proj = a + v * t; 
+    return proj * 2 - p;
 }
 // 圆结构体（可选）
 struct Circle {
-    Point c;
-    ld r;
-    Circle(Point c, ld r) : c(c), r(r) {}
+    Point c;
+    ld r;
+    Circle(Point c, ld r) : c(c), r(r) {}
 };
 // 点与圆的位置关系：1=内, 0=上, -1=外
 int pointInCircle(const Point& p, const Circle& cir) {
-    ld dis = len(p - cir.c);
-    if (sgn(dis - cir.r) < 0) return 1;
-    if (sgn(dis - cir.r) == 0) return 0;
-    return -1;
+    ld dis = len(p - cir.c);
+    if (sgn(dis - cir.r) < 0) return 1;
+    if (sgn(dis - cir.r) == 0) return 0;
+    return -1;
 }
