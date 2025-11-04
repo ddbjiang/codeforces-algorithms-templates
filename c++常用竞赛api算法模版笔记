@@ -295,6 +295,7 @@ int main() {
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
+using vi = vector<int>;
 int f(int l, int r) {
     static mt19937_64 gen(time(0));
     uniform_int_distribution<int> dis(l, r);
