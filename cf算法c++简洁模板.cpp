@@ -10,6 +10,8 @@ using namespace std;
 using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
+using i128 = __int128;
+using u128 = unsigned __int128;
 using vi = vector<int>;
 using vl = vector<ll>;
 using vd = vector<double>;
