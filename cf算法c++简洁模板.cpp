@@ -9,9 +9,9 @@ using namespace std;
 #define no cout<<"No"<<endl
 using ll = long long;
 using ull = unsigned long long;
-using ld = long double;
 using i128 = __int128;
 using u128 = unsigned __int128;
+using ld = long double;
 using vi = vector<int>;
 using vl = vector<ll>;
 using vd = vector<double>;
@@ -26,16 +26,19 @@ using msi = multiset<int>;
 using mii = map<int, int>;
 const ll mod = 1000000007;
 //const ll mod = 998244353;
-template <typename T>
-void out(T& a) { for (auto& x : a) { cout << x << " "; }cout << endl; }
-template<typename T>
-void db(T& x) { cout << x; }
-template<typename T>
-void db(vector<T>& v) { cout << "[";for (auto& x : v) cout << (&x == &v[0] ? "" : ",") << x;cout << "]"; }
-template<typename T>
-void db(vector<vector<T>>& v) { cout << endl;for (auto& i : v) { db(i);cout << endl; } }
-template<typename T>
-void debug(char* name, T& x) { cout << "debug: " << name << " = ";db(x);cout << endl; }
+template<class T> void out(const T& a) { for (int i = 0, n = a.size();i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
+template<class T> void debug(const T& x) { cout << x; }
+template<class T> void debug(const vector<T>& v) { cout << "[";for (int i = 0, n = v.size();i < n;i++)cout << v[i] << ",]"[i + 1 == n]; }
+template<class T> void debug(const vector<vector<T>>& v) { cout << endl;for (const auto& i : v) { debug(i);cout << endl; } }
+template<class T> void debug(const set<T>& st) { debug(vector<T>(all(st))); }
+template<class T> void debug(const multiset<T>& st) { debug(vector<T>(all(st))); }
+template<class T> void debug(stack<T> stk) { vector<T> v;while (stk.size()) v.pb(stk.top()), stk.pop(); debug(v); }
+template<class T> void debug(queue<T> q) { vector<T> v;while (q.size()) v.pb(q.front()), q.pop(); debug(v); }
+template<class T> void debug(const deque<T>& d) { debug(vector<T>(all(d))); }
+template<class T> void debug(priority_queue<T> pq) { vector<T> v;while (pq.size()) v.pb(pq.top()), pq.pop(); debug(v); }
+template<class K, class V> void debug(const vector<pair<K, V>>& vp) { vs a;for (auto& [k, v] : vp) a.pb("[" + to_string(k) + "," + to_string(v) + "]"); debug(a); }
+template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, v] : m) a.pb("[" + to_string(k) + "->" + to_string(v) + "]"); debug(a); }
+template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
 #define db(x) debug(#x, x)
 
 void solve() {
@@ -44,11 +47,9 @@ void solve() {
 
 }
 
-
 /*
 
 */
-
 
 signed main() {
     ios::sync_with_stdio(false);
