@@ -24,6 +24,7 @@ using pii = pair<int, int>;
 using si = set<int>;
 using msi = multiset<int>;
 using mii = map<int, int>;
+using tiii = tuple<int, int, int>;
 const ll mod = 1000000007;
 //const ll mod = 998244353;
 template<class T> void out(const T& a) { for (int i = 0, n = a.size();i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
