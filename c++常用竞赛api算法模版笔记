@@ -282,6 +282,7 @@ signed main() {
     }
     return 0;
 }
+
 公式，数论，技巧，备忘
 int*a=new int(n) delete[] a动态分配数组
 memset（位置，元素，sizeof（数组））初始化数组为元素
@@ -375,6 +376,49 @@ priority_queue<int> pq;最大堆
 priority_queue<int, vi, greater<int>> pq;最小堆
 cmath
 abs fabs sqrt cbrt pow(x,y) exp自然对数的指数函数 log log2 log10 ceil向上取整 floor向下取整 round四舍五入 trunc截断小数 fmod浮点取余 hypot勾股 nearbyint返回最接近的整数 sin cos tan
+对拍模板
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    system("g++ -std=c++23 rand.cpp -o rand.exe");
+    system("g++ -std=c++23 t1.cpp -o t1.exe");
+    system("g++ -std=c++23 t2.cpp -o t2.exe");
+    int t=1;
+    while (true) {
+    	cout<<"test "<<t++<<":";
+        system("rand.exe > data.txt");
+        system("t1.exe < data.txt > t1.txt");
+        system("t2.exe < data.txt > t2.txt");
+        if (system("fc t1.txt t2.txt")) {
+            cout << "wa" << endl;
+            cout<<"data:"<<endl;
+            system("type data.txt");
+            break;
+        }
+        else {
+            cout << "ac" << endl;
+        }
+    }
+    return 0;
+}
+随机数模板
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+using vi = vector<int>;
+int f(int l, int r) {
+    static mt19937_64 gen(time(0));
+    uniform_int_distribution<int> dis(l, r);
+    return dis(gen);
+}
+signed main() {
+    int t = f(1, 1);
+    cout << t << endl;
+    while (t--) {
+        int n = f(10, 10);cout << n << endl;
+    }
+    return 0;
+}
 集合通用方法
 stable_sort稳定排序
 fill(arr.begin(), arr.end(), 0);填充
