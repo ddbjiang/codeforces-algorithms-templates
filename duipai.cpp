@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 int main() {
     system("g++ -std=c++23 rand.cpp -o rand.exe");
     system("g++ -std=c++23 t1.cpp -o t1.exe");
