@@ -37,6 +37,8 @@ using mii = map<int, int>;
 using tiii = tuple<int, int, int>;
 const ll mod = 1000000007;
 //const ll mod = 998244353;
+const double PI = acos(-1.0);
+const double EPS = 1e-9;
 template<class T> void out(const T& a) { for (int i = 0, n = a.size();i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 template<class T> void debug(const T& x) { cout << x; }
 template<class T> void debug(const vector<T>& v) { cout << "[";for (int i = 0, n = v.size();i < n;i++)cout << v[i] << ",]"[i + 1 == n]; }
