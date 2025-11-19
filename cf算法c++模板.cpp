@@ -24,6 +24,7 @@ using pii = pair<int, int>;
 using si = set<int>;
 using msi = multiset<int>;
 using mii = map<int, int>;
+using tiii = tuple<int, int, int>;
 const ll mod = 1000000007;
 //const ll mod = 998244353;
 template<class T> void out(const T& a) { for (int i = 0, n = a.size();i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
@@ -40,20 +41,19 @@ template<class K, class V> void debug(const vector<pair<K, V>>& vp) { vs a;for (
 template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, v] : m) a.pb("[" + to_string(k) + "->" + to_string(v) + "]"); debug(a); }
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
 #define db(x) debug(#x, x)
-//sort(a.begin(), a.end(), greater<>());
-//sort(all(a), [](vi &a, vi &b) {return a[0] < b[0];});
-//priority_queue<int, vi, greater<int>> pq;
-//struct cmp {bool operator()(int a, int b) {return a > b;}};
-//priority_queue<int, vi, cmp> pq;
+//sort(all(a), [](vi a, vi b) {return a[0] < b[0];});lambda表达式
 //int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
 //<<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
 // struct aa {
 //     int x, y;
 //     bool operator<(const aa& o) const {
-//         if (x != o.x) return x < o.x;
-//         return y < o.y;
+//         if (x == o.x) return y < o.y;
+//         return x < o.x;
 //     }
 // };
+// priority_queue<aa>pq;默认最大堆跟排序相反，重载小于号决定优先级
+// priority_queue<int> pq;最大堆
+// priority_queue<int, vi, greater<int>> pq;最小堆
 ll ksm(ll x, ll n) {
     ll ans = 1;
     while (n > 0) {
