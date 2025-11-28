@@ -48,7 +48,7 @@ template<class T> void debug(const multiset<T>& st) { debug(vector<T>(all(st)));
 template<class T> void debug(stack<T> stk) { vector<T> v;while (stk.size()) v.pb(stk.top()), stk.pop(); debug(v); }
 template<class T> void debug(queue<T> q) { vector<T> v;while (q.size()) v.pb(q.front()), q.pop(); debug(v); }
 template<class T> void debug(const deque<T>& d) { debug(vector<T>(all(d))); }
-template<class T> void debug(priority_queue<T> pq) { vector<T> v;while (pq.size()) v.pb(pq.top()), pq.pop(); debug(v); }
+template<class T, class C, class Comp> void debug(const priority_queue<T, C, Comp>& p) { auto q = p; vector<T> v; while (!q.empty()) v.pb(q.top()), q.pop(); debug(v); }
 template<class K, class V> void debug(const vector<pair<K, V>>& vp) { vs a;for (auto& [k, v] : vp) a.pb("[" + to_string(k) + "," + to_string(v) + "]"); debug(a); }
 template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, v] : m) a.pb("[" + to_string(k) + "->" + to_string(v) + "]"); debug(a); }
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
@@ -318,7 +318,9 @@ auto find = [&](auto find,int x) -> int {
                 if (root[x] == x) return x;
                 return root[x] = find(find,root[x]);
                 };//函数lamda表达式写法
+枚举1到n的倍数时间复杂度nlnn
 力扣一般内存限制500m 时间限制3000ms
+umap防卡哈希，mp.reserve(n);mp.max_load_factor(0.3);
 位运算
 &按位与运算 |按位或运算 ^按位异或运算 ~取反运算 ^32大小写转化
 GCC/Clang:
@@ -367,11 +369,11 @@ sort(v.begin(), v.end(), [](auto a, auto b) {
 });//lambda表达式写法
 优先队列自定义排序
 struct aa {
-    int x, y;
-    bool operator<(const aa& o) const {
-        if (x == o.x) return y < o.y;
-        return x < o.x;
-    }
+    int x, y;
+    bool operator<(const aa& o) const {
+        if (x == o.x) return y < o.y;
+        return x < o.x;
+    }
 };
 priority_queue<aa>pq;默认最大堆跟排序相反，重载小于号决定优先级
 priority_queue<int> pq;最大堆
@@ -1091,3 +1093,18 @@ vvi ksm(int k) {
     }
     return res;
 }
+自定义哈希
+struct myhash {
+    static size_t hash(uint64_t x) {
+        return x ^ (x >> 31);
+    }
+    size_t operator()(uint64_t x) const {
+        return hash(x + 114514);
+    }
+    size_t operator()(pair <uint64_t, uint64_t >p) const {
+        return hash(p.first + 114514) + hash(p.second + 114514);
+    }
+};
+unordered_map<ull, ull, myhash> mp;
+mp.reserve(n);
+mp.max_load_factor(0.3);
