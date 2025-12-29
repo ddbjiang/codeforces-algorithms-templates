@@ -7,28 +7,13 @@ using namespace std;
 #define pb push_back
 #define yes cout<<"Yes"<<endl
 #define no cout<<"No"<<endl
-using ll = long long;
-using ull = unsigned long long;
-using i128 = __int128;
-using u128 = unsigned __int128;
-using ld = long double;
-using vi = vector<int>;
-using vl = vector<ll>;
-using vd = vector<double>;
-using vs = vector<string>;
-using vvi = vector<vector<int>>;
-using vvl = vector<vector<ll>>;
-using vvvi = vector<vector<vector<int>>>;
-using vpii = vector<pair<int, int>>;
-using pii = pair<int, int>;
-using si = set<int>;
-using msi = multiset<int>;
-using mii = map<int, int>;
-using tiii = tuple<int, int, int>;
-const ll mod = 1000000007;
-//const ll mod = 998244353;
-const double PI = acos(-1.0);
-const double EPS = 1e-9;
+using ll = long long;using ull = unsigned long long;using ld = long double;using i128 = __int128;using u128 = unsigned __int128;
+using vi = vector<int>;using vl = vector<ll>;using vvi = vector<vi>;using vvl = vector<vl>;using vvvi = vector<vvi>;using vvvl = vector<vvl>;
+using vd = vector<double>;using vs = vector<string>;using pii = pair<int, int>;using vpii = vector<pii>;
+using si = set<int>;using msi = multiset<int>;using mii = map<int, int>;
+using ar3 = array<int, 3>;using ar4 = array<int, 4>;using ar5 = array<int, 5>;
+const ll mod = 1000000007;//const ll mod = 998244353;
+const double PI = acos(-1.0), EPS = 1e-9;
 template<class T> void out(const T& a) { for (int i = 0, n = a.size();i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 template<class T> void debug(const T& x) { cout << x; }
 template<class T> void debug(const vector<T>& v) { cout << "[";for (int i = 0, n = v.size();i < n;i++)cout << v[i] << ",]"[i + 1 == n]; }
@@ -38,7 +23,7 @@ template<class T> void debug(const multiset<T>& st) { debug(vector<T>(all(st)));
 template<class T> void debug(stack<T> stk) { vector<T> v;while (stk.size()) v.pb(stk.top()), stk.pop(); debug(v); }
 template<class T> void debug(queue<T> q) { vector<T> v;while (q.size()) v.pb(q.front()), q.pop(); debug(v); }
 template<class T> void debug(const deque<T>& d) { debug(vector<T>(all(d))); }
-template<class T> void debug(priority_queue<T> pq) { vector<T> v;while (pq.size()) v.pb(pq.top()), pq.pop(); debug(v); }
+template<class T, class C, class Comp> void debug(const priority_queue<T, C, Comp>& p) { auto q = p; vector<T> v; while (!q.empty()) v.pb(q.top()), q.pop(); debug(v); }
 template<class K, class V> void debug(const vector<pair<K, V>>& vp) { vs a;for (auto& [k, v] : vp) a.pb("[" + to_string(k) + "," + to_string(v) + "]"); debug(a); }
 template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, v] : m) a.pb("[" + to_string(k) + "->" + to_string(v) + "]"); debug(a); }
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
