@@ -5,6 +5,7 @@ using namespace std;
 #define rall(a) a.rbegin(), a.rend()
 #define int long long
 #define pb push_back
+#define sz(x) (int)(x).size()
 #define yes cout<<"Yes"<<endl
 #define no cout<<"No"<<endl
 using ll = long long;using ull = unsigned long long;using ld = long double;using i128 = __int128;using u128 = unsigned __int128;
