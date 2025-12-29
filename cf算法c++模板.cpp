@@ -5,7 +5,7 @@ using namespace std;
 #define rall(a) a.rbegin(), a.rend()
 #define int long long
 #define pb push_back
-#define sz(x) (int)(x).size()
+#define sz(a) (int)(a).size()
 #define yes cout<<"Yes"<<endl
 #define no cout<<"No"<<endl
 using ll = long long;using ull = unsigned long long;using ld = long double;using i128 = __int128;using u128 = unsigned __int128;
@@ -28,7 +28,7 @@ template<class K, class V> void debug(const vector<pair<K, V>>& vp) { vs a;for (
 template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, v] : m) a.pb("[" + to_string(k) + "->" + to_string(v) + "]"); debug(a); }
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
 #define db(x) debug(#x, x)
-void rd(vi& a) { for (int& i : a)cin >> i; }
+void rd(vi& a) { for (int& x : a)cin >> x; }
 void out(vi& a) { for (int i = 0, n = a.size();i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 //sort(all(a), [](vi a, vi b) {return a[0] < b[0];});lambda表达式
 //int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
