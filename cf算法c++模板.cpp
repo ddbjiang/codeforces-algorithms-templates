@@ -14,7 +14,6 @@ using si = set<int>;using msi = multiset<int>;using mii = map<int, int>;
 using ar3 = array<int, 3>;using ar4 = array<int, 4>;using ar5 = array<int, 5>;
 const ll mod = 1000000007;//const ll mod = 998244353;
 const double PI = acos(-1.0), EPS = 1e-9;
-template<class T> void out(const T& a) { for (int i = 0, n = a.size();i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 template<class T> void debug(const T& x) { cout << x; }
 template<class T> void debug(const vector<T>& v) { cout << "[";for (int i = 0, n = v.size();i < n;i++)cout << v[i] << ",]"[i + 1 == n]; }
 template<class T> void debug(const vector<vector<T>>& v) { cout << endl;for (const auto& i : v) { debug(i);cout << endl; } }
@@ -28,6 +27,8 @@ template<class K, class V> void debug(const vector<pair<K, V>>& vp) { vs a;for (
 template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, v] : m) a.pb("[" + to_string(k) + "->" + to_string(v) + "]"); debug(a); }
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
 #define db(x) debug(#x, x)
+void rd(vi& a) { for (int& i : a)cin >> i; }
+void out(vi& a) { for (int i = 0, n = a.size();i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 //sort(all(a), [](vi a, vi b) {return a[0] < b[0];});lambda表达式
 //int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
 //<<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
