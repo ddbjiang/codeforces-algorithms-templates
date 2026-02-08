@@ -19,13 +19,14 @@ using namespace std;
 #define sz(a) (int)(a).size()
 #define yes cout<<"Yes"<<endl
 #define no cout<<"No"<<endl
+#define up(a) iota(all(a),0);
 using ll = long long;using ull = unsigned long long;using ld = long double;using i128 = __int128;using u128 = unsigned __int128;
 using vi = vector<int>;using vl = vector<ll>;using vvi = vector<vi>;using vvl = vector<vl>;using vvvi = vector<vvi>;using vvvl = vector<vvl>;
 using vd = vector<double>;using vs = vector<string>;using pii = pair<int, int>;using vpii = vector<pii>;
 using si = set<int>;using msi = multiset<int>;using mii = map<int, int>;
 using ar3 = array<int, 3>;using ar4 = array<int, 4>;using ar5 = array<int, 5>;
 const ll mod = 1000000007;//const ll mod = 998244353;
-const double PI = acos(-1.0), EPS = 1e-9;
+const double pai = acos(-1.0), eps = 1e-9;
 template<class T> void debug(const T& x) { cout << x; }
 template<class T> void debug(const vector<T>& v) { cout << "[";for (int i = 0, n = v.size();i < n;i++)cout << v[i] << ",]"[i + 1 == n]; }
 template<class T> void debug(const vector<vector<T>>& v) { cout << endl;for (const auto& i : v) { debug(i);cout << endl; } }
@@ -40,7 +41,7 @@ template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, 
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
 #define db(x) debug(#x, x)
 void rd(vi& a) { for (int& x : a)cin >> x; }
-void out(vi& a) { for (int i = 0, n = a.size();i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
+void out(vi& a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 //sort(all(a), [](vi a, vi b) {return a[0] < b[0];});lambda表达式
 //int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
 //<<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
@@ -96,11 +97,11 @@ vl jcb, jcnyb;
 void initjc(ll n) {//依赖ny,ksm
     jcb.assign(n + 1, 1);
     jcnyb.assign(n + 1, 1);
-    for (ll i = 1; i <= n; ++i) {
+    for (ll i = 1; i <= n; i++) {
         jcb[i] = jcb[i - 1] * i % mod;
     }
     jcnyb[n] = ny(jcb[n]);
-    for (ll i = n - 1; i >= 0; --i) {
+    for (ll i = n - 1; i >= 0; i--) {
         jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
     }
 }
@@ -247,6 +248,10 @@ struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
         return query(1, 1, n, l, r);
     }
 };
+int find(vi& root, int x) {//并查集路径压缩
+    if (root[x] == x)return x;
+    return root[x] = find(root, root[x]);
+}
 int qry(int l, int r) {//交互
     cout << "? " << l << ' ' << r << endl;
     int x;cin >> x;
@@ -439,6 +444,9 @@ rotate(v.begin(), v.begin() + 2, v.end()); // {1,2,3,4,5} -> {3,4,5,1,2}循环�
 nth_element将第n个元素排到第n个位置，左边小于它右边大于它（On）
 打乱数组random_shuffle c++14以下 shuffle(v.begin(), v.end(), rng) mt19937 rng(random_device{}()); c++11以上
 iota(all(root), 0);递增1数组
+*max_element(all(a));最大值
+*min_element(all(a));最小值
+accumulate(all(a), 0LL);总和
 STL
 vector动态数组
 vector<int> a;vector<int> a(n);vector<int> a(n, val);vector<int> a= {1, 2, 3};vector<int> a2(a);
