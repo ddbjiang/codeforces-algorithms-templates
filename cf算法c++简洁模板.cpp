@@ -8,7 +8,6 @@ using namespace std;
 #define sz(a) (int)(a).size()
 #define yes cout<<"Yes"<<endl
 #define no cout<<"No"<<endl
-#define up(a) iota(all(a),0);
 using ll = long long;using ull = unsigned long long;using ld = long double;using i128 = __int128;using u128 = unsigned __int128;
 using vi = vector<int>;using vl = vector<ll>;using vvi = vector<vi>;using vvl = vector<vl>;using vvvi = vector<vvi>;using vvvl = vector<vvl>;
 using vd = vector<double>;using vs = vector<string>;using pii = pair<int, int>;using vpii = vector<pii>;
@@ -30,6 +29,7 @@ template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, 
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
 #define db(x) debug(#x, x)
 void rd(vi& a) { for (int& x : a)cin >> x; }
+void rd(vvi& a) { for (vi& x : a)rd(a); }
 void out(vi& a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 
 void solve() {
