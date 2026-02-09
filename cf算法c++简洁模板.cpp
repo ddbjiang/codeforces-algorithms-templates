@@ -30,6 +30,7 @@ template<class T> void debug(const char* name, const T& x) { cout << "debug: " <
 #define db(x) debug(#x, x)
 void rd(vi& a) { for (int& x : a)cin >> x; }
 void rd(vvi& a) { for (vi& x : a)rd(a); }
+void out(int& a) { cout << a << endl; };
 void out(vi& a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 
 void solve() {
