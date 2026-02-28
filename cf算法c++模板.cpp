@@ -30,7 +30,10 @@ template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, 
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
 #define db(x) debug(#x, x)
 void rd(vi& a) { for (int& x : a)cin >> x; }
+void rd(vvi& a) { for (vi& x : a)rd(x); }
+void out(int a) { cout << a << endl; };
 void out(vi& a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
+string to2(ll x) { string res;while (x) { res += x % 2 + '0';x >>= 1; }reverse(all(res));return res; }
 
 //sort(all(a), [](vi a, vi b) {return a[0] < b[0];});lambda表达式
 //int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
@@ -111,11 +114,12 @@ int find(vi& root, int x) {//并查集简洁写法
     if (root[x] == x)return x;
     return root[x] = find(root, root[x]);
 }
-struct Trie {//常数较大
+struct Trie {//字符串字典树
     struct Node {
-        int next[26];int cnt;
+        int next[26];
+        int cnt;
         Node() {
-            memset(next, 0, sizeof(next));
+            memset(next, -1, sizeof(next));
             cnt = 0;
         }
     };
@@ -127,7 +131,7 @@ struct Trie {//常数较大
         int i = 0;
         for (char c : word) {
             c -= 'a';
-            if (nodes[i].next[c] == 0) {
+            if (nodes[i].next[c] == -1) {
                 nodes[i].next[c] = nodes.size();
                 nodes.emplace_back();
             }
@@ -135,16 +139,72 @@ struct Trie {//常数较大
             nodes[i].cnt++;
         }
     }
+    void erase(const string& word) {
+        int i = 0;
+        for (char c : word) {
+            c -= 'a';
+            i = nodes[i].next[c];
+            nodes[i].cnt--;
+        }
+    }
     ll find(const string& s) {
         int i = 0;
-        int sum = 0;
+        ll sum = 0;
         for (char c : s) {
             c -= 'a';
-            if (nodes[i].next[c] == 0) {
-                return 0;
-            }
+            if (nodes[i].next[c] == -1 || nodes[nodes[i].next[c]].cnt == 0) return 0;
             i = nodes[i].next[c];
             sum += nodes[i].cnt;
+        }
+        return sum;
+    }
+};
+
+struct Trie2 {//01字典树
+    struct Node {
+        int next[2];int cnt;
+        Node() {
+            memset(next, -1, sizeof(next));
+            cnt = 0;
+        }
+    };
+    vector<Node> nodes;
+    Trie2() {
+        nodes.emplace_back();
+    }
+    void insert(int x) {
+        int i = 0;
+        for (int b = 31; b >= 0; b--) {
+            int c = (x >> b) & 1;
+            if (nodes[i].next[c] == -1) {
+                nodes[i].next[c] = nodes.size();
+                nodes.emplace_back();
+            }
+            i = nodes[i].next[c];
+            nodes[i].cnt++;
+        }
+    }
+    void erase(int x) {
+        int i = 0;
+        for (int b = 31; b >= 0; b--) {
+            int c = (x >> b) & 1;
+            i = nodes[i].next[c];
+            nodes[i].cnt--;
+        }
+    }
+    int find(int x) {
+        int i = 0;
+        int sum = 0;
+        for (int b = 31; b >= 0; b--) {
+            int c = (x >> b) & 1;
+            int t = c ^ 1;
+            if (nodes[i].next[t] != -1 && nodes[nodes[i].next[t]].cnt > 0) {
+                sum |= (1 << b);
+                i = nodes[i].next[t];
+            }
+            else {
+                i = nodes[i].next[c];
+            }
         }
         return sum;
     }
@@ -201,12 +261,28 @@ struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
         tree.assign(4 * n, 0);
         lazy.assign(4 * n, 0);
     }
+    SegTree(const vl& v) {
+        n = (int)v.size();
+        tree.assign(4 * n, LLONG_MIN);
+        lazy.assign(4 * n, 0);
+        build(v, 1, 1, n);
+    }
+    void build(const vl& v, int node, int l, int r) {
+        if (l == r) {
+            tree[node] = v[l];
+            return;
+        }
+        int mid = (l + r) / 2;
+        build(v, node * 2, l, mid);
+        build(v, node * 2 + 1, mid + 1, r);
+        tree[node] = max(tree[node * 2], tree[node * 2 + 1]);
+    }
     void push(int v, int l, int r) {
         if (lazy[v] != 0) {
             tree[v] += lazy[v];
             if (l != r) {
-                lazy[v*2] += lazy[v];
-                lazy[v*2+1] += lazy[v];
+                lazy[v * 2] += lazy[v];
+                lazy[v * 2 + 1] += lazy[v];
             }
             lazy[v] = 0;
         }
@@ -220,16 +296,16 @@ struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
             return;
         }
         int mid = (l + r) / 2;
-        update(v*2, l, mid, ul, ur, val);
-        update(v*2+1, mid+1, r, ul, ur, val);
-        tree[v] = max(tree[v*2], tree[v*2+1]);
+        update(v * 2, l, mid, ul, ur, val);
+        update(v * 2 + 1, mid + 1, r, ul, ur, val);
+        tree[v] = max(tree[v * 2], tree[v * 2 + 1]);
     }
     ll query(int v, int l, int r, int ql, int qr) {
         push(v, l, r);
         if (ql > r || qr < l) return LLONG_MIN;
         if (ql <= l && r <= qr) return tree[v];
         int mid = (l + r) / 2;
-        return max(query(v*2, l, mid, ql, qr), query(v*2+1, mid+1, r, ql, qr));
+        return max(query(v * 2, l, mid, ql, qr), query(v * 2 + 1, mid + 1, r, ql, qr));
     }
     void update(int l, int r, ll val) {
         update(1, 1, n, l, r, val);
@@ -248,6 +324,19 @@ int qry(int l, int r) {//交互
     cout << "? " << l << ' ' << r << endl;
     int x;cin >> x;
     return x;
+}
+
+ll exgcd(ll a, ll b, ll& x, ll& y) {
+    if (!b) { x = 1; y = 0; return a; }
+    ll d = exgcd(b, a % b, y, x);
+    y -= a / b * x;
+    return d;
+}
+
+ll ny_exgcd(ll a) {//非质数求逆元
+    ll x, y;
+    ll g = exgcd(a, mod, x, y);
+    return g == 1 ? (x % mod + mod) % mod : -1; // -1 表示无逆元
 }
 
 void solve() {
