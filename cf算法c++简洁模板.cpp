@@ -13,7 +13,6 @@ using ll = long long;using ull = unsigned long long;using ld = long double;using
 using vi = vector<int>;using vl = vector<ll>;using vvi = vector<vi>;using vvl = vector<vl>;using vvvi = vector<vvi>;using vvvl = vector<vvl>;
 using vd = vector<double>;using vs = vector<string>;using pii = pair<int, int>;using vpii = vector<pii>;
 using si = set<int>;using msi = multiset<int>;using mii = map<int, int>;
-using ar3 = array<int, 3>;using ar4 = array<int, 4>;using ar5 = array<int, 5>;
 const ll mod = 1000000007;//const ll mod = 998244353;
 const double pai = acos(-1.0), eps = 1e-9;
 template<class T> void debug(const T& x) { cout << x; }
@@ -31,9 +30,16 @@ template<class T> void debug(const char* name, const T& x) { cout << "debug: " <
 #define db(x) debug(#x, x)
 void rd(vi& a) { for (int& x : a)cin >> x; }
 void rd(vvi& a) { for (vi& x : a)rd(x); }
-void out(int a) { cout << a << endl; };
+void out(int x) { cout << x << endl; };
+void out(string s) { cout << s << endl; };
 void out(vi& a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
-string to2(ll x) { string res;while (x) { res += x % 2 + '0';x >>= 1; }reverse(all(res));return res; }
+string to2(ll x) { string s;while (x) { s += x % 2 + '0';x >>= 1; }reverse(all(s));return s; }
+struct node {
+    int x, y;
+    // bool operator<(const node& o) const {
+    //     if (x == o.x) return y < o.y;else return x < o.x;
+    // }
+};
 
 void solve() {
     
