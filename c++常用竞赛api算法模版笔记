@@ -46,10 +46,10 @@ void out(string s) { cout << s << endl; };
 void out(vi& a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 string to2(ll x) { string s;while (x) { s += x % 2 + '0';x >>= 1; }reverse(all(s));return s; }
 struct node {
-    int x, y;
-    // bool operator<(const node& o) const {
-    //     if (x == o.x) return y < o.y;else return x < o.x;
-    // }
+    int x, y;
+    // bool operator<(const node& o) const {
+    //     if (x == o.x) return y < o.y;else return x < o.x;
+    // }
 };
 //sort(all(a), [](vi a, vi b) {return a[0] < b[0];});lambda表达式
 //int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
@@ -58,309 +58,309 @@ struct node {
 // priority_queue<int> pq;最大堆
 // priority_queue<int, vi, greater<int>> pq;最小堆
 ll ksm(ll x, ll n) {
-    ll ans = 1;
-    while (n > 0) {
-        if (n & 1) {
-            ans = ans * x % mod;
-        }
-        x = x * x % mod;
-        n >>= 1;
-    }
-    return ans;
+    ll ans = 1;
+    while (n > 0) {
+        if (n & 1) {
+            ans = ans * x % mod;
+        }
+        x = x * x % mod;
+        n >>= 1;
+    }
+    return ans;
 }
 ll ny(ll x) {//依赖ksm
-    return ksm(x, mod - 2);
+    return ksm(x, mod - 2);
 }
 vi minp, primes;//最小质因数等于自身为质数，小于等于n的全部质数
 void initp(int n) {
-    minp.assign(n + 1, 0);
-    primes.clear();
-    for (int i = 2; i <= n; i++) {
-        if (minp[i] == 0) {
-            minp[i] = i;
-            primes.push_back(i);
-        }
-        for (const int& p : primes) {
-            if (i * p > n)break;
-            minp[i * p] = p;
-            if (p == minp[i])break;
-        }
-    }
+    minp.assign(n + 1, 0);
+    primes.clear();
+    for (int i = 2; i <= n; i++) {
+        if (minp[i] == 0) {
+            minp[i] = i;
+            primes.push_back(i);
+        }
+        for (const int& p : primes) {
+            if (i * p > n)break;
+            minp[i * p] = p;
+            if (p == minp[i])break;
+        }
+    }
 }
 vl nyb;
 void initny(ll n){//线性求逆元
-    nyb.assign(n, 0);
-    nyb[1] = 1;
-    for (ll i = 2; i < n; ++i) {
-        nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
-    }
+    nyb.assign(n, 0);
+    nyb[1] = 1;
+    for (ll i = 2; i < n; ++i) {
+        nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
+    }
 }
 vl jcb, jcnyb;
 void initjc(ll n) {//依赖ny,ksm
-    jcb.assign(n + 1, 1);
-    jcnyb.assign(n + 1, 1);
-    for (ll i = 1; i <= n; i++) {
-        jcb[i] = jcb[i - 1] * i % mod;
-    }
-    jcnyb[n] = ny(jcb[n]);
-    for (ll i = n - 1; i >= 0; i--) {
-        jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
-    }
+    jcb.assign(n + 1, 1);
+    jcnyb.assign(n + 1, 1);
+    for (ll i = 1; i <= n; i++) {
+        jcb[i] = jcb[i - 1] * i % mod;
+    }
+    jcnyb[n] = ny(jcb[n]);
+    for (ll i = n - 1; i >= 0; i--) {
+        jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
+    }
 }
 inline ll C(ll n, ll k) {//依赖initjc
-    if (k < 0 || k > n) return 0;
-    return jcb[n] * jcnyb[k] % mod * jcnyb[n - k] % mod;
+    if (k < 0 || k > n) return 0;
+    return jcb[n] * jcnyb[k] % mod * jcnyb[n - k] % mod;
 }
 inline ll A(ll n, ll k) {//依赖initjc
-    if (k < 0 || k > n) return 0;
-    return jcb[n] * jcnyb[n - k] % mod;
+    if (k < 0 || k > n) return 0;
+    return jcb[n] * jcnyb[n - k] % mod;
 }
 ll Lucas(ll n, ll k) {//mod小于1e6
-    if (k == 0) return 1;
-    return C(n % mod, k % mod) * Lucas(n / mod, k / mod) % mod;
+    if (k == 0) return 1;
+    return C(n % mod, k % mod) * Lucas(n / mod, k / mod) % mod;
 }
 int find(vi& root, int x) {//并查集简洁写法
-    if (root[x] == x)return x;
-    return root[x] = find(root, root[x]);
+    if (root[x] == x)return x;
+    return root[x] = find(root, root[x]);
 }
 struct Trie {//字符串字典树
-    struct Node {
-        int next[26];
-        int cnt;
-        Node() {
-            memset(next, -1, sizeof(next));
-            cnt = 0;
-        }
-    };
-    vector<Node> nodes;
-    Trie() {
-        nodes.emplace_back();
-    }
-    void insert(const string& word) {
-        int i = 0;
-        for (char c : word) {
-            c -= 'a';
-            if (nodes[i].next[c] == -1) {
-                nodes[i].next[c] = nodes.size();
-                nodes.emplace_back();
-            }
-            i = nodes[i].next[c];
-            nodes[i].cnt++;
-        }
-    }
-    void erase(const string& word) {
-        int i = 0;
-        for (char c : word) {
-            c -= 'a';
-            i = nodes[i].next[c];
-            nodes[i].cnt--;
-        }
-    }
-    ll find(const string& s) {
-        int i = 0;
-        ll sum = 0;
-        for (char c : s) {
-            c -= 'a';
-            if (nodes[i].next[c] == -1 || nodes[nodes[i].next[c]].cnt == 0) return 0;
-            i = nodes[i].next[c];
-            sum += nodes[i].cnt;
-        }
-        return sum;
-    }
+    struct Node {
+        int next[26];
+        int cnt;
+        Node() {
+            memset(next, -1, sizeof(next));
+            cnt = 0;
+        }
+    };
+    vector<Node> nodes;
+    Trie() {
+        nodes.emplace_back();
+    }
+    void insert(const string& word) {
+        int i = 0;
+        for (char c : word) {
+            c -= 'a';
+            if (nodes[i].next[c] == -1) {
+                nodes[i].next[c] = nodes.size();
+                nodes.emplace_back();
+            }
+            i = nodes[i].next[c];
+            nodes[i].cnt++;
+        }
+    }
+    void erase(const string& word) {
+        int i = 0;
+        for (char c : word) {
+            c -= 'a';
+            i = nodes[i].next[c];
+            nodes[i].cnt--;
+        }
+    }
+    ll find(const string& s) {
+        int i = 0;
+        ll sum = 0;
+        for (char c : s) {
+            c -= 'a';
+            if (nodes[i].next[c] == -1 || nodes[nodes[i].next[c]].cnt == 0) return 0;
+            i = nodes[i].next[c];
+            sum += nodes[i].cnt;
+        }
+        return sum;
+    }
 };
 struct Trie2 {//01字典树
-    struct Node {
-        int next[2];int cnt;
-        Node() {
-            memset(next, -1, sizeof(next));
-            cnt = 0;
-        }
-    };
-    vector<Node> nodes;
-    Trie2() {
-        nodes.emplace_back();
-    }
-    void insert(int x) {
-        int i = 0;
-        for (int b = 31; b >= 0; b--) {
-            int c = (x >> b) & 1;
-            if (nodes[i].next[c] == -1) {
-                nodes[i].next[c] = nodes.size();
-                nodes.emplace_back();
-            }
-            i = nodes[i].next[c];
-            nodes[i].cnt++;
-        }
-    }
-    void erase(int x) {
-        int i = 0;
-        for (int b = 31; b >= 0; b--) {
-            int c = (x >> b) & 1;
-            i = nodes[i].next[c];
-            nodes[i].cnt--;
-        }
-    }
-    int find(int x) {
-        int i = 0;
-        int sum = 0;
-        for (int b = 31; b >= 0; b--) {
-            int c = (x >> b) & 1;
-            int t = c ^ 1;
-            if (nodes[i].next[t] != -1 && nodes[nodes[i].next[t]].cnt > 0) {
-                sum |= (1 << b);
-                i = nodes[i].next[t];
-            }
-            else {
-                i = nodes[i].next[c];
-            }
-        }
-        return sum;
-    }
+    struct Node {
+        int next[2];int cnt;
+        Node() {
+            memset(next, -1, sizeof(next));
+            cnt = 0;
+        }
+    };
+    vector<Node> nodes;
+    Trie2() {
+        nodes.emplace_back();
+    }
+    void insert(int x) {
+        int i = 0;
+        for (int b = 31; b >= 0; b--) {
+            int c = (x >> b) & 1;
+            if (nodes[i].next[c] == -1) {
+                nodes[i].next[c] = nodes.size();
+                nodes.emplace_back();
+            }
+            i = nodes[i].next[c];
+            nodes[i].cnt++;
+        }
+    }
+    void erase(int x) {
+        int i = 0;
+        for (int b = 31; b >= 0; b--) {
+            int c = (x >> b) & 1;
+            i = nodes[i].next[c];
+            nodes[i].cnt--;
+        }
+    }
+    int find(int x) {
+        int i = 0;
+        int sum = 0;
+        for (int b = 31; b >= 0; b--) {
+            int c = (x >> b) & 1;
+            int t = c ^ 1;
+            if (nodes[i].next[t] != -1 && nodes[nodes[i].next[t]].cnt > 0) {
+                sum |= (1 << b);
+                i = nodes[i].next[t];
+            }
+            else {
+                i = nodes[i].next[c];
+            }
+        }
+        return sum;
+    }
 };
 struct Treea {//1-idx
-    int n;vl tree;
-    Treea(int size) {
-        n = size;tree.assign(n + 1, 0);
-    }
-    void update(int i, ll t) {
-        while (i <= n) {
-            tree[i] += t;
-            i += i & (-i);
-        }
-    }
-    ll sum(int i) {
-        ll sum = 0;
-        while (i > 0) {
-            sum += tree[i];
-            i -= i & (-i);
-        }
-        return sum;
-    }
+    int n;vl tree;
+    Treea(int size) {
+        n = size;tree.assign(n + 1, 0);
+    }
+    void update(int i, ll t) {
+        while (i <= n) {
+            tree[i] += t;
+            i += i & (-i);
+        }
+    }
+    ll sum(int i) {
+        ll sum = 0;
+        while (i > 0) {
+            sum += tree[i];
+            i -= i & (-i);
+        }
+        return sum;
+    }
 };
 struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
-    int n;vvl st;vl log;
-    ST(const vl& v) {
-        n = v.size() - 1;
-        int maxlog = 20;
-        st.assign(n + 1, vl(maxlog + 1));
-        log.assign(n + 2, 0);
-        for (int i = 2; i <= n; i++) {
-            log[i] = log[i >> 1] + 1;
-        }
-        for (int i = 1; i <= n; i++) {
-            st[i][0] = v[i];
-        }
-        for (int j = 1; j <= maxlog; j++) {
-            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
-                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
-            }
-        }
-    }
-    int query(int l, int r) {
-        int j = log[r - l + 1];
-        return max(st[l][j], st[r - (1 << j) + 1][j]);
-    }
+    int n;vvl st;vl log;
+    ST(const vl& v) {
+        n = v.size() - 1;
+        int maxlog = 20;
+        st.assign(n + 1, vl(maxlog + 1));
+        log.assign(n + 2, 0);
+        for (int i = 2; i <= n; i++) {
+            log[i] = log[i >> 1] + 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            st[i][0] = v[i];
+        }
+        for (int j = 1; j <= maxlog; j++) {
+            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
+                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
+            }
+        }
+    }
+    int query(int l, int r) {
+        int j = log[r - l + 1];
+        return max(st[l][j], st[r - (1 << j) + 1][j]);
+    }
 };
 struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
-    int n;
-    vl tree, lazy;
-    SegTree(int size) {
-        n = size;
-        tree.assign(4 * n, 0);
-        lazy.assign(4 * n, 0);
-    }
-    SegTree(const vl& v) {
-        n = (int)v.size();
-        tree.assign(4 * n, LLONG_MIN);
-        lazy.assign(4 * n, 0);
-        build(v, 1, 1, n);
-    }
-    void build(const vl& v, int node, int l, int r) {
-        if (l == r) {
-            tree[node] = v[l];
-            return;
-        }
-        int mid = (l + r) / 2;
-        build(v, node * 2, l, mid);
-        build(v, node * 2 + 1, mid + 1, r);
-        tree[node] = max(tree[node * 2], tree[node * 2 + 1]);
-    }
-    void push(int v, int l, int r) {
-        if (lazy[v] != 0) {
-            tree[v] += lazy[v];
-            if (l != r) {
-                lazy[v * 2] += lazy[v];
-                lazy[v * 2 + 1] += lazy[v];
-            }
-            lazy[v] = 0;
-        }
-    }
-    void update(int v, int l, int r, int ul, int ur, ll val) {
-        push(v, l, r);
-        if (ul > r || ur < l) return;
-        if (ul <= l && r <= ur) {
-            lazy[v] += val;
-            push(v, l, r);
-            return;
-        }
-        int mid = (l + r) / 2;
-        update(v * 2, l, mid, ul, ur, val);
-        update(v * 2 + 1, mid + 1, r, ul, ur, val);
-        tree[v] = max(tree[v * 2], tree[v * 2 + 1]);
-    }
-    ll query(int v, int l, int r, int ql, int qr) {
-        push(v, l, r);
-        if (ql > r || qr < l) return LLONG_MIN;
-        if (ql <= l && r <= qr) return tree[v];
-        int mid = (l + r) / 2;
-        return max(query(v * 2, l, mid, ql, qr), query(v * 2 + 1, mid + 1, r, ql, qr));
-    }
-    void update(int l, int r, ll val) {
-        update(1, 1, n, l, r, val);
-    }
-    ll query(int l, int r) {
-        return query(1, 1, n, l, r);
-    }
+    int n;
+    vl tree, lazy;
+    SegTree(int size) {
+        n = size;
+        tree.assign(4 * n, 0);
+        lazy.assign(4 * n, 0);
+    }
+    SegTree(const vl& v) {
+        n = (int)v.size();
+        tree.assign(4 * n, LLONG_MIN);
+        lazy.assign(4 * n, 0);
+        build(v, 1, 1, n);
+    }
+    void build(const vl& v, int node, int l, int r) {
+        if (l == r) {
+            tree[node] = v[l];
+            return;
+        }
+        int mid = (l + r) / 2;
+        build(v, node * 2, l, mid);
+        build(v, node * 2 + 1, mid + 1, r);
+        tree[node] = max(tree[node * 2], tree[node * 2 + 1]);
+    }
+    void push(int v, int l, int r) {
+        if (lazy[v] != 0) {
+            tree[v] += lazy[v];
+            if (l != r) {
+                lazy[v * 2] += lazy[v];
+                lazy[v * 2 + 1] += lazy[v];
+            }
+            lazy[v] = 0;
+        }
+    }
+    void update(int v, int l, int r, int ul, int ur, ll val) {
+        push(v, l, r);
+        if (ul > r || ur < l) return;
+        if (ul <= l && r <= ur) {
+            lazy[v] += val;
+            push(v, l, r);
+            return;
+        }
+        int mid = (l + r) / 2;
+        update(v * 2, l, mid, ul, ur, val);
+        update(v * 2 + 1, mid + 1, r, ul, ur, val);
+        tree[v] = max(tree[v * 2], tree[v * 2 + 1]);
+    }
+    ll query(int v, int l, int r, int ql, int qr) {
+        push(v, l, r);
+        if (ql > r || qr < l) return LLONG_MIN;
+        if (ql <= l && r <= qr) return tree[v];
+        int mid = (l + r) / 2;
+        return max(query(v * 2, l, mid, ql, qr), query(v * 2 + 1, mid + 1, r, ql, qr));
+    }
+    void update(int l, int r, ll val) {
+        update(1, 1, n, l, r, val);
+    }
+    ll query(int l, int r) {
+        return query(1, 1, n, l, r);
+    }
 };
 int find(vi& root, int x) {//并查集路径压缩
-    if (root[x] == x)return x;
-    return root[x] = find(root, root[x]);
+    if (root[x] == x)return x;
+    return root[x] = find(root, root[x]);
 }
 int qry(int l, int r) {//交互
-    cout << "? " << l << ' ' << r << endl;
-    int x;cin >> x;
-    return x;
+    cout << "? " << l << ' ' << r << endl;
+    int x;cin >> x;
+    return x;
 }
 ll exgcd(ll a, ll b, ll& x, ll& y) {
-    if (!b) { x = 1; y = 0; return a; }
-    ll d = exgcd(b, a % b, y, x);
-    y -= a / b * x;
-    return d;
+    if (!b) { x = 1; y = 0; return a; }
+    ll d = exgcd(b, a % b, y, x);
+    y -= a / b * x;
+    return d;
 }
 ll ny_exgcd(ll a) {//非质数求逆元
-    ll x, y;
-    ll g = exgcd(a, mod, x, y);
-    return g == 1 ? (x % mod + mod) % mod : -1; // -1 表示无逆元
+    ll x, y;
+    ll g = exgcd(a, mod, x, y);
+    return g == 1 ? (x % mod + mod) % mod : -1; // -1 表示无逆元
 }
 void solve() {
-   
+   
 }
 /*
 */
 signed main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);cout.tie(nullptr);
-    //int MAXN = 2e5 + 10;
-    //initny(MAXN);
-    //initjc(MAXN);
-    //initp(MAXN);
-    int t = 1;
-    cin >> t;
-    for (int i = 1; i <= t; i++) {
-        //cout << "----Test " << i << "----" << endl;
-        solve();
-    }
-    return 0;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);cout.tie(nullptr);
+    //int MAXN = 2e5 + 10;
+    //initny(MAXN);
+    //initjc(MAXN);
+    //initp(MAXN);
+    int t = 1;
+    cin >> t;
+    for (int i = 1; i <= t; i++) {
+        //cout << "----Test " << i << "----" << endl;
+        solve();
+    }
+    return 0;
 }
 
 公式，数论，技巧，备忘
@@ -915,203 +915,6 @@ int strStr(string s, string t) {
         return -1;
     }
 
-简单计算几何模板
-#include <bits/stdc++.h>
-using namespace std;
-using ld = long double;
-const ld eps = 1e-9;
-const ld PI = acosl(-1.0);
-// 判断浮点数符号，避免精度问题
-int sgn(ld x) {
-    if (fabs(x) < eps) return 0;
-    return x > 0 ? 1 : -1;
-}
-// === 向量/点 结构体 ===
-struct Point {
-    ld x, y;
-    Point() = default;
-    Point(ld x, ld y) : x(x), y(y) {}
-    bool operator==(const Point& b) const { return sgn(x - b.x) == 0 && sgn(y - b.y) == 0; }
-    bool operator<(const Point& b) const { return sgn(x - b.x) == 0 ? sgn(y - b.y) < 0 : sgn(x - b.x) < 0; }
-    Point operator+(const Point& b) const { return { x + b.x, y + b.y }; }
-    Point operator-(const Point& b) const { return { x - b.x, y - b.y }; }
-    Point operator*(ld k) const { return { x * k, y * k }; }
-    Point operator/(ld k) const { return { x / k, y / k }; }
-    ld operator^(const Point& b) const { return x * b.y - y * b.x; } // 叉积
-    ld operator*(const Point& b) const { return x * b.x + y * b.y; } // 点积
-};
-ostream& operator<<(ostream& os, const Point& p) {
-    return os << "(" << p.x << ", " << p.y << ")";
-}
-// 计算向量长度
-ld len(const Point& a) {
-    return sqrt(a.x * a.x + a.y * a.y);
-}
-// 向量夹角 [0, π]
-ld angle(const Point& a, const Point& b) {
-    return acos((a * b) / (len(a) * len(b)));
-}
-// 旋转点 p 绕原点逆时针旋转 rad 弧度
-Point rotate(const Point& p, ld rad) {
-    return { p.x * cos(rad) - p.y * sin(rad), p.x * sin(rad) + p.y * cos(rad) };
-}
-// 单位向量
-Point unit(const Point& a) {
-    ld L = len(a);
-    return L < eps ? Point(0, 0) : a / L;
-}
-// === 直线/线段 结构体 ===
-struct Line {
-    Point s, e; // 起点、终点
-    Line() = default;
-    Line(Point s, Point e) : s(s), e(e) {}
-};
-// 判断两直线是否平行
-bool parallel(const Line& l1, const Line& l2) {
-    return sgn((l1.e - l1.s) ^ (l2.e - l2.s)) == 0;
-}
-// 判断两直线是否相交，若相交返回交点
-bool lineIntersect(const Line& l1, const Line& l2, Point& res) {
-    ld a1 = (l2.e - l2.s) ^ (l1.s - l2.s);
-    ld a2 = (l2.e - l2.s) ^ (l1.e - l2.s);
-    if (sgn(a1 - a2) == 0) return false; // 平行无交点
-    res = (l1.s * a2 - l1.e * a1) / (a2 - a1);
-    return true;
-}
-// 点到直线的距离（垂线距离）
-ld distPointToLine(const Point& p, const Line& l) {
-    return fabs((l.e - l.s) ^ (p - l.s)) / len(l.e - l.s);
-}
-// 点到线段的距离（考虑端点）
-ld distPointToSeg(const Point& p, const Line& l) {
-    Point a = l.s, b = l.e;
-    if (sgn((p - a) * (b - a)) < 0) return len(p - a);
-    if (sgn((p - b) * (a - b)) < 0) return len(p - b);
-    return fabs((b - a) ^ (p - a)) / len(b - a);
-}
-// 判断点是否在线段上（含端点）
-bool onSegment(const Point& p, const Line& l) {
-    return sgn((l.e - l.s) ^ (p - l.s)) == 0 && sgn((p - l.s) * (p - l.e)) <= 0;
-}
-// 判断两线段是否相交（包括端点）
-bool segIntersect(const Line& l1, const Line& l2) {
-    int d1 = sgn((l1.e - l1.s) ^ (l2.s - l1.s));
-    int d2 = sgn((l1.e - l1.s) ^ (l2.e - l1.s));
-    int d3 = sgn((l2.e - l2.s) ^ (l1.s - l2.s));
-    int d4 = sgn((l2.e - l2.s) ^ (l1.e - l2.s));
-    if (d1 * d2 < 0 && d3 * d4 < 0) return true;
-    return (d1 == 0 && onSegment(l2.s, l1)) ||
-        (d2 == 0 && onSegment(l2.e, l1)) ||
-        (d3 == 0 && onSegment(l1.s, l2)) ||
-        (d4 == 0 && onSegment(l1.e, l2));
-}
-// 两线段之间的最短距离
-ld segDist(const Line& l1, const Line& l2) {
-    if (segIntersect(l1, l2)) return 0;
-    ld ans = 1e18;
-    ans = min(ans, distPointToSeg(l1.s, l2));
-    ans = min(ans, distPointToSeg(l1.e, l2));
-    ans = min(ans, distPointToSeg(l2.s, l1));
-    ans = min(ans, distPointToSeg(l2.e, l1));
-    return ans;
-}
-// 多边形面积（按顺序给出顶点，可顺/逆时针）
-ld polygonArea(vector<Point>& p) {
-    ld area = 0;
-    int n = p.size();
-    for (int i = 0; i < n; ++i) {
-        area += (p[i] ^ p[(i + 1) % n]);
-    }
-    return fabs(area) / 2.0;
-}
-// 判断点是否在多边形内部（射线法）
-// 返回: 0=外部, 1=内部, 2=边上
-int pointInPolygon(const Point& pt, const vector<Point>& poly) {
-    int cnt = 0;
-    int n = poly.size();
-    for (int i = 0; i < n; ++i) {
-        Point a = poly[i], b = poly[(i + 1) % n];
-        if (onSegment(pt, Line(a, b))) return 2;
-        if (sgn(a.y - b.y) != 0) {
-            if (sgn(pt.y - min(a.y, b.y)) >= 0 && sgn(pt.y - max(a.y, b.y)) < 0) {
-                ld x = (pt.y - a.y) * (b.x - a.x) / (b.y - a.y) + a.x;
-                if (sgn(pt.x - x) > 0) cnt++;
-                else if (sgn(pt.x - x) == 0) return 2;
-            }
-        }
-    }
-    return cnt & 1 ? 1 : 0;
-}
-// 判断多边形是否为凸多边形
-bool isConvex(vector<Point>& poly) {
-    int n = poly.size();
-    if (n < 3) return false;
-    bool hasPos = false, hasNeg = false;
-    for (int i = 0; i < n; ++i) {
-        Point a = poly[i], b = poly[(i + 1) % n], c = poly[(i + 2) % n];
-        ld cr = (b - a) ^ (c - b);
-        if (sgn(cr) > 0) hasPos = true;
-        if (sgn(cr) < 0) hasNeg = true;
-    }
-    return !(hasPos && hasNeg);
-}
-// 凸包（Graham Scan）逆时针输出凸包点集
-vector<Point> convexHull(vector<Point> pts) {
-    sort(pts.begin(), pts.end());
-    pts.erase(unique(pts.begin(), pts.end()), pts.end());
-    if (pts.size() <= 1) return pts;
-    vector<Point> ch;
-    int n = pts.size();
-    ch.resize(2 * n);
-    int k = 0;
-    // 下凸壳
-    for (int i = 0; i < n; ++i) {
-        while (k >= 2 && sgn((ch[k - 1] - ch[k - 2]) ^ (pts[i] - ch[k - 2])) <= 0) k--;
-        ch[k++] = pts[i];
-    }
-    // 上凸壳
-    for (int i = n - 2, t = k + 1; i >= 0; --i) {
-        while (k >= t && sgn((ch[k - 1] - ch[k - 2]) ^ (pts[i] - ch[k - 2])) <= 0) k--;
-        ch[k++] = pts[i];
-    }
-    ch.resize(k - 1);
-    return ch;
-}
-// 凸包直径（旋转卡壳，O(n)）
-ld convexDiameter(vector<Point>& ch) {
-    int n = ch.size();
-    if (n <= 1) return 0;
-    if (n == 2) return len(ch[1] - ch[0]);
-    ld ans = 0;
-    for (int u = 0, v = 1; u < n; u++) {
-        while (sgn((ch[(u + 1) % n] - ch[u]) ^ (ch[(v + 1) % n] - ch[v])) >= 0)
-            v = (v + 1) % n;
-        ans = max(ans, len(ch[u] - ch[v]));
-        ans = max(ans, len(ch[(u + 1) % n] - ch[v]));
-    }
-    return ans;
-}
-// 点 p 关于直线 l 的对称点
-Point reflectPoint(const Point& p, const Line& l) {
-    Point a = l.s, b = l.e;
-    Point v = b - a;
-    ld t = ((p - a) * v) / (v * v);
-    Point proj = a + v * t; 
-    return proj * 2 - p;
-}
-// 圆结构体（可选）
-struct Circle {
-    Point c;
-    ld r;
-    Circle(Point c, ld r) : c(c), r(r) {}
-};
-// 点与圆的位置关系：1=内, 0=上, -1=外
-int pointInCircle(const Point& p, const Circle& cir) {
-    ld dis = len(p - cir.c);
-    if (sgn(dis - cir.r) < 0) return 1;
-    if (sgn(dis - cir.r) == 0) return 0;
-    return -1;
-}
 // 扩展欧几里得算法：求 ax + by = gcd(a, b)
 // 返回 gcd(a, b)，x 和 y 通过引用返回
 ll exgcd(ll a, ll b, ll &x, ll &y) {
