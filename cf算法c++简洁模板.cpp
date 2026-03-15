@@ -30,15 +30,16 @@ template<class T> void debug(const char* name, const T& x) { cout << "debug: " <
 #define db(x) debug(#x, x)
 void rd(vi& a) { for (int& x : a)cin >> x; }
 void rd(vvi& a) { for (vi& x : a)rd(x); }
+void rd(vpii& a) {for (auto& [x, y] : a) {cin >> x >> y;}}
 void out(int x) { cout << x << endl; };
 void out(string s) { cout << s << endl; };
 void out(vi& a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 string to2(ll x) { string s;while (x) { s += x % 2 + '0';x >>= 1; }reverse(all(s));return s; }
 struct node {
     int x, y;
-    // bool operator<(const node& o) const {
-    //     if (x == o.x) return y < o.y;else return x < o.x;
-    // }
+    bool operator<(const node& o) const {
+        if (x == o.x) return y < o.y;else return x < o.x;
+    }
 };
 
 void solve() {
