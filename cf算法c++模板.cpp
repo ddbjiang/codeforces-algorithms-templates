@@ -13,6 +13,7 @@ using ll = long long;using ull = unsigned long long;using ld = long double;using
 using vi = vector<int>;using vl = vector<ll>;using vvi = vector<vi>;using vvl = vector<vl>;using vvvi = vector<vvi>;using vvvl = vector<vvl>;
 using vd = vector<double>;using vs = vector<string>;using pii = pair<int, int>;using vpii = vector<pii>;
 using si = set<int>;using msi = multiset<int>;using mii = map<int, int>;
+using ar3 = array<int, 3>;
 const ll mod = 1000000007;//const ll mod = 998244353;
 const double pai = acos(-1.0), eps = 1e-9;
 template<class T> void debug(const T& x) { cout << x; }
@@ -23,7 +24,7 @@ template<class T> void debug(const multiset<T>& st) { debug(vector<T>(all(st)));
 template<class T> void debug(stack<T> stk) { vector<T> v;while (stk.size()) v.pb(stk.top()), stk.pop(); debug(v); }
 template<class T> void debug(queue<T> q) { vector<T> v;while (q.size()) v.pb(q.front()), q.pop(); debug(v); }
 template<class T> void debug(const deque<T>& d) { debug(vector<T>(all(d))); }
-template<class T, class C, class Comp> void debug(const priority_queue<T, C, Comp>& p) { auto q = p; vector<T> v; while (!q.empty()) v.pb(q.top()), q.pop(); debug(v); }
+template<class T, class C, class Cmp> void debug(const priority_queue<T, C, Cmp>& p) { auto q = p; vector<T> v; while (!q.empty()) v.pb(q.top()), q.pop(); debug(v); }
 template<class K, class V> void debug(const vector<pair<K, V>>& vp) { vs a;for (auto& [k, v] : vp) a.pb("[" + to_string(k) + "," + to_string(v) + "]"); debug(a); }
 template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, v] : m) a.pb("[" + to_string(k) + "->" + to_string(v) + "]"); debug(a); }
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
@@ -33,8 +34,14 @@ void rd(vvi& a) { for (vi& x : a)rd(x); }
 void rd(vpii& a) { for (auto& [x, y] : a) { cin >> x >> y; } }
 void out(int x) { cout << x << endl; };
 void out(string s) { cout << s << endl; };
-void out(vi& a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
+void out(vi a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
+void out(vpii& a) { for (auto& [x, y] : a) { cout << x << " " << y << endl; } };
 string to2(ll x) { string s;while (x) { s += x % 2 + '0';x >>= 1; }reverse(all(s));return s; }
+struct hash2 {
+    size_t operator()(const ar3& a) const {
+        return a[0] * 1000000007 + a[1] * 1000000009 + a[2] * 998244353;
+    }
+};
 struct node {
     int x, y;
     bool operator<(const node& o) const {
@@ -254,66 +261,129 @@ struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
         return max(st[l][j], st[r - (1 << j) + 1][j]);
     }
 };
-struct SegTree {//1-idx,(sum,max,min,gcd,lcm,乘积,|,&,^)
+struct tnode {//max,min,sum,*,^,gcd,lcm,|,&
+    ll val;
+    bool zero;
+    tnode() {
+        //val = -4e18;//max
+        //val = 4e18;//min
+        val = 0;//sum
+        zero = true;
+    }
+    tnode(ll v) {
+        val = v;zero = false;
+    }
+    friend tnode operator+(const tnode& a, const tnode& b) {
+        if (a.zero) return b;
+        if (b.zero) return a;
+        tnode res;
+        res.zero = false;
+        //能区间更新
+        res.val = a.val + b.val;            // sum
+        //res.val = max(a.val, b.val);        // max
+        //res.val = min(a.val, b.val);        // min
+        //res.val = (a.val * b.val) % mod;    // *
+        //res.val = a.val ^ b.val;            // ^
+        //不能区间更新
+        //res.val = gcd(a.val, b.val);        // gcd
+        //ll g = gcd(a.val, b.val);
+        //res.val = (a.val / g) * b.val;      // lcm
+        //但支持区间^,|,&
+        //res.val = a.val | b.val;            // |
+        //res.val = a.val & b.val;            // &
+        return res;
+    }
+};
+
+struct SegTree {
     int n;
-    vl tree, lazy;
+    vector<tnode> tree;
+    //vl lazyset;
+    vl lazyadd;
+    //vl lazymul;
     SegTree(int size) {
         n = size;
-        tree.assign(4 * n, 0);
-        lazy.assign(4 * n, 0);
+        tree.assign(4 * n + 1, tnode());
+        //lazyset.assign(4 * n + 1, -4e18);
+        lazyadd.assign(4 * n + 1, -4e18);
+        //lazymul.assign(4 * n + 1, -4e18);
     }
-    SegTree(const vl& v) {
-        n = (int)v.size();
-        tree.assign(4 * n, LLONG_MIN);
-        lazy.assign(4 * n, 0);
-        build(v, 1, 1, n);
+    SegTree(const vl& a) {
+        n = (int)a.size() - 1;
+        tree.assign(4 * n + 1, tnode());
+        //lazyset.assign(4 * n + 1, -4e18);
+        lazyadd.assign(4 * n + 1, -4e18);
+        //lazymul.assign(4 * n + 1, -4e18);
+        build(a, 1, 1, n);
     }
-    void build(const vl& v, int node, int l, int r) {
+    void build(const vl& v, int idx, int l, int r) {
         if (l == r) {
-            tree[node] = v[l];
+            tree[idx] = tnode(v[l]);
             return;
         }
         int mid = (l + r) / 2;
-        build(v, node * 2, l, mid);
-        build(v, node * 2 + 1, mid + 1, r);
-        tree[node] = max(tree[node * 2], tree[node * 2 + 1]);
+        build(v, idx * 2, l, mid);
+        build(v, idx * 2 + 1, mid + 1, r);
+        tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
     }
-    void push(int v, int l, int r) {
-        if (lazy[v] != 0) {
-            tree[v] += lazy[v];
-            if (l != r) {
-                lazy[v * 2] += lazy[v];
-                lazy[v * 2 + 1] += lazy[v];
-            }
-            lazy[v] = 0;
+    void apply(int idx, int l, int r, ll add) {
+        int len = r - l + 1;
+        //区间赋值
+        // if (setval != -4e18) {
+        //     tree[idx].val = setval;//sum加上*len
+        //     lazyset[idx] = setval;
+        //     lazyadd[idx] = 0;
+        // }
+        // if (add != -4e18) {
+        //     tree[idx].val += add;//sum加上*len
+        //     if (lazyset[idx] != -4e18) lazyset[idx] += add;
+        //     else {
+        //         if (lazyadd[idx] == -4e18) lazyadd[idx] = add;
+        //         else lazyadd[idx] += add;
+        //     }
+        // }
+        //区间增加
+        if (add == -4e18) return;
+        tree[idx].val += add;//sum加上*len
+        if (lazyadd[idx] == -4e18) {
+            lazyadd[idx] = add;
+        }
+        else {
+            lazyadd[idx] += add;
+        }
+        //区间乘和加maxmin val=val*k;val=val+b;//sum b加上* len
+        //lazy:mul = mul * k, add = add * k + b
+    }
+    void push(int idx, int l, int r) {
+        if (lazyadd[idx] != -4e18) {
+            int mid = (l + r) / 2;
+            apply(idx * 2, l, mid, lazyadd[idx]);
+            apply(idx * 2 + 1, mid + 1, r, lazyadd[idx]);
+            lazyadd[idx] = -4e18;
         }
     }
     void update(int v, int l, int r, int ul, int ur, ll val) {
-        push(v, l, r);
-        if (ul > r || ur < l) return;
         if (ul <= l && r <= ur) {
-            lazy[v] += val;
-            push(v, l, r);
+            apply(v, l, r, val);
             return;
         }
-        int mid = (l + r) / 2;
-        update(v * 2, l, mid, ul, ur, val);
-        update(v * 2 + 1, mid + 1, r, ul, ur, val);
-        tree[v] = max(tree[v * 2], tree[v * 2 + 1]);
-    }
-    ll query(int v, int l, int r, int ql, int qr) {
         push(v, l, r);
-        if (ql > r || qr < l) return LLONG_MIN;
-        if (ql <= l && r <= qr) return tree[v];
         int mid = (l + r) / 2;
-        return max(query(v * 2, l, mid, ql, qr), query(v * 2 + 1, mid + 1, r, ql, qr));
+        if (ul <= mid) update(v * 2, l, mid, ul, ur, val);
+        if (ur > mid) update(v * 2 + 1, mid + 1, r, ul, ur, val);
+        tree[v] = tree[v * 2] + tree[v * 2 + 1];
     }
-    void update(int l, int r, ll val) {
-        update(1, 1, n, l, r, val);
+    tnode query(int v, int l, int r, int ql, int qr) {
+        if (ql <= l && r <= qr) return tree[v];
+        push(v, l, r);
+        int mid = (l + r) / 2;
+        tnode res;
+        if (ql <= mid) res = res + query(v * 2, l, mid, ql, qr);
+        if (qr > mid) res = res + query(v * 2 + 1, mid + 1, r, ql, qr);
+        return res;
     }
-    ll query(int l, int r) {
-        return query(1, 1, n, l, r);
-    }
+    void update(int l, int r, ll val) { update(1, 1, n, l, r, val); }
+    ll query(int l, int r) { return query(1, 1, n, l, r).val; }
 };
 
 int qry(int l, int r) {//交互
