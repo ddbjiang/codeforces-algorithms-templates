@@ -273,9 +273,9 @@ struct tnode {//max,min,sum,*,^,gcd,lcm,|,&
     ll val;
     bool zero;
     tnode() {
-        //val = -4e18;//max
+        val = -4e18;//max
         //val = 4e18;//min
-        val = 0;//sum
+        //val = 0;//sum
         zero = true;
     }
     tnode(ll v) {
@@ -287,8 +287,8 @@ struct tnode {//max,min,sum,*,^,gcd,lcm,|,&
         tnode res;
         res.zero = false;
         //能区间更新
-        res.val = a.val + b.val;            // sum
-        //res.val = max(a.val, b.val);        // max
+        //res.val = a.val + b.val;            // sum
+        res.val = max(a.val, b.val);          // max
         //res.val = min(a.val, b.val);        // min
         //res.val = (a.val * b.val) % mod;    // *
         //res.val = a.val ^ b.val;            // ^
