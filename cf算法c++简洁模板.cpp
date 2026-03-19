@@ -13,6 +13,7 @@ using ll = long long;using ull = unsigned long long;using ld = long double;using
 using vi = vector<int>;using vl = vector<ll>;using vvi = vector<vi>;using vvl = vector<vl>;using vvvi = vector<vvi>;using vvvl = vector<vvl>;
 using vd = vector<double>;using vs = vector<string>;using pii = pair<int, int>;using vpii = vector<pii>;
 using si = set<int>;using msi = multiset<int>;using mii = map<int, int>;
+using ar3 = array<int, 3>;
 const ll mod = 1000000007;//const ll mod = 998244353;
 const double pai = acos(-1.0), eps = 1e-9;
 template<class T> void debug(const T& x) { cout << x; }
@@ -23,18 +24,20 @@ template<class T> void debug(const multiset<T>& st) { debug(vector<T>(all(st)));
 template<class T> void debug(stack<T> stk) { vector<T> v;while (stk.size()) v.pb(stk.top()), stk.pop(); debug(v); }
 template<class T> void debug(queue<T> q) { vector<T> v;while (q.size()) v.pb(q.front()), q.pop(); debug(v); }
 template<class T> void debug(const deque<T>& d) { debug(vector<T>(all(d))); }
-template<class T, class C, class Comp> void debug(const priority_queue<T, C, Comp>& p) { auto q = p; vector<T> v; while (!q.empty()) v.pb(q.top()), q.pop(); debug(v); }
+template<class T, class C, class Cmp> void debug(const priority_queue<T, C, Cmp>& p) { auto q = p; vector<T> v; while (!q.empty()) v.pb(q.top()), q.pop(); debug(v); }
 template<class K, class V> void debug(const vector<pair<K, V>>& vp) { vs a;for (auto& [k, v] : vp) a.pb("[" + to_string(k) + "," + to_string(v) + "]"); debug(a); }
 template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, v] : m) a.pb("[" + to_string(k) + "->" + to_string(v) + "]"); debug(a); }
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
 #define db(x) debug(#x, x)
 void rd(vi& a) { for (int& x : a)cin >> x; }
 void rd(vvi& a) { for (vi& x : a)rd(x); }
-void rd(vpii& a) {for (auto& [x, y] : a) {cin >> x >> y;}}
+void rd(vpii& a) { for (auto& [x, y] : a) { cin >> x >> y; } }
 void out(int x) { cout << x << endl; };
 void out(string s) { cout << s << endl; };
-void out(vi& a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
+void out(vi a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
+void out(vpii& a) { for (auto& [x, y] : a) { cout << x << " " << y << endl; } };
 string to2(ll x) { string s;while (x) { s += x % 2 + '0';x >>= 1; }reverse(all(s));return s; }
+struct hash2 {size_t operator()(const ar3& a) const {return a[0] * 1000000007 + a[1] * 1000000009 + a[2] * 998244353;}};
 struct node {
     int x, y;
     bool operator<(const node& o) const {
