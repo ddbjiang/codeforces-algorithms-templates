@@ -37,16 +37,16 @@ void out(string s) { cout << s << endl; };
 void out(vi a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 void out(vpii& a) { for (auto& [x, y] : a) { cout << x << " " << y << endl; } };
 string to2(ll x) { string s;while (x) { s += x % 2 + '0';x >>= 1; }reverse(all(s));return s; }
-struct hash2 {size_t operator()(const ar3& a) const {return a[0] * 1000000007 + a[1] * 1000000009 + a[2] * 998244353;}};
+struct hash2 { size_t operator()(const ar3& a) const { return a[0] * 1000000007 + a[1] * 1000000009 + a[2] * 998244353; } };
+//unordered_map<ar3, int, hash2> mp;mp.reserve(n);mp.max_load_factor(0.5);
 struct node {
     int x, y;
     bool operator<(const node& o) const {
-        if (x == o.x) return y < o.y;else return x < o.x;
+        if (x == o.x) return y < o.y;return x < o.x;
     }
 };
 
 void solve() {
-    
 
 
 }
