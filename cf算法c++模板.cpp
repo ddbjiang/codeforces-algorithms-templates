@@ -37,15 +37,12 @@ void out(string s) { cout << s << endl; };
 void out(vi a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
 void out(vpii& a) { for (auto& [x, y] : a) { cout << x << " " << y << endl; } };
 string to2(ll x) { string s;while (x) { s += x % 2 + '0';x >>= 1; }reverse(all(s));return s; }
-struct hash2 {
-    size_t operator()(const ar3& a) const {
-        return a[0] * 1000000007 + a[1] * 1000000009 + a[2] * 998244353;
-    }
-};
+struct hash2 { size_t operator()(const ar3& a) const { return a[0] * 1000000007 + a[1] * 1000000009 + a[2] * 998244353; } };
+//unordered_map<ar3, int, hash2> mp;mp.reserve(n);mp.max_load_factor(0.5);
 struct node {
     int x, y;
     bool operator<(const node& o) const {
-        if (x == o.x) return y < o.y;else return x < o.x;
+        if (x == o.x) return y < o.y;return x < o.x;
     }
 };
 
@@ -237,7 +234,7 @@ struct Treea {//1-idx
         return sum;
     }
 };
-struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx)
+struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx,idx存pii)
     int n;vvl st;vl log;
     ST(const vl& v) {
         n = v.size() - 1;
@@ -279,8 +276,8 @@ struct tnode {//max,min,sum,*,^,gcd,lcm,|,&
         tnode res;
         res.zero = false;
         //能区间更新
-        //res.val = a.val + b.val;            // sum
-        res.val = max(a.val, b.val);          // max
+        res.val = a.val + b.val;            // sum
+        //res.val = max(a.val, b.val);        // max
         //res.val = min(a.val, b.val);        // min
         //res.val = (a.val * b.val) % mod;    // *
         //res.val = a.val ^ b.val;            // ^
@@ -298,21 +295,23 @@ struct tnode {//max,min,sum,*,^,gcd,lcm,|,&
 struct SegTree {
     int n;
     vector<tnode> tree;
-    //vl lazyset;
     vl lazyadd;
+    //vl lazyset;
     //vl lazymul;
     SegTree(int size) {
         n = size;
         tree.assign(4 * n + 1, tnode());
-        //lazyset.assign(4 * n + 1, -4e18);
         lazyadd.assign(4 * n + 1, -4e18);
+        //lazyset.assign(4 * n + 1, -4e18);
         //lazymul.assign(4 * n + 1, -4e18);
+        vl a(n + 1);
+        build(a, 1, 1, n);
     }
     SegTree(const vl& a) {
         n = (int)a.size() - 1;
         tree.assign(4 * n + 1, tnode());
-        //lazyset.assign(4 * n + 1, -4e18);
         lazyadd.assign(4 * n + 1, -4e18);
+        //lazyset.assign(4 * n + 1, -4e18);
         //lazymul.assign(4 * n + 1, -4e18);
         build(a, 1, 1, n);
     }
@@ -328,6 +327,16 @@ struct SegTree {
     }
     void apply(int idx, int l, int r, ll add) {
         int len = r - l + 1;
+        //区间增加
+        if (add == -4e18) return;
+        tree[idx].val += add * len;//sum加上*len
+        tree[idx].zero = false;
+        if (lazyadd[idx] == -4e18) {
+            lazyadd[idx] = add;
+        }
+        else {
+            lazyadd[idx] += add;
+        }
         //区间赋值
         // if (setval != -4e18) {
         //     tree[idx].val = setval;//sum加上*len
@@ -342,17 +351,9 @@ struct SegTree {
         //         else lazyadd[idx] += add;
         //     }
         // }
-        //区间增加
-        if (add == -4e18) return;
-        tree[idx].val += add;//sum加上*len
-        if (lazyadd[idx] == -4e18) {
-            lazyadd[idx] = add;
-        }
-        else {
-            lazyadd[idx] += add;
-        }
-        //区间乘和加maxmin val=val*k;val=val+b;//sum b加上* len
-        //lazy:mul = mul * k, add = add * k + b
+        //区间乘加maxmin
+        // val = val * k;lazymul = lazymul * k;
+        // val = val + add;lazyadd = lazyadd + b;//sum add加上*len
     }
     void push(int idx, int l, int r) {
         if (lazyadd[idx] != -4e18) {
@@ -360,37 +361,32 @@ struct SegTree {
             apply(idx * 2, l, mid, lazyadd[idx]);
             apply(idx * 2 + 1, mid + 1, r, lazyadd[idx]);
             lazyadd[idx] = -4e18;
+            //lazymul[idx] = -4e18;
         }
     }
-    void update(int v, int l, int r, int ul, int ur, ll val) {
+    void update(int idx, int l, int r, int ul, int ur, ll val) {
         if (ul <= l && r <= ur) {
-            apply(v, l, r, val);
+            apply(idx, l, r, val);
             return;
         }
-        push(v, l, r);
+        push(idx, l, r);
         int mid = (l + r) / 2;
-        if (ul <= mid) update(v * 2, l, mid, ul, ur, val);
-        if (ur > mid) update(v * 2 + 1, mid + 1, r, ul, ur, val);
-        tree[v] = tree[v * 2] + tree[v * 2 + 1];
+        if (ul <= mid) update(idx * 2, l, mid, ul, ur, val);
+        if (ur > mid) update(idx * 2 + 1, mid + 1, r, ul, ur, val);
+        tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
     }
-    tnode query(int v, int l, int r, int ql, int qr) {
-        if (ql <= l && r <= qr) return tree[v];
-        push(v, l, r);
+    tnode query(int idx, int l, int r, int ql, int qr) {
+        if (ql <= l && r <= qr) return tree[idx];
+        push(idx, l, r);
         int mid = (l + r) / 2;
         tnode res;
-        if (ql <= mid) res = res + query(v * 2, l, mid, ql, qr);
-        if (qr > mid) res = res + query(v * 2 + 1, mid + 1, r, ql, qr);
+        if (ql <= mid) res = res + query(idx * 2, l, mid, ql, qr);
+        if (qr > mid) res = res + query(idx * 2 + 1, mid + 1, r, ql, qr);
         return res;
     }
     void update(int l, int r, ll val) { update(1, 1, n, l, r, val); }
     ll query(int l, int r) { return query(1, 1, n, l, r).val; }
 };
-
-int qry(int l, int r) {//交互
-    cout << "? " << l << ' ' << r << endl;
-    int x;cin >> x;
-    return x;
-}
 
 ll exgcd(ll a, ll b, ll& x, ll& y) {
     if (!b) { x = 1; y = 0; return a; }
@@ -399,14 +395,13 @@ ll exgcd(ll a, ll b, ll& x, ll& y) {
     return d;
 }
 
-ll ny_exgcd(ll a) {//非质数求逆元
+ll nyexgcd(ll a) {//非质数求逆元
     ll x, y;
     ll g = exgcd(a, mod, x, y);
     return g == 1 ? (x % mod + mod) % mod : -1; // -1 表示无逆元
 }
 
 void solve() {
-    
 
 
 }
