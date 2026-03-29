@@ -8,7 +8,9 @@ using namespace std;
 #define sz(a) (int)(a).size()
 #define yes cout<<"Yes"<<endl
 #define no cout<<"No"<<endl
-#define up(a) iota(all(a),0);
+#define up(a) iota(all(a),0)
+#define so(a) sort(all(a))
+#define rso(a) sort(rall(a))
 using ll = long long;using ull = unsigned long long;using ld = long double;using i128 = __int128;using u128 = unsigned __int128;
 using vi = vector<int>;using vl = vector<ll>;using vvi = vector<vi>;using vvl = vector<vl>;using vvvi = vector<vvi>;using vvvl = vector<vvl>;
 using vd = vector<double>;using vs = vector<string>;using pii = pair<int, int>;using vpii = vector<pii>;
@@ -258,7 +260,7 @@ struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx,idx存pii)
         return max(st[l][j], st[r - (1 << j) + 1][j]);
     }
 };
-struct tnode {//max,min,sum,*,^,gcd,lcm,|,&
+struct tnode {//1-idx,(max,min,sum,*,^,gcd,lcm,|,&)
     ll val;
     bool zero;
     tnode() {
@@ -388,18 +390,6 @@ struct SegTree {
     ll query(int l, int r) { return query(1, 1, n, l, r).val; }
 };
 
-ll exgcd(ll a, ll b, ll& x, ll& y) {
-    if (!b) { x = 1; y = 0; return a; }
-    ll d = exgcd(b, a % b, y, x);
-    y -= a / b * x;
-    return d;
-}
-
-ll nyexgcd(ll a) {//非质数求逆元
-    ll x, y;
-    ll g = exgcd(a, mod, x, y);
-    return g == 1 ? (x % mod + mod) % mod : -1; // -1 表示无逆元
-}
 
 void solve() {
 
