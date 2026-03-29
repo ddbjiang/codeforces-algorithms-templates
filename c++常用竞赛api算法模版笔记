@@ -51,10 +51,10 @@ string to2(ll x) { string s;while (x) { s += x % 2 + '0';x >>= 1; }reverse(all(s
 struct hash2 { size_t operator()(const ar3& a) const { return a[0] * 1000000007 + a[1] * 1000000009 + a[2] * 998244353; } };
 //unordered_map<ar3, int, hash2> mp;mp.reserve(n);mp.max_load_factor(0.5);
 struct node {
-    int x, y;
-    bool operator<(const node& o) const {
-        if (x == o.x) return y < o.y;return x < o.x;
-    }
+    int x, y;
+    bool operator<(const node& o) const {
+        if (x == o.x) return y < o.y;return x < o.x;
+    }
 };
 //sort(all(a), [](vi a, vi b) {return a[0] < b[0];});lambda表达式
 //int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
@@ -63,366 +63,356 @@ struct node {
 // priority_queue<int> pq;最大堆
 // priority_queue<int, vi, greater<int>> pq;最小堆
 ll ksm(ll x, ll n) {
-    ll ans = 1;
-    while (n > 0) {
-        if (n & 1) {
-            ans = ans * x % mod;
-        }
-        x = x * x % mod;
-        n >>= 1;
-    }
-    return ans;
+    ll ans = 1;
+    while (n > 0) {
+        if (n & 1) {
+            ans = ans * x % mod;
+        }
+        x = x * x % mod;
+        n >>= 1;
+    }
+    return ans;
 }
 ll ny(ll x) {//依赖ksm
-    return ksm(x, mod - 2);
+    return ksm(x, mod - 2);
 }
 vi minp, primes;//最小质因数等于自身为质数，小于等于n的全部质数
 void initp(int n) {
-    minp.assign(n + 1, 0);
-    primes.clear();
-    for (int i = 2; i <= n; i++) {
-        if (minp[i] == 0) {
-            minp[i] = i;
-            primes.push_back(i);
-        }
-        for (const int& p : primes) {
-            if (i * p > n)break;
-            minp[i * p] = p;
-            if (p == minp[i])break;
-        }
-    }
+    minp.assign(n + 1, 0);
+    primes.clear();
+    for (int i = 2; i <= n; i++) {
+        if (minp[i] == 0) {
+            minp[i] = i;
+            primes.push_back(i);
+        }
+        for (const int& p : primes) {
+            if (i * p > n)break;
+            minp[i * p] = p;
+            if (p == minp[i])break;
+        }
+    }
 }
 vl nyb;
 void initny(ll n){//线性求逆元
-    nyb.assign(n, 0);
-    nyb[1] = 1;
-    for (ll i = 2; i < n; ++i) {
-        nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
-    }
+    nyb.assign(n, 0);
+    nyb[1] = 1;
+    for (ll i = 2; i < n; ++i) {
+        nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
+    }
 }
 vl jcb, jcnyb;
 void initjc(ll n) {//依赖ny,ksm
-    jcb.assign(n + 1, 1);
-    jcnyb.assign(n + 1, 1);
-    for (ll i = 1; i <= n; i++) {
-        jcb[i] = jcb[i - 1] * i % mod;
-    }
-    jcnyb[n] = ny(jcb[n]);
-    for (ll i = n - 1; i >= 0; i--) {
-        jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
-    }
+    jcb.assign(n + 1, 1);
+    jcnyb.assign(n + 1, 1);
+    for (ll i = 1; i <= n; i++) {
+        jcb[i] = jcb[i - 1] * i % mod;
+    }
+    jcnyb[n] = ny(jcb[n]);
+    for (ll i = n - 1; i >= 0; i--) {
+        jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
+    }
 }
 inline ll C(ll n, ll k) {//依赖initjc
-    if (k < 0 || k > n) return 0;
-    return jcb[n] * jcnyb[k] % mod * jcnyb[n - k] % mod;
+    if (k < 0 || k > n) return 0;
+    return jcb[n] * jcnyb[k] % mod * jcnyb[n - k] % mod;
 }
 inline ll A(ll n, ll k) {//依赖initjc
-    if (k < 0 || k > n) return 0;
-    return jcb[n] * jcnyb[n - k] % mod;
+    if (k < 0 || k > n) return 0;
+    return jcb[n] * jcnyb[n - k] % mod;
 }
 ll Lucas(ll n, ll k) {//mod小于1e6
-    if (k == 0) return 1;
-    return C(n % mod, k % mod) * Lucas(n / mod, k / mod) % mod;
+    if (k == 0) return 1;
+    return C(n % mod, k % mod) * Lucas(n / mod, k / mod) % mod;
 }
 int find(vi& root, int x) {//并查集简洁写法
-    if (root[x] == x)return x;
-    return root[x] = find(root, root[x]);
+    if (root[x] == x)return x;
+    return root[x] = find(root, root[x]);
 }
 struct Trie {//字符串字典树
-    struct Node {
-        int next[26];
-        int cnt;
-        Node() {
-            memset(next, -1, sizeof(next));
-            cnt = 0;
-        }
-    };
-    vector<Node> nodes;
-    Trie() {
-        nodes.emplace_back();
-    }
-    void insert(const string& word) {
-        int i = 0;
-        for (char c : word) {
-            c -= 'a';
-            if (nodes[i].next[c] == -1) {
-                nodes[i].next[c] = nodes.size();
-                nodes.emplace_back();
-            }
-            i = nodes[i].next[c];
-            nodes[i].cnt++;
-        }
-    }
-    void erase(const string& word) {
-        int i = 0;
-        for (char c : word) {
-            c -= 'a';
-            i = nodes[i].next[c];
-            nodes[i].cnt--;
-        }
-    }
-    ll find(const string& s) {
-        int i = 0;
-        ll sum = 0;
-        for (char c : s) {
-            c -= 'a';
-            if (nodes[i].next[c] == -1 || nodes[nodes[i].next[c]].cnt == 0) return 0;
-            i = nodes[i].next[c];
-            sum += nodes[i].cnt;
-        }
-        return sum;
-    }
+    struct Node {
+        int next[26];
+        int cnt;
+        Node() {
+            memset(next, -1, sizeof(next));
+            cnt = 0;
+        }
+    };
+    vector<Node> nodes;
+    Trie() {
+        nodes.emplace_back();
+    }
+    void insert(const string& word) {
+        int i = 0;
+        for (char c : word) {
+            c -= 'a';
+            if (nodes[i].next[c] == -1) {
+                nodes[i].next[c] = nodes.size();
+                nodes.emplace_back();
+            }
+            i = nodes[i].next[c];
+            nodes[i].cnt++;
+        }
+    }
+    void erase(const string& word) {
+        int i = 0;
+        for (char c : word) {
+            c -= 'a';
+            i = nodes[i].next[c];
+            nodes[i].cnt--;
+        }
+    }
+    ll find(const string& s) {
+        int i = 0;
+        ll sum = 0;
+        for (char c : s) {
+            c -= 'a';
+            if (nodes[i].next[c] == -1 || nodes[nodes[i].next[c]].cnt == 0) return 0;
+            i = nodes[i].next[c];
+            sum += nodes[i].cnt;
+        }
+        return sum;
+    }
 };
 struct Trie2 {//01字典树
-    struct Node {
-        int next[2];int cnt;
-        Node() {
-            memset(next, -1, sizeof(next));
-            cnt = 0;
-        }
-    };
-    vector<Node> nodes;
-    Trie2() {
-        nodes.emplace_back();
-    }
-    void insert(int x) {
-        int i = 0;
-        for (int b = 31; b >= 0; b--) {
-            int c = (x >> b) & 1;
-            if (nodes[i].next[c] == -1) {
-                nodes[i].next[c] = nodes.size();
-                nodes.emplace_back();
-            }
-            i = nodes[i].next[c];
-            nodes[i].cnt++;
-        }
-    }
-    void erase(int x) {
-        int i = 0;
-        for (int b = 31; b >= 0; b--) {
-            int c = (x >> b) & 1;
-            i = nodes[i].next[c];
-            nodes[i].cnt--;
-        }
-    }
-    int find(int x) {
-        int i = 0;
-        int sum = 0;
-        for (int b = 31; b >= 0; b--) {
-            int c = (x >> b) & 1;
-            int t = c ^ 1;
-            if (nodes[i].next[t] != -1 && nodes[nodes[i].next[t]].cnt > 0) {
-                sum |= (1 << b);
-                i = nodes[i].next[t];
-            }
-            else {
-                i = nodes[i].next[c];
-            }
-        }
-        return sum;
-    }
+    struct Node {
+        int next[2];int cnt;
+        Node() {
+            memset(next, -1, sizeof(next));
+            cnt = 0;
+        }
+    };
+    vector<Node> nodes;
+    Trie2() {
+        nodes.emplace_back();
+    }
+    void insert(int x) {
+        int i = 0;
+        for (int b = 31; b >= 0; b--) {
+            int c = (x >> b) & 1;
+            if (nodes[i].next[c] == -1) {
+                nodes[i].next[c] = nodes.size();
+                nodes.emplace_back();
+            }
+            i = nodes[i].next[c];
+            nodes[i].cnt++;
+        }
+    }
+    void erase(int x) {
+        int i = 0;
+        for (int b = 31; b >= 0; b--) {
+            int c = (x >> b) & 1;
+            i = nodes[i].next[c];
+            nodes[i].cnt--;
+        }
+    }
+    int find(int x) {
+        int i = 0;
+        int sum = 0;
+        for (int b = 31; b >= 0; b--) {
+            int c = (x >> b) & 1;
+            int t = c ^ 1;
+            if (nodes[i].next[t] != -1 && nodes[nodes[i].next[t]].cnt > 0) {
+                sum |= (1 << b);
+                i = nodes[i].next[t];
+            }
+            else {
+                i = nodes[i].next[c];
+            }
+        }
+        return sum;
+    }
 };
 struct Treea {//1-idx
-    int n;vl tree;
-    Treea(int size) {
-        n = size;tree.assign(n + 1, 0);
-    }
-    void update(int i, ll t) {
-        while (i <= n) {
-            tree[i] += t;
-            i += i & (-i);
-        }
-    }
-    ll sum(int i) {
-        ll sum = 0;
-        while (i > 0) {
-            sum += tree[i];
-            i -= i & (-i);
-        }
-        return sum;
-    }
+    int n;vl tree;
+    Treea(int size) {
+        n = size;tree.assign(n + 1, 0);
+    }
+    void update(int i, ll t) {
+        while (i <= n) {
+            tree[i] += t;
+            i += i & (-i);
+        }
+    }
+    ll sum(int i) {
+        ll sum = 0;
+        while (i > 0) {
+            sum += tree[i];
+            i -= i & (-i);
+        }
+        return sum;
+    }
 };
 struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx,idx存pii)
-    int n;vvl st;vl log;
-    ST(const vl& v) {
-        n = v.size() - 1;
-        int maxlog = 20;
-        st.assign(n + 1, vl(maxlog + 1));
-        log.assign(n + 2, 0);
-        for (int i = 2; i <= n; i++) {
-            log[i] = log[i >> 1] + 1;
-        }
-        for (int i = 1; i <= n; i++) {
-            st[i][0] = v[i];
-        }
-        for (int j = 1; j <= maxlog; j++) {
-            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
-                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
-            }
-        }
-    }
-    int query(int l, int r) {
-        int j = log[r - l + 1];
-        return max(st[l][j], st[r - (1 << j) + 1][j]);
-    }
+    int n;vvl st;vl log;
+    ST(const vl& v) {
+        n = v.size() - 1;
+        int maxlog = 20;
+        st.assign(n + 1, vl(maxlog + 1));
+        log.assign(n + 2, 0);
+        for (int i = 2; i <= n; i++) {
+            log[i] = log[i >> 1] + 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            st[i][0] = v[i];
+        }
+        for (int j = 1; j <= maxlog; j++) {
+            for (int i = 1; i + (1 << j) - 1 <= n; i++) {
+                st[i][j] = max(st[i][j-1], st[i + (1 << (j-1))][j-1]);
+            }
+        }
+    }
+    int query(int l, int r) {
+        int j = log[r - l + 1];
+        return max(st[l][j], st[r - (1 << j) + 1][j]);
+    }
 };
 struct tnode {//max,min,sum,*,^,gcd,lcm,|,&
-    ll val;
-    bool zero;
-    tnode() {
-        //val = -4e18;//max
-        //val = 4e18;//min
-        val = 0;//sum
-        zero = true;
-    }
-    tnode(ll v) {
-        val = v;zero = false;
-    }
-    friend tnode operator+(const tnode& a, const tnode& b) {
-        if (a.zero) return b;
-        if (b.zero) return a;
-        tnode res;
-        res.zero = false;
-        //能区间更新
-        res.val = a.val + b.val;            // sum
-        //res.val = max(a.val, b.val);        // max
-        //res.val = min(a.val, b.val);        // min
-        //res.val = (a.val * b.val) % mod;    // *
-        //res.val = a.val ^ b.val;            // ^
-        //不能区间更新
-        //res.val = gcd(a.val, b.val);        // gcd
-        //ll g = gcd(a.val, b.val);
-        //res.val = (a.val / g) * b.val;      // lcm
-        //但支持区间^,|,&
-        //res.val = a.val | b.val;            // |
-        //res.val = a.val & b.val;            // &
-        return res;
-    }
+    ll val;
+    bool zero;
+    tnode() {
+        //val = -4e18;//max
+        //val = 4e18;//min
+        val = 0;//sum
+        zero = true;
+    }
+    tnode(ll v) {
+        val = v;zero = false;
+    }
+    friend tnode operator+(const tnode& a, const tnode& b) {
+        if (a.zero) return b;
+        if (b.zero) return a;
+        tnode res;
+        res.zero = false;
+        //能区间更新
+        res.val = a.val + b.val;            // sum
+        //res.val = max(a.val, b.val);        // max
+        //res.val = min(a.val, b.val);        // min
+        //res.val = (a.val * b.val) % mod;    // *
+        //res.val = a.val ^ b.val;            // ^
+        //不能区间更新
+        //res.val = gcd(a.val, b.val);        // gcd
+        //ll g = gcd(a.val, b.val);
+        //res.val = (a.val / g) * b.val;      // lcm
+        //但支持区间^,|,&
+        //res.val = a.val | b.val;            // |
+        //res.val = a.val & b.val;            // &
+        return res;
+    }
 };
 struct SegTree {
-    int n;
-    vector<tnode> tree;
-    vl lazyadd;
-    //vl lazyset;
-    //vl lazymul;
-    SegTree(int size) {
-        n = size;
-        tree.assign(4 * n + 1, tnode());
-        lazyadd.assign(4 * n + 1, -4e18);
-        //lazyset.assign(4 * n + 1, -4e18);
-        //lazymul.assign(4 * n + 1, -4e18);
-        vl a(n + 1);
-        build(a, 1, 1, n);
-    }
-    SegTree(const vl& a) {
-        n = (int)a.size() - 1;
-        tree.assign(4 * n + 1, tnode());
-        lazyadd.assign(4 * n + 1, -4e18);
-        //lazyset.assign(4 * n + 1, -4e18);
-        //lazymul.assign(4 * n + 1, -4e18);
-        build(a, 1, 1, n);
-    }
-    void build(const vl& v, int idx, int l, int r) {
-        if (l == r) {
-            tree[idx] = tnode(v[l]);
-            return;
-        }
-        int mid = (l + r) / 2;
-        build(v, idx * 2, l, mid);
-        build(v, idx * 2 + 1, mid + 1, r);
-        tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
-    }
-    void apply(int idx, int l, int r, ll add) {
-        int len = r - l + 1;
-        //区间增加
-        if (add == -4e18) return;
-        tree[idx].val += add * len;//sum加上*len
-        tree[idx].zero = false;
-        if (lazyadd[idx] == -4e18) {
-            lazyadd[idx] = add;
-        }
-        else {
-            lazyadd[idx] += add;
-        }
-        //区间赋值
-        // if (setval != -4e18) {
-        //     tree[idx].val = setval;//sum加上*len
-        //     lazyset[idx] = setval;
-        //     lazyadd[idx] = 0;
-        // }
-        // if (add != -4e18) {
-        //     tree[idx].val += add;//sum加上*len
-        //     if (lazyset[idx] != -4e18) lazyset[idx] += add;
-        //     else {
-        //         if (lazyadd[idx] == -4e18) lazyadd[idx] = add;
-        //         else lazyadd[idx] += add;
-        //     }
-        // }
-        //区间乘加maxmin
-        // val = val * k;lazymul = lazymul * k;
-        // val = val + add;lazyadd = lazyadd + b;//sum add加上*len
-    }
-    void push(int idx, int l, int r) {
-        if (lazyadd[idx] != -4e18) {
-            int mid = (l + r) / 2;
-            apply(idx * 2, l, mid, lazyadd[idx]);
-            apply(idx * 2 + 1, mid + 1, r, lazyadd[idx]);
-            lazyadd[idx] = -4e18;
-            //lazymul[idx] = -4e18;
-        }
-    }
-    void update(int idx, int l, int r, int ul, int ur, ll val) {
-        if (ul <= l && r <= ur) {
-            apply(idx, l, r, val);
-            return;
-        }
-        push(idx, l, r);
-        int mid = (l + r) / 2;
-        if (ul <= mid) update(idx * 2, l, mid, ul, ur, val);
-        if (ur > mid) update(idx * 2 + 1, mid + 1, r, ul, ur, val);
-        tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
-    }
-    tnode query(int idx, int l, int r, int ql, int qr) {
-        if (ql <= l && r <= qr) return tree[idx];
-        push(idx, l, r);
-        int mid = (l + r) / 2;
-        tnode res;
-        if (ql <= mid) res = res + query(idx * 2, l, mid, ql, qr);
-        if (qr > mid) res = res + query(idx * 2 + 1, mid + 1, r, ql, qr);
-        return res;
-    }
-    void update(int l, int r, ll val) { update(1, 1, n, l, r, val); }
-    ll query(int l, int r) { return query(1, 1, n, l, r).val; }
+    int n;
+    vector<tnode> tree;
+    vl lazyadd;
+    //vl lazyset;
+    //vl lazymul;
+    SegTree(int size) {
+        n = size;
+        tree.assign(4 * n + 1, tnode());
+        lazyadd.assign(4 * n + 1, -4e18);
+        //lazyset.assign(4 * n + 1, -4e18);
+        //lazymul.assign(4 * n + 1, -4e18);
+        vl a(n + 1);
+        build(a, 1, 1, n);
+    }
+    SegTree(const vl& a) {
+        n = (int)a.size() - 1;
+        tree.assign(4 * n + 1, tnode());
+        lazyadd.assign(4 * n + 1, -4e18);
+        //lazyset.assign(4 * n + 1, -4e18);
+        //lazymul.assign(4 * n + 1, -4e18);
+        build(a, 1, 1, n);
+    }
+    void build(const vl& v, int idx, int l, int r) {
+        if (l == r) {
+            tree[idx] = tnode(v[l]);
+            return;
+        }
+        int mid = (l + r) / 2;
+        build(v, idx * 2, l, mid);
+        build(v, idx * 2 + 1, mid + 1, r);
+        tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
+    }
+    void apply(int idx, int l, int r, ll add) {
+        int len = r - l + 1;
+        //区间增加
+        if (add == -4e18) return;
+        tree[idx].val += add * len;//sum加上*len
+        tree[idx].zero = false;
+        if (lazyadd[idx] == -4e18) {
+            lazyadd[idx] = add;
+        }
+        else {
+            lazyadd[idx] += add;
+        }
+        //区间赋值
+        // if (setval != -4e18) {
+        //     tree[idx].val = setval;//sum加上*len
+        //     lazyset[idx] = setval;
+        //     lazyadd[idx] = 0;
+        // }
+        // if (add != -4e18) {
+        //     tree[idx].val += add;//sum加上*len
+        //     if (lazyset[idx] != -4e18) lazyset[idx] += add;
+        //     else {
+        //         if (lazyadd[idx] == -4e18) lazyadd[idx] = add;
+        //         else lazyadd[idx] += add;
+        //     }
+        // }
+        //区间乘加maxmin
+        // val = val * k;lazymul = lazymul * k;
+        // val = val + add;lazyadd = lazyadd + b;//sum add加上*len
+    }
+    void push(int idx, int l, int r) {
+        if (lazyadd[idx] != -4e18) {
+            int mid = (l + r) / 2;
+            apply(idx * 2, l, mid, lazyadd[idx]);
+            apply(idx * 2 + 1, mid + 1, r, lazyadd[idx]);
+            lazyadd[idx] = -4e18;
+            //lazymul[idx] = -4e18;
+        }
+    }
+    void update(int idx, int l, int r, int ul, int ur, ll val) {
+        if (ul <= l && r <= ur) {
+            apply(idx, l, r, val);
+            return;
+        }
+        push(idx, l, r);
+        int mid = (l + r) / 2;
+        if (ul <= mid) update(idx * 2, l, mid, ul, ur, val);
+        if (ur > mid) update(idx * 2 + 1, mid + 1, r, ul, ur, val);
+        tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
+    }
+    tnode query(int idx, int l, int r, int ql, int qr) {
+        if (ql <= l && r <= qr) return tree[idx];
+        push(idx, l, r);
+        int mid = (l + r) / 2;
+        tnode res;
+        if (ql <= mid) res = res + query(idx * 2, l, mid, ql, qr);
+        if (qr > mid) res = res + query(idx * 2 + 1, mid + 1, r, ql, qr);
+        return res;
+    }
+    void update(int l, int r, ll val) { update(1, 1, n, l, r, val); }
+    ll query(int l, int r) { return query(1, 1, n, l, r).val; }
 };
-ll exgcd(ll a, ll b, ll& x, ll& y) {
-    if (!b) { x = 1; y = 0; return a; }
-    ll d = exgcd(b, a % b, y, x);
-    y -= a / b * x;
-    return d;
-}
-ll nyexgcd(ll a) {//非质数求逆元
-    ll x, y;
-    ll g = exgcd(a, mod, x, y);
-    return g == 1 ? (x % mod + mod) % mod : -1; // -1 表示无逆元
-}
+
 void solve() {
 }
 /*
 */
 signed main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);cout.tie(nullptr);
-    //int MAXN = 2e5 + 10;
-    //initny(MAXN);
-    //initjc(MAXN);
-    //initp(MAXN);
-    int t = 1;
-    cin >> t;
-    for (int i = 1; i <= t; i++) {
-        //cout << "----Test " << i << "----" << endl;
-        solve();
-    }
-    return 0;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);cout.tie(nullptr);
+    //int MAXN = 2e5 + 10;
+    //initny(MAXN);
+    //initjc(MAXN);
+    //initp(MAXN);
+    int t = 1;
+    cin >> t;
+    for (int i = 1; i <= t; i++) {
+        //cout << "----Test " << i << "----" << endl;
+        solve();
+    }
+    return 0;
 }
 公式，数论，技巧，备忘
 int*a=new int(n) delete[] a动态分配数组
@@ -474,6 +464,7 @@ distance(it1, it2);算迭代器距离
 绝对众数算法，摩尔投票，cnt=0换候选者，等于候选者++，否则--
 等比数列求和公式 a1 * (1 - q^n) / (1 - q)
 折半搜索 折半位运算枚举
+
 位运算
 &按位与运算 |按位或运算 ^按位异或运算 ~取反运算 ^32大小写转化
 GCC/Clang:
@@ -502,6 +493,26 @@ __bit_ceil(x)找≥x的最小2的幂
 最短路Floyd算法，二维数组存边的距离，无边赋最大值。三维递推f[k + 1][i][j] = Math.min(f[k][i][j], f[k][i][k] + f[k][k][j]);可以优化成二维
 最小生成树k算法，按权值升序，如果两点祖先不同合并答案加权值
 最小生成树prim算法，带距离邻接表g加优先队列
+
+换根dp 两次dfs 第一次dfs计算计算子树信息 第二次计算ans[v] =  ans[u] - (v子树贡献) + (非v子树贡献)（父节点u）
+基环树 一颗树加一条额外边 n个点n条边
+DFS序数组 = 先序遍历生成的长度为N的线性数组，核心性质是任意节点u的子树对应数组中连续区间[in[u], out[u]]，从而将子树操作转化为区间操作（配合树状数组/线段树）
+树形dp 以“自底向上”的方式，先处理子节点，再合并到父节点
+利用差分约束系统转成图论问题（三角不等式 最短路最长路）
+树的直径 两次bfs都找最远点（带负权用树形DP维护最长链和次长链）
+
+
+最近公共祖先lca fa[u][i]=fa[fa[u][i-1]][i-1]，先跳到同一层，然后一起跳到lca的上一层，从最大的i开始循环尝试
+维护路径最大值mx[u][i] = max(mx[u][i-1], mx[fa[u][i-1]][i-1])，也是一样跳法
+树上前缀和 点前缀和：qzh[u]+qzh[v]-qzh[lca]-qzh[fa[lca]] 边前缀和qzh[x]+qzh[y]-2*qzh[lca]
+树上差分 点差分：cf[u] += k, cf[v] += k, cf[lca] -= k, cf[fa[lca]] -= k。 边差分：cf[u] += k, cf[v] += k, cf[lca] -= 2*k。最后dfs一次求前缀和，边权初始不为0：叶子差分值等于自己，其他节点等于父权减子权和
+树上任意两点的距离 dep[u]+dep[v]-dep[lca]*2
+树两点最短路径，找lca，两点向上找到lca
+bool check(int p, int u, int v, int l) {//判断p是否在u到v最短路径上，l是u和v的lca
+    if (dep[p] < dep[l]) return false;
+    return (lca(u, p) == p) || (lca(v, p) == p);
+}
+
 计算几何
 点积x1x2+y1y2
 点积大于0 向量夹角为锐角,等于0直角,小于0钝角
@@ -886,48 +897,34 @@ int strStr(string s, string t) {
         }
         return -1;
     }
-
-// 扩展欧几里得算法：求 ax + by = gcd(a, b)
-// 返回 gcd(a, b)，x 和 y 通过引用返回
-ll exgcd(ll a, ll b, ll &x, ll &y) {
-    if (b == 0) {
-        x = 1;
-        y = 0;
-        return a;
-    }
-    ll g = exgcd(b, a % b, y, x); //交换了 x 和 y 的位置
+// 扩展欧几里得：递归求解 ax + by = gcd(a,b)，返回 gcd 并更新引用参数 x, y
+ll exgcd(ll a, ll b, ll& x, ll& y) {
+    if (!b) { x = 1; y = 0; return a; }
+    ll d = exgcd(b, a % b, y, x);
     y -= a / b * x;
-    return g;
+    return d;
 }
-// 求 a 在模 mod 下的乘法逆元（若存在）
-// 要求：a >= 0, mod > 0
-// 返回值：逆元（在 [0, mod-1] 范围内），若不存在则返回 -1
-ll modInverse(ll a, ll mod) {
-    ll x, y;
-    ll g = exgcd(a, mod, x, y);
-    if (g != 1) {
-        return -1; // 逆元不存在
-    }
-    x %= mod;
-    if (x < 0) x += mod;
-    return x;
-}
-// 求解 a*x ≡ b (mod m)
+// 线性同余方程：求解 ax ≡ b (mod m)，返回最小非负整数解，无解则返回 -1
 ll linearCongruence(ll a, ll b, ll m) {
     ll x, y;
     ll g = exgcd(a, m, x, y);
-    if (b % g != 0) return -1; // 无解
-    x = x * (b / g) % m;      // 得到一个特解
-    return (x % m + m) % m;   // 返回最小非负解
+    if (b % g != 0) return -1;
+    x = x * (b / g) % m;
+    return (x % m + m) % m;
+}
+// 乘法逆元：求解 ax ≡ 1 (mod m)，本质是调用同余方程且右边常数项为 1
+ll getInverse(ll a, ll m) {
+    return linearCongruence(a, 1, m);
 }
 // 求解 a*x + b*y = c
 bool solveDiophantine(ll a, ll b, ll c, ll& x, ll& y) {
     ll g = exgcd(a, b, x, y);
-    if (c % g != 0) return false; // 无整数解
+    if (c % g != 0) return false;
     x = x * (c / g);
     y = y * (c / g);
     return true;
 }
+
 矩阵乘法（重载）
 vvi operator*(const vvi& a, const vvi& b) {
     vvi res(a.size(), vi(b[0].size()));
@@ -983,4 +980,115 @@ void sos_dp(int n, vector<int>& a) {
             }
         }
     }
+}
+
+lca在线算法
+const int MAXN = 500005;
+int fa[MAXN][20];
+int dep[MAXN];
+vi g[MAXN];
+void dfslca(int u, int p) {
+    dep[u] = dep[p] + 1;
+    fa[u][0] = p;
+    for (int i = 1;i < 20;i++) {
+        fa[u][i] = fa[fa[u][i - 1]][i - 1];
+    }
+    for (int v : g[u]) {
+        if (v != p) {
+            dfslca(v, u);
+        }
+    }
+}
+int lca(int u, int v) {
+    if (dep[u] < dep[v])swap(u, v);
+    for (int i = 19;i >= 0;i--) {
+        if (dep[fa[u][i]] >= dep[v]) {
+            u = fa[u][i];
+        }
+    }
+    if (u == v)return v;
+    for (int i = 19;i >= 0;i--) {
+        if (fa[u][i] != fa[v][i]) {
+            u = fa[u][i], v = fa[v][i];
+        }
+    }
+    return fa[u][0];
+}
+ cf[u]++;cf[v]++; cf[l] -= 2;
+void dfs(int u, int p) {//差分复原或前缀和
+    for (auto [v, c1, c2] : g[u]) {
+        if (v != p) {
+            dfs(v, u);
+            cf[u] += cf[v];
+        }
+    }
+}
+//lca离线算法On+m
+vector<pii>query[MAXN];
+int ans[MAXN], root[MAXN], vis[MAXN];
+int find(int x) {
+    if (root[x] == x)return x;
+    return root[x] = find(root[x]);
+}
+void dfstarjan(int u) {
+    vis[u] = 1;
+    for (int v : g[u]) {
+        if (vis[v] == 0) {
+            dfstarjan(v);
+            root[v] = u;
+        }
+    }
+    for (auto [x, y] : query[u]) {
+        if (vis[x] == 1) {
+            ans[y] = find(x);
+        }
+    }
+}
+void dfsxu(int u, int p) {//dfs序，结合线段树解决子树加减查询问题
+    in[u] = ++time;// in[u]: 节点 u 进入的时间戳（在序列中的起始位置） 
+    sz[u] = 1;// sz[u]: 以 u 为根的子树包含的节点总数
+    for (int v : g[u]) {
+        if (v != p) {
+            dfsxu(v, u);
+            sz[u] += sz[v];// 子节点 v 的子树处理完了，把 v 的子树大小加到 u 上
+        }
+    }// 此时 u 的子树对应区间 [in[u], in[u] + sz[u] - 1]
+}
+void dfsoula(int u, int fa) {//欧拉序，L[u] 是 u 第一次出现的位置，R[u] 是最后一次，转成st表O1求lca（深度最小）
+    L[u] = oula.size();// 记录左端点（进入）
+    oula.pb(u);// 加入序列
+    for (int v : g[u]) {
+        if (v != fa) {
+            dfs(v, u);
+        }
+    }
+    oula.pb(u);// 再次加入序列（回溯）
+    R[u] = oula.size() - 1;// 记录右端点（离开）
+}
+//求连通分量模板
+const int MAXN = 1e4+10;
+vi g[MAXN];int dfn[MAXN], low[MAXN], tot;//dfn时间戳：记录节点 x 第几个被访问,low追溯值：记录 x 能追溯到的栈中最早的节点
+stack<int>stk;int vis[MAXN];//stk用于存储当前搜索路径上的节点,vis标记节点是否在当前栈中
+int scc[MAXN], siz[MAXN], cnt;//scc记录每个节点属于哪个SCC,siz记录每个SCC包含的节点数量
+void tarjan(int x) {
+    dfn[x] = low[x] = tot++;//入x时，盖戳，入栈
+    stk.push(x);vis[x] = 1;
+    for (int y : g[x]) {
+        if (dfn[y] == 0) {//若y尚未访问
+            tarjan(y);
+            low[x] = min(low[x], low[y]);//回x时更新low
+        }
+        else if (vis[y] == 1) {//若y已访问且在栈中，更新low
+            low[x] = min(low[x], dfn[y]);
+        }
+    }
+    if (dfn[x] == low[x]) {//离x时记录SCC，若x时SCC的根
+        int y;cnt++;
+        do {
+            y = stk.top();stk.pop();
+            vis[y] = 0;
+            scc[y] = cnt;//SCC编号
+            siz[cnt]++;//SCC大小
+        } while (y != x);
+    }
 }
