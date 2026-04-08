@@ -5,6 +5,10 @@ using namespace std;
 #define rall(a) a.rbegin(), a.rend()
 #define int long long
 #define pb push_back
+#define eb emplace_back
+#define pf push_front
+#define fi first
+#define se second
 #define sz(a) (int)(a).size()
 #define yes cout<<"Yes"<<endl
 #define no cout<<"No"<<endl
@@ -13,11 +17,9 @@ using namespace std;
 #define rso(a) sort(rall(a))
 using ll = long long;using ull = unsigned long long;using ld = long double;using i128 = __int128;using u128 = unsigned __int128;
 using vi = vector<int>;using vl = vector<ll>;using vvi = vector<vi>;using vvl = vector<vl>;using vvvi = vector<vvi>;using vvvl = vector<vvl>;
-using vd = vector<double>;using vs = vector<string>;using pii = pair<int, int>;using vpii = vector<pii>;
 using si = set<int>;using msi = multiset<int>;using mii = map<int, int>;
-using ar3 = array<int, 3>;
-const ll mod = 1000000007;//const ll mod = 998244353;
-const double pai = acos(-1.0), eps = 1e-9;
+using vd = vector<double>;using vs = vector<string>;using pii = pair<int, int>;using vpii = vector<pii>;using vvpii = vector<vpii>;
+using ar3 = array<int, 3>;using tiii = tuple<int, int, int>;//get<0>(t);
 template<class T> void debug(const T& x) { cout << x; }
 template<class T> void debug(const vector<T>& v) { cout << "[";for (int i = 0, n = v.size();i < n;i++)cout << v[i] << ",]"[i + 1 == n]; }
 template<class T> void debug(const vector<vector<T>>& v) { cout << endl;for (const auto& i : v) { debug(i);cout << endl; } }
@@ -47,28 +49,18 @@ struct node {
         if (x == o.x) return y < o.y;return x < o.x;
     }
 };
+const ll mod = 1000000007;//const ll mod = 998244353;
+const ll base1 = 131, base2 = 13331, smod1 = 1e9 + 7, smod2 = 1e9 + 9;
+const double pai = acos(-1.0), eps = 1e-9;
+const int N = 2e5 + 10;
 
 //sort(all(a), [](vi a, vi b) {return a[0] < b[0];});lambda表达式
-//int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
+//int t;cin >> t;cin.ignore();while (t--) {string line;getline(cin, line);stringstream ss(line);int x;while (ss >> x) {}}不定输入
 //<<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
 // priority_queue<node>pq;默认最大堆跟排序相反，重载小于号决定优先级
 // priority_queue<int> pq;最大堆
 // priority_queue<int, vi, greater<int>> pq;最小堆
 
-ll ksm(ll x, ll n) {
-    ll ans = 1;
-    while (n > 0) {
-        if (n & 1) {
-            ans = ans * x % mod;
-        }
-        x = x * x % mod;
-        n >>= 1;
-    }
-    return ans;
-}
-ll ny(ll x) {//依赖ksm
-    return ksm(x, mod - 2);
-}
 vi minp, primes;//最小质因数等于自身为质数，小于等于n的全部质数
 void initp(int n) {
     minp.assign(n + 1, 0);
@@ -85,13 +77,19 @@ void initp(int n) {
         }
     }
 }
-vl nyb;
-void initny(ll n){//线性求逆元
-    nyb.assign(n, 0);
-    nyb[1] = 1;
-    for (ll i = 2; i < n; ++i) {
-        nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
+ll ksm(ll x, ll n) {
+    ll ans = 1;
+    while (n > 0) {
+        if (n & 1) {
+            ans = ans * x % mod;
+        }
+        x = x * x % mod;
+        n >>= 1;
     }
+    return ans;
+}
+ll ny(ll x) {//依赖ksm
+    return ksm(x, mod - 2);
 }
 vl jcb, jcnyb;
 void initjc(ll n) {//依赖ny,ksm
@@ -105,6 +103,14 @@ void initjc(ll n) {//依赖ny,ksm
         jcnyb[i] = jcnyb[i + 1] * (i + 1) % mod;
     }
 }
+vl nyb;
+void initny(ll n) {//线性求逆元
+    nyb.assign(n, 0);
+    nyb[1] = 1;
+    for (ll i = 2; i < n; ++i) {
+        nyb[i] = (mod - (mod / i) * nyb[mod % i] % mod) % mod;
+    }
+}
 inline ll C(ll n, ll k) {//依赖initjc
     if (k < 0 || k > n) return 0;
     return jcb[n] * jcnyb[k] % mod * jcnyb[n - k] % mod;
@@ -113,7 +119,7 @@ inline ll A(ll n, ll k) {//依赖initjc
     if (k < 0 || k > n) return 0;
     return jcb[n] * jcnyb[n - k] % mod;
 }
-ll Lucas(ll n, ll k) {//mod小于1e6
+ll Lucas(ll n, ll k) {//mod小于1e6,预处理initjc(mod - 1);适用C和A
     if (k == 0) return 1;
     return C(n % mod, k % mod) * Lucas(n / mod, k / mod) % mod;
 }
@@ -167,7 +173,7 @@ struct Trie {//字符串字典树
     }
 };
 
-struct Trie2 {//01字典树
+struct Trie2 {//01字典树，处理最大异或和
     struct Node {
         int next[2];int cnt;
         Node() {
@@ -260,41 +266,40 @@ struct ST {//1-idx,(max,min,gcd,lcm,&,|,minidx,maxidx,idx存pii)
         return max(st[l][j], st[r - (1 << j) + 1][j]);
     }
 };
-struct tnode {//1-idx,(max,min,sum,*,^,gcd,lcm,|,&)
-    ll val;
-    bool zero;
-    tnode() {
-        //val = -4e18;//max
-        //val = 4e18;//min
-        val = 0;//sum
-        zero = true;
-    }
-    tnode(ll v) {
-        val = v;zero = false;
-    }
-    friend tnode operator+(const tnode& a, const tnode& b) {
-        if (a.zero) return b;
-        if (b.zero) return a;
-        tnode res;
-        res.zero = false;
-        //能区间更新
-        res.val = a.val + b.val;            // sum
-        //res.val = max(a.val, b.val);        // max
-        //res.val = min(a.val, b.val);        // min
-        //res.val = (a.val * b.val) % mod;    // *
-        //res.val = a.val ^ b.val;            // ^
-        //不能区间更新
-        //res.val = gcd(a.val, b.val);        // gcd
-        //ll g = gcd(a.val, b.val);
-        //res.val = (a.val / g) * b.val;      // lcm
-        //但支持区间^,|,&
-        //res.val = a.val | b.val;            // |
-        //res.val = a.val & b.val;            // &
-        return res;
-    }
-};
-
-struct SegTree {
+struct SegTree {//1-idx,(max,min,sum,*,^,gcd,lcm,|,&)
+    struct tnode {
+        ll val;
+        bool zero;
+        tnode() {
+            //val = -4e18;//max
+            //val = 4e18;//min
+            val = 0;//sum
+            zero = true;
+        }
+        tnode(ll v) {
+            val = v;zero = false;
+        }
+        friend tnode operator+(const tnode& a, const tnode& b) {
+            if (a.zero) return b;
+            if (b.zero) return a;
+            tnode res;
+            res.zero = false;
+            //能区间更新
+            res.val = a.val + b.val;            // sum
+            //res.val = max(a.val, b.val);        // max
+            //res.val = min(a.val, b.val);        // min
+            //res.val = (a.val * b.val) % mod;    // *
+            //res.val = a.val ^ b.val;            // ^
+            //不能区间更新
+            //res.val = gcd(a.val, b.val);        // gcd
+            //ll g = gcd(a.val, b.val);
+            //res.val = (a.val / g) * b.val;      // lcm
+            //但支持区间^,|,&
+            //res.val = a.val | b.val;            // |
+            //res.val = a.val & b.val;            // &
+            return res;
+        }
+    };
     int n;
     vector<tnode> tree;
     vl lazyadd;
@@ -404,9 +409,9 @@ signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);cout.tie(nullptr);
     //int MAXN = 2e5 + 10;
-    //initny(MAXN);
-    //initjc(MAXN);
     //initp(MAXN);
+    //initjc(MAXN);
+    //initny(MAXN);
     int t = 1;
     cin >> t;
     for (int i = 1; i <= t; i++) {
