@@ -70,7 +70,7 @@ const ll base1 = 131, base2 = 13331, smod1 = 1e9 + 7, smod2 = 1e9 + 9;
 const double pai = acos(-1.0), eps = 1e-9;
 const int N = 2e5 + 10;
 //sort(all(a), [](vi a, vi b) {return a[0] < b[0];});lambda表达式
-//int m;cin >> m;cin.ignore();while(m--){string line;getline(cin, line);stringstream ss(line);int x;while(ss >> x){}}不定输入
+//int t;cin >> t;cin.ignore();while (t--) {string line;getline(cin, line);stringstream ss(line);int x;while (ss >> x) {}}不定输入
 //<<setw(n)右对齐字符宽度n <<left<<setw(n)左对齐宽度n <<fixed<< setprecision(n)保留n位小数
 // priority_queue<node>pq;默认最大堆跟排序相反，重载小于号决定优先级
 // priority_queue<int> pq;最大堆
