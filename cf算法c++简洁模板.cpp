@@ -34,8 +34,9 @@ template<class K, class V> void debug(const map<K, V>& m) { vs a;for (auto& [k, 
 template<class T> void debug(const char* name, const T& x) { cout << "debug: " << name << " = "; debug(x); cout << endl; }
 #define db(x) debug(#x, x)
 void rd(vi& a) { for (int& x : a)cin >> x; }
-void rd(vvi& a) { for (vi& x : a)rd(x); }
 void rd(vpii& a) { for (auto& [x, y] : a) { cin >> x >> y; } }
+void rd(vs& a) { for (string& s : a)cin >> s; }
+void rd(vvi& a) { for (vi& x : a)rd(x); }
 void out(int x) { cout << x << endl; };
 void out(string s) { cout << s << endl; };
 void out(vi a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
