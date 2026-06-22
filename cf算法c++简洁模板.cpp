@@ -3,12 +3,11 @@ using namespace std;
 #define endl "\n"
 #define int long long
 
-#pragma region ddb
+#pragma region ddbjiang
 #define all(a) a.begin(), a.end()
 #define rall(a) a.rbegin(), a.rend()
 #define pb push_back
 #define eb emplace_back
-#define pf push_front
 #define fi first
 #define se second
 #define sz(a) (int)(a).size()
@@ -42,10 +41,12 @@ void rd(vvi& a) { for (vi& x : a)rd(x); }
 void out(int x) { cout << x << endl; };
 void out(string s) { cout << s << endl; };
 void out(vi a) { for (int i = 0, n = sz(a);i < n;i++)cout << a[i] << " \n"[i + 1 == n]; }
+void out(vvi& a) { for (auto& i : a) out(i); }
 void out(vpii& a) { for (auto& [x, y] : a) { cout << x << " " << y << endl; } };
 string to2(ll x) { string s;while (x) { s += x % 2 + '0';x >>= 1; }reverse(all(s));return s; }
 ll toll(string s) { int sum = 0;for (char i : s) { if (i == '1')sum *= 2, sum++;else sum *= 2; }return sum; }
-#pragma endregion
+#pragma endregion ddbjiang
+
 struct hash2 { size_t operator()(const ar3& a) const { return a[0] * 1000000007 + a[1] * 1000000009 + a[2] * 998244353; } };
 //unordered_map<ar3, int, hash2> mp;mp.reserve(n);mp.max_load_factor(0.5);
 struct aa {
