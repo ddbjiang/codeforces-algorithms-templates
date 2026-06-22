@@ -1,6 +1,3 @@
-重要模版 st表 树状数组 并查集 差分 二维差分 组合数 错排 快速幂 集合枚举 gcd 素数筛
-次要模板 ST表 树状数组 背包 区间dp 单调队列 单调栈 最短路d和堆优化 Floyd 最小生成树k(并查集) prim 字典树 邻接表
-
 math BigIntegar arrarys数组方法 collection集合方法
 集合通用方法 arraylist set map stack queue dueqe string stringbuilder
 
@@ -49,46 +46,22 @@ public class Main {
     	}
     }
 }
-基础算法备忘
+基础算法备忘（java特有）
 最大int 2147483647 最小int -2147483648
 除法向上取整（x+y-1）/y
 dfs收集答案 List<List<Integer>> ans = new ArrayList<>();
 LinkedList<Integer> path = new LinkedList<>();
 set存字符串去重
-java标签搭配continue和break跳出多层循环
+标签搭配continue和break跳出多层循环（java特有）
 Integer.parseInt可以进制转化
-.toArray(Integer[]::new)集合转成数组
-滑窗越长越合法ans += left，越短越合法ans += right - left + 1，恰好型f(k) - f(k + 1)
-排序置换环 并查集解
-01bfs用双端队列，0开头入队，1末尾入队
-三色标记法 未遍历0 遍历中1 遍历完2
-拓扑排序dfs倒序，bfs正序
 Map.Entry<K, V>当pair用
-最短路d朴素算法 初始化两点距离g和单点最短路数组dist，找当前点连接的最短距离的点，标记访问过，更新dist数组
-堆优化版，带距离邻接表g加优先队列
-最短路Floyd算法，二维数组存边的距离，无边赋最大值。三维数组递推
-f[k + 1][i][j] = Math.min(f[k][i][j], f[k][i][k] + f[k][k][j]);可以优化成二维
-最小生成树k算法，按权值升序，如果两点祖先不同合并答案加权值
-最小生成树prim算法，带距离邻接表g加优先队列
-力扣预处理可以放在外面static{}
-分组循环while(i<n){int low=i;i++;while(i<n&&f()){i++}int high=i-1}
-(long)Math.sqrt(t)*(long)Math.sqrt(t)==t判断完全平方数
-逆元a^-1两次快速幂求，一个数（对mod取模完）的（mod-2）次方再对mod取模
-费马小定理a^-1%p替换成a^(p-2)%p(条件是p是质数，a和p互质) (2^10)^(p−2)=2^(10×(p−2))(modp)模意义下分两次快速幂和一次是一样的 模意义下的除法要转化成逆元 比如组合数n!×(k!)^−1×((n−k)!)^−1 (modp)
 大整数类有自带的逆元
-逆元分数加法直接相加取模即可
 String.split("\\+");转义
-0.5*|(( x₁y₂ + x₂y₃ + ... + xₙ₋₁yₙ + xₙy₁ ) - ( y₁x₂ + y₂x₃ + ... + yₙ₋₁xₙ + yₙx₁ ))|多边形面积公式
-大数据范围可以打表枚举质数和特定的数
-dfs回溯分组合 子集 切割 排列 棋盘
-枚举右维护左 枚举中间前后缀分解
-排序不等式贪心最大最小
 Arrays.asList(result)数组转list
 return Arrays.copyOf(ans, k);
-树状数组统计出现次数或排序二分后离散化
-大写变小写、小写变大写 : 字符 ^= 32;大写变小写、小写变小写 : 字符 |= 32;小写变大写、大写变大写 : 字符 &= -33;
 HashMap<String, List<Integer>> map = new HashMap<>();多重映射相当于c++ unordered_map<K, vector<V>>
 map.putIfAbsent(key, new ArrayList<>());map.get(key).add(value);
+queue.add(new int[] {j,dist[j]});
 
 
 二进制和位运算
@@ -115,25 +88,26 @@ for (int i = 0; i < (1 << l); i++)
         if ((i & (1 << j)) != 0) {}
 
 javapair类（是下标也可以用数组存）
-class Pair {
-	    final int x,y;
-	    public Pair(int x, int y) {
-	        this.x = x;this.y = y;
-	    }
-	    public boolean equals(Object o) {
-	        if (this == o) return true;
-	        if (o == null || getClass() != o.getClass()) return false;
-	        Pair pair = (Pair) o;
-	        return x == pair.x && y == pair.y;
-	    }
-	    public int hashCode() {
-	        return Objects.hash(x, y);
-	    }
-	}
-
+java自定义哈希
+public class Student {
+    int id;
+    String name;
+    public Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    @Override
+        public int hashCode() {
+        return id;
+    }
+    @Override
+        public boolean equals(Object obj) {
+        return this.id == ((Student)obj).id;
+    }
+}
 排序
-sort（）或sort((a,b)->a-b)升序
-sort（Collections.reverseOrder()）或sort((a,b)->b-a)降序
+sort（v）或sort(v,(a,b)->a-b)升序
+sort（Collections.reverseOrder()）或sort(v,(a,b)->b-a)降序
 Arrays.sort(v,(a,b)->{
             if(a[0]==b[0])return a[1]-b[1];
             return b[0]-a[0];
@@ -227,11 +201,11 @@ keySet()：返回映射中所有键的集合视图。
 values()：返回映射中所有值的集合视图。
 entrySet()：返回映射中所有键值对的集合set视图。
 
-map.foreach(k,v)->{}遍历
-for（Map.Entry<,>entry entries）遍历
+mp.forEach((x,y)->{});遍历
+for(Map.Entry<Integer,Integer>i:mp.entrySet())遍历
 containKey判断是否包含健 containValue判断是否包含值
 map.merge(t, 1, Integer::sum);等价于map.put(t, map.getOrDefault(t, 0)+1);
-map.computeIfAbsent(t, k->new ArrayList<Integer>());如果不存在键时创建值，可以用ifelse实现
+map.computeIfAbsent(t, k->new ArrayList<Integer>());如果不存在键时创建值，可以用ifelse替代
 TreeMap
 ceilingKey(K key) 返回大于等于 key 的最小键 floorKey(K key) 返回小于等于 key 的最大键 
 higherKey(K key) - 返回严格大于 key 的最小键 lowerKey(K key) 返回严格小于 key 的最大键 
@@ -288,21 +262,6 @@ StringJonier
 new StringJonier(间隔符号); new StringJonier(间隔符号,开始符号,结束符号);
 add() toString()
 
-差分
-int[] a=new int[n+1];int[] cf=new int[n+2];
-for(int i=1;i<=n;i++) {
-        a[i]=in.nextInt();
-        cf[i]=a[i]-a[i-1];
-}//差分数组初始化
-while(q-->0) {
-        int x=in.nextInt();int y=in.nextInt();int z=in.nextInt();
-        cf[x]+=z;
-        cf[y+1]-=z;//可能需要判断y+1是否合理
-}
-for(int i=1;i<=n;i++) {
-        a[i]=a[i-1]+cf[i];
-        min=Math.min(min, a[i]);
-}//前缀和复原差分数组
 二维差分（不需要显式初始化）
 void insert(int x1, int y1 , int x2 , int y2 , int c){
     b[x1][y1] += c;
@@ -381,7 +340,7 @@ a[0]=1;
         for(int i=1;i<=k;i++) 
             for(int j=i;j>=1;j--) 
                 a[j]=(a[j-1]+a[j])%mod;
-错排
+错排（1, 0, 1, 2, 9, 44, 265）
 cp[0]=1;cp[1]=0;
         for(int i=2;i<=n;i++) 
         	cp[i]=(i-1)*(cp[i-1]+cp[i-2]);
@@ -423,9 +382,6 @@ for (int i = 1; i <= n - len + 1; i++) {
 int j = i + len - 1;
 for (int k = i; k < j; k++) {
 dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k + 1][j] + cost(i, k, j));}}}
-单调队列
-拓扑排序
-
 01背包（可以转二进制拆分优化）
 for(int i=1;i<=n;i++) {
 for(int j=m;j>=w[i];j--){
@@ -496,7 +452,7 @@ class Solution {
         int max=(int) (1e9+7);
         List<int[]>g[]=new List[n];
         Arrays.setAll(g, i->new ArrayList<>());
-        int[]dist=new int[n];;
+        int[]dist=new int[n];
         Arrays.fill(dist, max);
         for(int[]i:times) {
         	g[i[0]-1].add(new int[] {i[1]-1,i[2]});
@@ -663,3 +619,31 @@ public class SegmentTree {
         }
     }
 }
+
+LocalDate
+now()：获取当前日期。
+of(int year, Month month, int dayOfMonth)创建指定的日期对象。
+of(int year, int month, int dayOfMonth)创建指定的日期对象。
+getYear(), getMonthValue(), getDayOfMonth()分别获取年、月、日。
+plusDays(long daysToAdd), minusDays(long daysToSubtract)增加或减少天数。
+equal判断日期相等
+isAfter(LocalDate other), isBefore(LocalDate other)比较日期先后。
+LocalTime
+now()：获取当前时间。
+of(int hour, int minute) 或 of(int hour, int minute, int second)：创建指定的时间对象。
+getHour(), getMinute(), getSecond()：分别获取小时、分钟、秒。
+plusHours(long hoursToAdd), minusHours(long hoursToSubtract)：增加或减少小时数。
+withHour(int hour) ：设置特定字段的值。
+LocalDateTime
+now()：获取当前的日期和时间。
+of(LocalDate date, LocalTime time) 或 of(int year, Month month, int dayOfMonth, int hour, int minute)：创建指定的日期时间对象。
+toLocalDate(), toLocalTime()：分别提取日期和时间部分
+plusDays(long daysToAdd), minusMonths(long monthsToSubtract)：增加或减少不同单位的时间。
+
+for(LocalDate i=d1;!i.isAfter(d2);i=i.plusDays(1)) {
+        	int y=i.getYear();
+        	int m=i.getMonthValue();
+        	int d=i.getDayOfMonth();
+        	pw.println(y+" "+m+" "+d);
+        	ans++;
+        }遍历日期
