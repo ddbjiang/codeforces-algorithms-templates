@@ -26,14 +26,15 @@ g++ a.cpp -std=c++23 -O2
 ./a.out
 read -p "——————"
 #define _crt_secure_no_warnings 1抑制安全警告
+endl每次刷新缓冲区 换行速度不如“\n”
 
 输出
 printf输出 %d整数 %.2f浮点数 %s字符串 .1lf四舍五入一位小数 %e科学记数法 %c字符 %b布尔
 宽度%8d，数字右对齐，左边空格补位；%-8d反过来数字左对齐；printf("%8.2f",x)输出总共8个字符右对齐精度为2个字符的浮点数
 <<setw(n)n右对齐字符宽度；  <<left<<setw(n)左对齐n宽度；  <<fixed<< setprecision(n)保留n位小数
-ios::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);输入输出流加速
 
 卡常
+ios::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);输入输出流加速
 int* a = new int[n]{} 动态分配普通全0数组 delete[] a 释放
 memset(位置,元素,sizeof(数组)) 初始化数组为元素 数组大小size()内存sizeof()
 set必须用自带的二分函数才是Ologn
@@ -61,6 +62,17 @@ void add(int u, int v) {//加边
 cnt = 0;memset(head, -1, sizeof(head));//每组数据初始化
 for (int i = head[u];~i;i = edge[i].next) {//遍历
         int v = edge[i].to;
+}
+inline int read() {//快读
+    int x = 0, f = 1; char ch = getchar();
+    while (ch < '0' || ch>'9') { if (ch == '-')f = -1; ch = getchar(); }
+    while (ch >= '0' && ch <= '9') x = x * 10 + ch - '0', ch = getchar();
+    return x * f;
+}
+inline void write(int x) {//快写
+    if (x < 0) putchar('-'), x = -x;
+    if (x > 9) write(x / 10);
+    putchar(x % 10 + '0');
 }
 
 技巧备忘
